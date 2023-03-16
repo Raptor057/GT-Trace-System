@@ -1,3 +1,4 @@
+## GT Trace System
 # Introduction 
 TODO: 
 This is the source code of the traceability system and its services.
@@ -70,6 +71,23 @@ TODO:
 - vscode-icons
 - XML Tools
 - Arduino
+
+# Build and Test
+TODO:  
+- 
+# Actualizaciones
+TODO: 
+- 03 / 16 / 2023: Copied the project from the DefaultCollection Collection to the General_Transmissions_Dev Collection.
+
+
+## GTT
+# Introduction 
+TODO: 
+This is the source code of the traceability system and its services.
+also called Trace v2, created in 2022 by Engineer MJV.
+# Getting Started
+TODO:
+
 
 # Build and Test
 TODO:  
