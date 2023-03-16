@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Gg8M3SRbIDo5DpVwy/1IglAXqZKEIqwoZkavaxGryE8=",
+  "Source": "GT.Trace.EtiMovements.UI.WebApi",
+  "BasePath": "_content/GT.Trace.EtiMovements.UI.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

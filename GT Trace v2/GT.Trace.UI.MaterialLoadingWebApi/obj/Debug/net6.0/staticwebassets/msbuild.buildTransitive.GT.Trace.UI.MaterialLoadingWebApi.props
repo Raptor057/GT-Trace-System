@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\GT.Trace.UI.MaterialLoadingWebApi.props" />
+</Project>

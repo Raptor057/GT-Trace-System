@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a2035ddd-d509-4904-a771-b9eaa4d9cfa3": {
+      "ProjectGuid": "a2035ddd-d509-4904-a771-b9eaa4d9cfa3",
+      "DisplayName": "GT.Trace.UI.Console",
+      "ColorIndex": 0
+    },
+    "ec909a49-3481-4e2c-bf25-f3a42020ab55": {
+      "ProjectGuid": "ec909a49-3481-4e2c-bf25-f3a42020ab55",
+      "DisplayName": "GT.Trace.Domain",
+      "ColorIndex": 1
+    },
+    "818f970f-9516-476a-87fa-2288a33b1aac": {
+      "ProjectGuid": "818f970f-9516-476a-87fa-2288a33b1aac",
+      "DisplayName": "GT.Trace.Infra",
+      "ColorIndex": 2
+    },
+    "65499471-cafd-4c18-aeec-896255c87da4": {
+      "ProjectGuid": "65499471-cafd-4c18-aeec-896255c87da4",
+      "DisplayName": "GT.Trace.App",
+      "ColorIndex": 3
+    }
+  },
+  "NextColorIndex": 4
+}

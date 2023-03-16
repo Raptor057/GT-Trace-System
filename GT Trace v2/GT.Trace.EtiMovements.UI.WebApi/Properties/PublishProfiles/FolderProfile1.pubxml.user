@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>\\mxsrvapps\apps\web\gtt\services\etimovements</_PublishTargetUrl>
+    <History>True|2022-09-27T17:46:00.1195279Z;True|2022-09-27T10:57:44.6078587-05:00;True|2022-08-19T16:02:30.0246106-05:00;True|2022-08-18T15:55:07.6433288-05:00;True|2022-08-18T15:27:50.7909522-05:00;True|2022-08-18T15:15:51.6002520-05:00;True|2022-08-15T11:28:01.2620671-05:00;True|2022-08-15T11:25:43.9357275-05:00;True|2022-08-15T11:18:01.1850901-05:00;True|2022-08-12T08:48:35.9298137-05:00;False|2022-08-12T08:47:45.6982909-05:00;False|2022-08-12T08:46:57.8273138-05:00;True|2022-07-07T16:37:21.3191246-05:00;True|2022-07-07T16:37:16.5687587-05:00;</History>
+  </PropertyGroup>
+</Project>

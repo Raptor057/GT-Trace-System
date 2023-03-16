@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "7m0OoyChUPUf51+vFMF71V7O9wNecxaBa5+CpgEv1l0=",
+  "Source": "GT.Trace.Packaging.UI.PackagingWebApi",
+  "BasePath": "_content/GT.Trace.Packaging.UI.PackagingWebApi",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

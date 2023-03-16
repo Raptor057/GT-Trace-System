@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "9JOJpXxbUU8s18rCKbXobbviPewt/i4vSXgUWUAxFs0=",
+  "Source": "GT.Trace.UI.MaterialLoadingWebApi",
+  "BasePath": "_content/GT.Trace.UI.MaterialLoadingWebApi",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

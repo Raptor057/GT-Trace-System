@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "0Lrk8DZuSjF8NbvCRaG0aP3JHZmx6UHjQkPEtk6kMUg=",
+  "Source": "GT.Trace.UI.CommonWebApi",
+  "BasePath": "_content/GT.Trace.UI.CommonWebApi",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

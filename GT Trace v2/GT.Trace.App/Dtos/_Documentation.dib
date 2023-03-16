@@ -1,0 +1,20 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
+#!markdown
+
+Aqui se encuentran las clases de tipo Data Transfer Object del proyecto GT.Trace.App,
+Se utiliza para poder agregar o actualizar una publicacion.
+--------------------------------------------------------
+Here are the Data Transfer Object type classes of the GT.Trace.App project,
+It is used to add or update a publication.
+
+BomEntry
+public record BomEntryDto(string LineCode, string PartNo, string ComponentNo, string PointOfUseCode);
+
+EtiInfoDto
+public sealed record EtiInfoDto(long EtiID, string EtiNo, string? ComponentNo, string? Revision, string? LotNo, bool IsLocked);
+
+EtiKeyDto
+public sealed record EtiKeyDto(long EtiID, string EtiNo);

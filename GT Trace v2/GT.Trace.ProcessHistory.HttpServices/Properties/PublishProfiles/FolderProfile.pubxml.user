@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>\\mxsrvapps\apps\web\gtt\services\processhistory</_PublishTargetUrl>
+    <History>True|2022-10-25T18:21:58.9544645Z;True|2022-10-25T13:21:45.2497099-05:00;True|2022-10-25T11:07:26.1339433-05:00;True|2022-10-24T17:53:30.8779245-05:00;True|2022-10-24T17:35:57.1446987-05:00;True|2022-10-24T17:35:47.6876806-05:00;True|2022-10-24T17:16:17.3681414-05:00;True|2022-10-24T11:40:15.1123124-05:00;True|2022-10-18T08:37:38.4571889-05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

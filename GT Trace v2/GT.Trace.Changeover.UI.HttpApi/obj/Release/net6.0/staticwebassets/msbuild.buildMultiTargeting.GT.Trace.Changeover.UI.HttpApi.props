@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\GT.Trace.Changeover.UI.HttpApi.props" />
+</Project>
