@@ -1,6 +1,6 @@
 {
-  "SerializedFilePath": "c:\\Dev\\General_Transmissions_Dev\\GT Trace System\\GT Trace v2\\GT.Trace.ProcessHistory.HttpServices\\obj\\Debug\\net6.0\\project.razor.json",
-  "FilePath": "c:\\Dev\\General_Transmissions_Dev\\GT Trace System\\GT Trace v2\\GT.Trace.ProcessHistory.HttpServices\\GT.Trace.ProcessHistory.HttpServices.csproj",
+  "SerializedFilePath": "c:\\Dev\\General_Transmissions_Dev\\GT Trace System\\GT Trace v2\\GT.Trace.EZ2000.Packaging.UI.PackagingWebApi\\obj\\Debug\\net6.0\\project.razor.json",
+  "FilePath": "c:\\Dev\\General_Transmissions_Dev\\GT Trace System\\GT Trace v2\\GT.Trace.EZ2000.Packaging.UI.PackagingWebApi\\GT.Trace.EZ2000.Packaging.UI.PackagingWebApi.csproj",
   "Configuration": {
     "ConfigurationName": "MVC-3.0",
     "LanguageVersion": "6.0",
@@ -18371,7 +18371,7 @@
     ],
     "CSharpLanguageVersion": 1000
   },
-  "RootNamespace": "GT.Trace.ProcessHistory.HttpServices",
+  "RootNamespace": "GT.Trace.EZ2000.Packaging.UI.PackagingWebApi",
   "Documents": [],
   "SerializationFormat": "0.3"
 }

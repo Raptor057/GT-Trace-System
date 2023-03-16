@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = GT.Trace.Common
-build_property.ProjectDir = C:\Dev\General_Transmissions_Dev\GT Trace System\GT Trace v2\GT.Trace.Common\
+build_property.ProjectDir = c:\Dev\General_Transmissions_Dev\GT Trace System\GT Trace v2\GT.Trace.Common\
