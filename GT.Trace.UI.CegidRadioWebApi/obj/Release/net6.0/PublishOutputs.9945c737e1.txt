@@ -1,0 +1,9 @@
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\GT.Trace.UI.CegidRadioWebApi.exe
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\GT.Trace.UI.CegidRadioWebApi.dll
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\GT.Trace.UI.CegidRadioWebApi.deps.json
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\GT.Trace.UI.CegidRadioWebApi.runtimeconfig.json
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\GT.Trace.UI.CegidRadioWebApi.pdb
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\MediatR.dll
+C:\Dev\MXSRVDEV\Temp\GT Trace v2\GT.Trace.UI.CegidRadioWebApi\obj\Release\net6.0\PubTmp\Out\MediatR.Contracts.dll

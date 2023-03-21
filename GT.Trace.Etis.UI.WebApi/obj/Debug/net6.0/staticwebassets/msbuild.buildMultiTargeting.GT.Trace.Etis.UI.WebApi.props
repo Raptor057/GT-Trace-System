@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\GT.Trace.Etis.UI.WebApi.props" />
+</Project>

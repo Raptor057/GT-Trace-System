@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "+qjaixQZCb4nmL1G4VhpNmSgwtH4ApBwIgDhwbevoKI=",
+  "Source": "GT.Trace.ProcessHistory.HttpServices",
+  "BasePath": "_content/GT.Trace.ProcessHistory.HttpServices",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

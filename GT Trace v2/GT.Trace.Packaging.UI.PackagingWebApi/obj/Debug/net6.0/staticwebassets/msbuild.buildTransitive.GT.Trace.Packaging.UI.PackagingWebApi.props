@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\GT.Trace.Packaging.UI.PackagingWebApi.props" />
-</Project>

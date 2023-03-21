@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "3VFll7Y4H4Fbq/Q+j4CDoUttXGDbN5kvZ8pvp+9X1gy1/lEyfoNswXyXIfdnemJ2bAzWS1Sd1PQ68kjRF6XZDw==",
+  "success": true,
+  "projectFilePath": "C:\\Dev\\General_Transmissions_Dev\\GT Trace System\\GT.Trace.UI.CegidRadioWebApi\\GT.Trace.UI.CegidRadioWebApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rarriaga\\.nuget\\packages\\mediatr\\10.0.1\\mediatr.10.0.1.nupkg.sha512",
+    "C:\\Users\\rarriaga\\.nuget\\packages\\mediatr.contracts\\1.0.1\\mediatr.contracts.1.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

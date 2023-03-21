@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "FzwvXiWsSmHihGsD2CcvTWRI1Vd7oRPh07seBkwmI7c=",
+  "Source": "GT.Trace.Changeover.UI.HttpApi",
+  "BasePath": "_content/GT.Trace.Changeover.UI.HttpApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

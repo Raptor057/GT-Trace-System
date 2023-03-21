@@ -1,0 +1,15 @@
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\bin\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.deps.json
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\bin\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.dll
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\bin\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.pdb
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.csproj.AssemblyReference.cache
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.AssemblyInfoInputs.cache
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.AssemblyInfo.cs
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.csproj.CoreCompileInputs.cache
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.dll
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\refint\GT.Trace.EZ2000.Packaging.Domain.dll
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.pdb
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\ref\GT.Trace.EZ2000.Packaging.Domain.dll
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\bin\Debug\net6.0\GT.Trace.Common.dll
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\bin\Debug\net6.0\GT.Trace.Common.pdb
+C:\Dev\Git\GTTSystem\NET6\GT Trace v2\GT.Trace.EZ2000.Packaging.Domain\obj\Debug\net6.0\GT.Trace.EZ2000.Packaging.Domain.csproj.CopyComplete
