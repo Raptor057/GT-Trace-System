@@ -35,6 +35,7 @@
     {production.forecast} / {production.requirement}
     <i class={production.forecast < production.requirement ? "bad" : "good"} />
   </strong>
+  <!-- Aqui se habilita el boton de desbloqueo de linea -->
   <button id="btnUnlock" style="background-color: #ff9500;" on:click={btnUnlock}>Desbloquear Linea</button>
 </div>
 

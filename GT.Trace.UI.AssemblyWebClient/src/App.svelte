@@ -20,6 +20,7 @@ here it view the composition of the gamma or also named boom.
     CommonApi,
     ProcessHistoryApi,
     PackagingApi,
+    EventsHistory,
   } from "./utils/HttpRequests";
   import { intros } from "svelte/internal";
   export let lineCode = "";
@@ -65,18 +66,18 @@ In short, this function uses an API to look up the usage points of an ETI and ha
   MaterialLoadingApi.getEtiPointsOfUse(etiNo, selectedLineCode, selectedPartNo)
     .then((data) => {
       pointsOfUse = [...pointsOfUse, ...data];
-      //console.log(pointsOfUse);
       if (data.length === 0) {
-        alert(`La ETI "${etiNo}" no corresponde con ningún punto de uso para la gama "${selectedPartNo} en la Linea ${selectedLineCode}".`);
+        const getEtimessage = (`- La ETI "${etiNo}" no corresponde con ningún punto de uso para la gama "${selectedPartNo} en la Linea ${selectedLineCode}".`);
+        //alert(`La ETI "${etiNo}" no corresponde con ningún punto de uso para la gama "${selectedPartNo} en la Linea ${selectedLineCode}".`);
+        alert(getEtimessage);
         unlockLinewhile();
+        EventHistory(getEtimessage,lineCode);
     }})
     .catch((error) => {
       pointsOfUse = [];
       //console.log(error);
     });
 };
-
-
 
 //#endregion
 
@@ -95,6 +96,17 @@ In short, this function uses an API to look up the usage points of an ETI and ha
       ),
     };
   };
+
+  /*
+  Envio de mensaje al host
+  */
+  function EventHistory(message, lineCode) {
+    EventsHistory.recordHistory(message, lineCode)
+      .then(() => {
+        //alert('Mensaje enviado con éxito.');
+      })
+      .catch((err) => alert('Error al enviar el mensaje: ' + err));
+  }
 
   /**
    * Find point of use data.
@@ -124,17 +136,8 @@ In short, this function uses an API to look up the usage points of an ETI and ha
 
   // Handle API errors.               //<----Aqui se reciben los errores!!!!!!
   let handleError = (message) => 
-  {
-      if(message.indexOf('No se puede utilizar la ETI') !== -1) 
-      {
-        alert(message);
-        //unlockLinewhile();
-      }
-        else
-        {
-          alert(message);
-          
-        }
+  { alert(message);
+    EventHistory(message,lineCode);
   }
     
   // Get the total active ETI count.

@@ -118,3 +118,12 @@ export const PackagingApi = (function (apiUrl) {
         HttpRequest.put(`${apiUrl}/api/StationBlocked/${is_blocked}/${lineName}`),
         };
 })("http://mxsrvapps.gt.local/gtt/services/packaging");
+//--------------------------------------------------------------------------------
+export const EventsHistory = (function (apiUrl) {
+    //apiUrl = 'http://localhost:1117';
+    
+    return {
+        recordHistory: async (clientmessage, lineCode) =>
+            HttpRequest.post(`${apiUrl}/api/message/${clientmessage}/lines/${lineCode}`),
+    };
+})("http://mxsrvapps/gtt/services/eventshistory");
