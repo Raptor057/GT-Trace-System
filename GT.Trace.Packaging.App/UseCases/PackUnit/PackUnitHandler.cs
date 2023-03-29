@@ -97,7 +97,7 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 long? masterLabelID = await _stations.GetLatestMasterLabelFolioByLineAsync(station.Line.Name).ConfigureAwait(false);
                 string? origen = await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number,
                     station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false);
-                origen ??= " ";
+                origen ??= "_";
                 var date = DateTime.Now.Date;
                 var pallet = new PalletDto
                 {
