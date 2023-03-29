@@ -139,5 +139,14 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
 
         public async Task<long?> GetLastMasterFolioByLineAsync(string lineName) =>
             await _con.ExecuteScalarAsync<long?>("SELECT MAX(id) [Folio] FROM dbo.Master_labels_WB WHERE line=@lineName;", new { lineName });
+
+        public async Task<string> GetOrigenByCegid(string partNo, string partRev)
+        {
+            string origen = await _con.ExecuteScalarAsync<string>(
+                "SELECT ISNULL(NULLIF(RTRIM((SELECT * FROM [dbo].[ufn_GetArticleOrigenCegid] (@partNo,@PartRev))), ' '), ' ') as [Origen]",
+                new { partNo, partRev });
+            return origen;
+        }
+
     }
 }

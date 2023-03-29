@@ -9,7 +9,5 @@
         Task EtiUsed(string lineCode, string etiNo, string componentNo, string pointOfUseCode);
 
         Task EtiReturned(string lineCode, string etiNo, string partNo, string componentNo, string pointOfUseCode, string operatorNo, DateTime utcTimeStamp);
-
-        //Task UpdateEtiTraza(string etiNo); //<--Nuevo
     }
 }

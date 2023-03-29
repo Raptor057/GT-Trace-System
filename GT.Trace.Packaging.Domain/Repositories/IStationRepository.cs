@@ -9,5 +9,6 @@
         Task SaveAsync(Station station);
 
         Task<long?> GetLatestMasterLabelFolioByLineAsync(string lineName);
+        Task <string?> GetOrigenByCegid(string partNo, string partRev);
     }
 }

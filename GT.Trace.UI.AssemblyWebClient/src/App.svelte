@@ -75,7 +75,6 @@ In short, this function uses an API to look up the usage points of an ETI and ha
     }})
     .catch((error) => {
       pointsOfUse = [];
-      //console.log(error);
     });
 };
 
@@ -162,8 +161,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
   const tryProcessIndividualLabel = (input) => {
     const re = /(?<process>\d+)?\[\).+[A-Z]{2}(?<unit>.+?)P.+/;
     const match = re.exec(input);
-            //Aqui 
-            getEtiPointsOfUse(input); //<--Aqui se esta agregando este pedo
+            getEtiPointsOfUse(input);
     if (match && match.groups && match.groups.unit) {
       if (!match.groups.process) {
         alert(
@@ -358,29 +356,7 @@ const handleAuthorization = (passwordResponse) => {
     }
   }
 }
-//#region 
-//Este codigo es el original para bloqueo de linea, pero arriba se separo en 2 funciones para poder desbloquear la linea mediante un boton.
-// const SetBlockStatus = () => {
-//             PackagingApi.SetStationBlocked(1,lineCode) //Bloqueamos toda la linea
-//             let imputpassword = prompt("Linea Bloqueada \n Ingresa la contraseña del supervisor", ""); //Entrada de contraseña
-//             //https://developer.mozilla.org/es/docs/Learn/JavaScript/First_steps/Useful_string_methods
-//             // let imputpassword3 = imputpassword.slice(3,20);
-//             // let imputpassword4 = imputpassword.slice(4,20);z
-//             getAuthorizedUserPassword(imputpassword)
-//             .then((response) => {
-//               if(response)
-//               {
-//                   if(response.password == true){
-//                   PackagingApi.SetStationBlocked(0, lineCode);  
-//                   }
-//                   else{
-//                     alert("Contraseña Incorrecta \n Ingresa la contraseña Correcta para desbloquear");
-//                     unlockLinewhile();
-//                   }
-//               } 
-//             });
-//           };
-//#endregion
+
 </script>
 
 <SignalR

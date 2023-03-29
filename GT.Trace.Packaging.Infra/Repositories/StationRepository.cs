@@ -295,5 +295,8 @@
 
         public async Task<long?> GetLatestMasterLabelFolioByLineAsync(string lineName) =>
             await _traza.GetLastMasterFolioByLineAsync(lineName).ConfigureAwait(false);
+
+        public async Task <string?> GetOrigenByCegid(string partNum, string partRev) =>
+            await _traza.GetOrigenByCegid(partNum, partRev).ConfigureAwait(false);
     }
 }

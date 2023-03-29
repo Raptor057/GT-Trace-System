@@ -4,7 +4,7 @@
     {
         public static Revision New(string number) => new Revision(number ?? "");
 
-        private static readonly string _prototypeRevisionInitialChars = "XY01";
+        private static readonly string _prototypeRevisionInitialChars = "XY012";
 
         public Revision(string value)
         {

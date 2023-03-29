@@ -31,5 +31,8 @@
         public long? MasterID { get; set; }
 
         public int Quantity { get; set; }
+        
+        //Se Agrega campo Origen 3/27/2023
+        public string? Origen { get; set; }
     }
 }

@@ -95,10 +95,13 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             if (printMasterLabel)
             {
                 long? masterLabelID = await _stations.GetLatestMasterLabelFolioByLineAsync(station.Line.Name).ConfigureAwait(false);
-
+                string? origen = await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number,
+                    station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false);
+                origen ??= " ";
                 var date = DateTime.Now.Date;
                 var pallet = new PalletDto
                 {
+                    //Aqui se va a agregar el Origen segun el tipo de producto.
                     ApprovalDate = station.Line.Pallet.Approval?.Date,
                     Approver = station.Line.Pallet.Approval?.Username,
                     Customer = station.Line.WorkOrder.Client.Description,
@@ -113,7 +116,8 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                     PartNo = station.Line.WorkOrder.Part!.Number,
                     PurchaseOrderNo = station.Line.WorkOrder.PO.Number,
                     Quantity = palletQuantity,
-                    Revision = station.Line.WorkOrder.Part.Revision.OriginalValue
+                    Revision = station.Line.WorkOrder.Part.Revision.OriginalValue,
+                    Origen = origen
                 };
                 return new PalletCompleteResponse(station.Line.Code, unit.ID, station.Line.QcContainerApprovalInWarning, station.Line.QcContainerApprovalIsRequired, pallet, station.Line.WorkOrder.Code);
             }

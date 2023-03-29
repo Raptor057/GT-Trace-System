@@ -15,7 +15,5 @@ namespace GT.Trace.EtiMovements.UI.WebApi.Hubs
 
         public async Task SendEtiReturnedSignalAsync(string lineCode, string etiNo, string partNo, string componentNo, string pointOfUseCode, string operatorNo, DateTime utcTimeStamp) =>
             await Clients.All.EtiReturned(lineCode, etiNo, partNo, componentNo, pointOfUseCode, operatorNo, utcTimeStamp).ConfigureAwait(false);
-        //public async Task SendUpdateEtiTrazaSignalAsync(string etiNo) => 
-        //    await Clients.All.UpdateEtiTraza(etiNo).ConfigureAwait(false); //<--Nuevo
     }
 }
