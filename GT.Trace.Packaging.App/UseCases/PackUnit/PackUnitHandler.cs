@@ -95,13 +95,11 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             if (printMasterLabel)
             {
                 long? masterLabelID = await _stations.GetLatestMasterLabelFolioByLineAsync(station.Line.Name).ConfigureAwait(false);
-                string? origen = await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number,
-                    station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false);
-                origen ??= "_";
+                //03/30/2023: RA: Aqui se va a agregar el Origen segun el tipo de producto.
+                string? origen = (await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false)) ?? " ";
                 var date = DateTime.Now.Date;
                 var pallet = new PalletDto
                 {
-                    //Aqui se va a agregar el Origen segun el tipo de producto.
                     ApprovalDate = station.Line.Pallet.Approval?.Date,
                     Approver = station.Line.Pallet.Approval?.Username,
                     Customer = station.Line.WorkOrder.Client.Description,

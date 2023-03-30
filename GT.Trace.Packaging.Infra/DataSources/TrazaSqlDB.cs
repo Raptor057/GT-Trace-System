@@ -142,8 +142,10 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
 
         public async Task<string> GetOrigenByCegid(string partNo, string partRev)
         {
-            string origen = await _con.ExecuteScalarAsync<string>(
-                "SELECT ISNULL(NULLIF(RTRIM((SELECT * FROM [dbo].[ufn_GetArticleOrigenCegid] (@partNo,@PartRev))), ' '), ' ') as [Origen]",
+            string origen = await _con.QueryFirstAsync<string>(
+                //"SELECT ISNULL(NULLIF(RTRIM((SELECT * FROM [dbo].[ufn_GetArticleOrigenCegid] (@partNo,@PartRev))), ' '), ' ') as [Origen]",
+                // "SELECT * FROM [dbo].[ufn_GetArticleOrigenCegid] (@partNo,@partRev)",
+                "SELECT top 1 Origen FROM dbo.ufn_GetArticleOrigenCegid (@partNo, @partRev)",
                 new { partNo, partRev });
             return origen;
         }
