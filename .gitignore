@@ -153,3 +153,8 @@ typings/
 *.vssscc
 *.cscc
 *.metaproj
+/GT.Trace.UI.Console/obj/Debug/net6.0/GT.Trace.UI.Console.csproj.AssemblyReference.cache
+/GT.Trace.EZ2000.Packaging.Infra/obj/Debug/net6.0/GT.Trace.EZ2000.Packaging.Infra.csproj.AssemblyReference.cache
+/GT.Trace.EZ2000.Packaging.Domain/obj/Debug/net6.0/GT.Trace.EZ2000.Packaging.Domain.csproj.AssemblyReference.cache
+/GT.Trace.EZ2000.Packaging.App/obj/Debug/net6.0/GT.Trace.EZ2000.Packaging.App.csproj.AssemblyReference.cache
+/GT.Trace.Etis.Infra/obj/Debug/net6.0/GT.Trace.Etis.Infra.csproj.AssemblyReference.cache
