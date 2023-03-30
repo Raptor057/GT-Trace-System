@@ -1,14 +1,12 @@
-bin/
-obj/
-packages/
-/.vs/GT Trace v2/v17/.suo
+*/bin/
+*/obj/
+*/packages/
+/.vs/GT Trace v2/v17/.suo/
 /.vs/
-/.vs
-/GT.Trace.App/obj/Debug/net6.0/GT.Trace.App.csproj.AssemblyReference.cache
-/GT.Trace.Domain/obj/Debug/net6.0/GT.Trace.Domain.csproj.AssemblyReference.cache
-/GT.Trace.Infra/obj/Debug/net6.0/GT.Trace.Infra.csproj.AssemblyReference.cache
-/GT.Trace.Packaging.Infra/bin/Debug/net6.0/GT.Trace.App.dll
-/GT.Trace.Packaging.Infra/bin/Debug/net6.0/GT.Trace.App.pdb
-/GT.Trace.Packaging.Infra/bin/Debug/net6.0
-/GT.Trace.Packaging.UI.PackagingWebApi/bin/Debug/net6.0/GT.Trace.App.dll
-/GT.Trace.Packaging.UI.PackagingWebApi/bin
+/.vs/
+*/node_modules/
+*/public/build/
+*/.DS_Store
+/GT.Trace.UI.TraceWebClient/GT.Trace.UI.WebClient/node_modules
+/GT.Trace.UI.MaterialLoadingWebApi/obj/Debug/net6.0/GT.Trace.UI.MaterialLoadingWebApi.csproj.AssemblyReference.cache
+/GT.Trace.UI.CommonWebApi/obj/Debug/net6.0/GT.Trace.UI.CommonWebApi.csproj.AssemblyReference.cache
