@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   export let lineName = null;
   export let partNo = null;
   export let revision = null;
@@ -6,11 +6,10 @@
   export let activeEtiCount = null;
   export let gammaSize = null;
   export let production = {};
-  //$: console.log("xxxxx", production);
 </script>
 
 <div class="header">
-  <b>GT Trace Station EZ200</b>
+  <b>GT Trace Station</b>
   <strong>{lineName || "?"}</strong>
   <span>Modelo</span>
   <strong>{partNo || "?"} {revision || ""}</strong>
@@ -18,24 +17,6 @@
   <strong>{workOrderCode || "?"}</strong>
   <span>Trazabilidad</span>
   <strong>{activeEtiCount || "?"} / {gammaSize || "?"}</strong>
-    <!-- ================ESTO SE COMENTO 3/10/2023==================== -->
-  <!-- Se comenta esto para quitar el hora x hora hasta el pronostico -->
-  
-  <!-- <span>Hora</span>
-  <strong>{production.interval}</strong>
-  <span>Cumplimiento</span>
-  <strong>{production.actualQuantity} / {production.expectedQuantity}</strong>
-  <span>Pzs &times; Min</span>
-  <strong>
-    {Number(production.actualRate).toFixed(2)}
-    /
-    {Number(production.expectedRate).toFixed(2)}
-  </strong>
-  <span>Pronóstico</span>
-  <strong>
-    {production.forecast} / {production.requirement}
-    <i class={production.forecast < production.requirement ? "bad" : "good"} />
-  </strong> -->
 </div>
 
 <style lang="scss">
@@ -74,4 +55,81 @@
       }
     }
   }
+</style> -->
+<script>
+  export let lineName = "?";
+  export let partNo = "?";
+  export let revision = "";
+  export let workOrderCode = "?";
+  export let activeEtiCount = "?";
+  export let gammaSize = "?";
+  export let production = {};
+</script>
+
+<div class="header">
+  <div class="header-info">
+    <div class="header-item">
+      <b>GT Trace Station</b>
+    </div>
+    <div class="header-item">
+      <span>L&iacute;nea</span>
+      <strong>{lineName}</strong>
+    </div>
+    <div class="header-item">
+      <span>Modelo</span>
+      <strong>{partNo} {revision}</strong>
+    </div>
+    <div class="header-item">
+      <span>Orden</span>
+      <strong>{workOrderCode}</strong>
+    </div>
+    <div class="header-item">
+      <span>Trazabilidad</span>
+      <strong>{activeEtiCount} / {gammaSize}</strong>
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  .header {
+    background-color: #061933;
+    //background-color: #000000;
+    color: white;
+    height: 2rem;
+    line-height: 2rem;
+    padding-left: 0.5em;
+    position: relative;
+  }
+
+  .header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 1rem;
+  }
+  
+  strong {
+    background-color: #ffffff33;
+    border-radius: 0.25em;
+    color: #ff9500;
+    min-width: 3rem;
+    padding: 0 0.5em;
+  }
+
+  // i {
+  //   font-style: normal;
+  //   &.good {
+  //     color: lime;
+  //     &::after {
+  //       content: "✔";
+  //     }
+  //   }
+  //   &.bad {
+  //     color: red;
+  //     &::after {
+  //       content: "⚠";
+  //     }
+  //   }
+  // }
 </style>

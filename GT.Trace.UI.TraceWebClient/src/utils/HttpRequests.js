@@ -74,7 +74,6 @@ export const MaterialLoadingApi = (function (apiUrl) {
     return {
         getLine: (lineCode) =>
             HttpRequest.get(`${apiUrl}/api/lines/${lineCode}`)
-
     };
 })("http://mxsrvapps.gt.local/gtt/services/materialloading");
 

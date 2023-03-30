@@ -8,35 +8,25 @@
 </script>
 
 <div class="footer">
-  <!-- ================ESTO SE COMENTO 3/10/2023==================== -->
-  <!-- Se comento esto para eliminar la casilla de retorno de etiquetas -->
-  
-  <!-- <label class="material-return-checkbox">
-    <input type="checkbox" bind:checked={materialReturnModeIsEnabled} />
-    Retornar material.
-  </label> -->
   <span class="cur-time">{curTime.toLocaleString()}</span>
 </div>
 
 <style lang="scss">
   div.footer {
-    background-color: #061933;
-    bottom: 0;
-    color: white;
-    height: 2rem;
-    left: 0;
-    line-height: 2em;
-    overflow: hidden;
-    padding: 0 0.25em;
-    position: absolute;
-    right: 0;
-    > span.cur-time {
-      float: right;
-    }
-
-    > label.material-return-checkbox {
-      cursor: pointer;
-      display: inline-block;
-    }
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #061933;
+  color: white;
+  height: 2rem;
+  padding: 0 0.25em;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  span.cur-time {
+    margin-left: auto;
   }
+}
 </style>
