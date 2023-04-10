@@ -44,6 +44,22 @@ WHERE lpou.LineCode = @lineCode;",
                 new { lineCode, partNo, workOrderCode }
             ).ConfigureAwait(false);
 
+        //Obtener etiquetas activas para estacion TRACE 
+
+        public async Task<IEnumerable<PointOfUseEtis>> FindActiveTraceEtisAsync(string lineCode, string partNo, string workOrderCode) =>
+            await Connection.QueryAsync<PointOfUseEtis>(
+                @"SELECT poue.*, c.counter_value [PackingCount], c.bin_size [Size]
+FROM dbo.LinePointsOfUse lpou
+JOIN dbo.PointOfUseEtis poue
+    ON poue.PointOfUseCode = lpou.PointOfUseCode
+    AND poue.UtcUsageTime <= GETUTCDATE() AND poue.UtcExpirationTime IS NULL
+LEFT JOIN [MXSRVTRACA].[TRAZAB].[dbo].[eti_packing_counters] c
+    ON c.eti_no COLLATE SQL_Latin1_General_CP1_CI_AS = poue.EtiNo
+WHERE lpou.LineCode = @lineCode;",
+                new { lineCode, partNo, workOrderCode }
+            ).ConfigureAwait(false);
+        //
+
         public async Task<int> LoadEtiAsync(string partNo, string workOrderCode, string etiNo, string pointOfUseCode, string componentNo) =>
             await Connection.ExecuteAsync(
                 "INSERT INTO dbo.PointOfUseEtis (PartNo, WorkOrderCode, EtiNo, PointOfUseCode, ComponentNo) VALUES(@partNo, @workOrderCode, @etiNo, @pointOfUseCode, @componentNo);",
