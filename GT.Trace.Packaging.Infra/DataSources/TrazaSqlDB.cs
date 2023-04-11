@@ -105,10 +105,14 @@ SELECT @masterID, TELESIS, fecha FROM TEMP_PACK_WB WHERE NUM_P=@partNo and LINEA
                         "INSERT INTO tbl_picking_wb (telesis_no,linea,fecha,np_final,type,codew) values (@unitID,@lineName,FORMAT(GETDATE(), 'dd-MMM-yyyy'),@partNo,@sequenceNo + 1,@workOrderCode)",
                         new { unitID = unitID.ToString(), lineName, partNo, sequenceNo, workOrderCode }).ConfigureAwait(false);
 
+//        public async Task AddTracedUnitAsync(long unitID, string lineName, int operation, string clientName, string partNo, string workOrderCode) =>
+//                    await _con.ExecuteAsync(@"INSERT INTO Trazab_WB (Telesis_no, Linea, no_empleado, fecha_scan, hora_scan,ETI_no,MODELO,NP_FINAL,codew)
+//VALUES (@unitID,@lineName,@operation,FORMAT(GETDATE(), 'dd-MMM-yyyy'),Format(GETDATE(), 'hh:mm tt'),(SELECT TOP 1 SET_ID FROM dbo.Etis_WB WITH(NOLOCK) WHERE linea=@lineName AND status=0),@clientName,@partNo,@workOrderCode)",
+//                        new { unitID = unitID.ToString(), lineName, operation, clientName, partNo, workOrderCode }).ConfigureAwait(false);
         public async Task AddTracedUnitAsync(long unitID, string lineName, int operation, string clientName, string partNo, string workOrderCode) =>
-                    await _con.ExecuteAsync(@"INSERT INTO Trazab_WB (Telesis_no, Linea, no_empleado, fecha_scan, hora_scan,ETI_no,MODELO,NP_FINAL,codew)
+            await _con.ExecuteAsync(@"INSERT INTO Trazab_WB (Telesis_no, Linea, no_empleado, fecha_scan, hora_scan,ETI_no,MODELO,NP_FINAL,codew)
 VALUES (@unitID,@lineName,@operation,FORMAT(GETDATE(), 'dd-MMM-yyyy'),Format(GETDATE(), 'hh:mm tt'),(SELECT TOP 1 SET_ID FROM dbo.Etis_WB WITH(NOLOCK) WHERE linea=@lineName AND status=0),@clientName,@partNo,@workOrderCode)",
-                        new { unitID = unitID.ToString(), lineName, operation, clientName, partNo, workOrderCode }).ConfigureAwait(false);
+                new { unitID = unitID.ToString(), lineName, operation, clientName, partNo, workOrderCode }).ConfigureAwait(false);
 
         /// <summary>
         /// Pack unit into temporary pallet and update work order production counter.
