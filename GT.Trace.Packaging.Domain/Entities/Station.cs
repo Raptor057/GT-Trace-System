@@ -141,7 +141,8 @@
             if (CanTrace)
             {
                 unit.SetTrace(new Trace(Line.Name, DateTime.UtcNow));
-                _events.Enqueue(new UnitTracedEvent(unit.ID, Line.WorkOrder.Part.Number, Line.WorkOrder.Code, Line.Name, -1, Line.WorkOrder.Client.Name));
+                //Aqui se agrego como nuevo el Line.Code
+                _events.Enqueue(new UnitTracedEvent(unit.ID, Line.WorkOrder.Part.Number, Line.WorkOrder.Code, Line.Name,Line.Code ,-1, Line.WorkOrder.Client.Name));
             }
 
             Line.Pallet.PackUnit(unit.ID);

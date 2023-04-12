@@ -58,5 +58,9 @@ WHERE LineCode = @lineCode;", new { lineCode }).ConfigureAwait(false);
 
         internal async Task<IEnumerable<LineRouting>> GetLineRoutingByLineCode(string lineCode) =>
             await _con.QueryAsync<LineRouting>("SELECT * FROM LineRouting WHERE LineCode=@lineCode;", new { lineCode }).ConfigureAwait(false);
+
+        //Esto es nuevo para la trazabilidad
+        public async Task AddTracedUnitAsync(long unitID, string partNo, string lineCode, string workOrderCode) =>
+            await _con.ExecuteAsync("EXEC UpsInsertProductionTraceability @unitID, @partNo, @lineCode, @workOrderCode;", new { unitID, partNo , lineCode, workOrderCode }).ConfigureAwait(false);
     }
 }

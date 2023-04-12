@@ -286,6 +286,9 @@
         private async Task OnUnitTracedAsync(UnitTracedEvent e)
         {
             await _traza.AddTracedUnitAsync(e.UnitID, e.LineName, e.Operation, e.ClientName, e.PartNo, e.WorkOrderCode).ConfigureAwait(false);
+            //Agregado Nuevo para agregar datos de trazabilidad a la tabla ProductionTraceability
+            await _gtt.AddTracedUnitAsync(e.UnitID,e.PartNo,e.LineCode,e.WorkOrderCode).ConfigureAwait(false);
+
         }
 
         private async Task OnContainerApprovalCreatedAsync(ContainerApprovalCreatedEvent e)
