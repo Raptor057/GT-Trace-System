@@ -410,5 +410,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/GT.Trace.Packaging.Infra/bin/Release/net6.0/GT.Trace.Packaging.Infra.pdb
+#/GT.Trace.Packaging.Infra/bin/Release/net6.0/GT.Trace.Packaging.Infra.pdb
 **/dotnet-tools.json
