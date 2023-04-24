@@ -412,3 +412,16 @@ MigrationBackup/
 .ionide/
 #/GT.Trace.Packaging.Infra/bin/Release/net6.0/GT.Trace.Packaging.Infra.pdb
 **/dotnet-tools.json
+/GT.Trace.EtiMovements.Infra/Properties
+/GT.Trace.EtiMovements.Domain/Properties
+/GT.Trace.EtiMovements.App/Properties
+/GT.Trace.Changeover.Infra/Properties
+/GT.Trace.Common/Properties
+/GT.Trace.Domain/Properties
+/GT.Trace.Etis.App/Properties
+/GT.Trace.Etis.Domain/Properties
+/GT.Trace.Etis.Infra/Properties
+/GT.Trace.Infra/Properties
+/GT.Trace.Changeover.App/Properties
+/GT.Trace.Packaging.App/Properties
+/GT.Trace.Packaging.Domain/Properties
