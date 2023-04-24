@@ -62,5 +62,12 @@ WHERE LineCode = @lineCode;", new { lineCode }).ConfigureAwait(false);
         //Esto es nuevo para la trazabilidad
         public async Task AddTracedUnitAsync(long unitID, string partNo, string lineCode, string workOrderCode) =>
             await _con.ExecuteAsync("EXEC UpsInsertProductionTraceability @unitID, @partNo, @lineCode, @workOrderCode;", new { unitID, partNo , lineCode, workOrderCode }).ConfigureAwait(false);
+
+        //Se agrego para obtener el ultimo mensaje de la linea, se piensa usar para el bloqueo de linea, que de la info y se imprima en la pantalla
+        public async Task<string> GetMessageFromAssembly(string linecode) =>
+            await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where " +
+                "ClientMessage like ('%corresponde con ningún punto de uso para la gama%') and LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
+        //public async Task<string> GetMessageFromAssembly(string linecode) =>
+        //    await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
     }
 }

@@ -53,17 +53,6 @@
             var pcmx = await _traza.TryGetStationByHostnameAsync(hostname).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Estación \"{hostname}\" no encontrada.");
 
-            #region Modulo agregado por 5 why, pockayoke agregado por problemas en ****** produccion ***** 2/5/2023
-
-            //Prueba de comando
-            //var StationBlocked = await _traza.SetStationBlocked(hostname).ConfigureAwait(false);
-
-
-            var StationIsBlocked = await _traza.TryGetStationIsBlockedAsync(hostname).ConfigureAwait(false);
-            if (StationIsBlocked.is_blocked == true)
-                throw new InvalidCastException($"No puedes continuar la estacion {hostname} se encuentra bloqueada, Ingresa la contraseña de supervisor en la estacion de ensamble para continuar");
-
-            #endregion
 
             var selectedLineCode = GetLineCode(pcmx.Can_Chg_Line ?? false, lineCode, pcmx.LINE);
 
@@ -114,6 +103,20 @@
 
             var qc_params = await _traza.GetContainerApprovalParamsAsync(picking_config.tipo, refext.PackType.Trim()).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No se encontraron parametros de aprobación de calidad para tipo \"{picking_config.tipo}\" con empaque \"{refext.PackType.Trim()}\".");
+
+
+            #region Modulo agregado por 5 why, pockayoke agregado por problemas en ****** produccion ***** 2/5/2023
+            var stationIsBlocked = await _traza.TryGetStationIsBlockedAsync(hostname).ConfigureAwait(false);
+            var messagefromassembly = await _gtt.GetMessageFromAssembly(selectedLineCode).ConfigureAwait(false);
+            if (stationIsBlocked.is_blocked == true)
+                throw new InvalidCastException($"No se puede continuar. La estación {hostname} de la linea {selectedLineCode} está bloqueada debido a: [{messagefromassembly}]." +
+                    $"Ingrese la contraseña de supervisor / inspector de calidad en la estación de ensamble para continuar.");
+
+            //var StationIsBlocked = await _traza.TryGetStationIsBlockedAsync(hostname).ConfigureAwait(false);
+            //if (StationIsBlocked.is_blocked == true)
+            //    throw new InvalidCastException($"No puedes continuar, la estacion {hostname} se encuentra bloqueada, Ingresa la contraseña de supervisor en la estacion de ensamble para continuar");
+
+            #endregion
 
             var qc_approval = await _traza.TryGetApprovalByWorkOrderAsync(production.codew.Trim()).ConfigureAwait(false);
 
@@ -285,9 +288,22 @@
 
         private async Task OnUnitTracedAsync(UnitTracedEvent e)
         {
+            //este if aun estara aprueba
+            //if(e.LineCode == "LE")
+            //{
+            //    await _traza.AddTracedUnitAsync(e.UnitID, e.LineName, e.Operation, e.ClientName, e.PartNo, e.WorkOrderCode).ConfigureAwait(false);
+            //    //Agregado Nuevo para agregar datos de trazabilidad a la tabla ProductionTraceability
+            //    await _gtt.AddTracedUnitAsync(e.UnitID, e.PartNo, e.LineCode, e.WorkOrderCode).ConfigureAwait(false);
+            //}
+            //else
+            //{
+            //    await _traza.AddTracedUnitAsync(e.UnitID, e.LineName, e.Operation, e.ClientName, e.PartNo, e.WorkOrderCode).ConfigureAwait(false);
+
+            //}
+
             await _traza.AddTracedUnitAsync(e.UnitID, e.LineName, e.Operation, e.ClientName, e.PartNo, e.WorkOrderCode).ConfigureAwait(false);
             //Agregado Nuevo para agregar datos de trazabilidad a la tabla ProductionTraceability
-            await _gtt.AddTracedUnitAsync(e.UnitID,e.PartNo,e.LineCode,e.WorkOrderCode).ConfigureAwait(false);
+            //await _gtt.AddTracedUnitAsync(e.UnitID, e.PartNo, e.LineCode, e.WorkOrderCode).ConfigureAwait(false);
 
         }
 

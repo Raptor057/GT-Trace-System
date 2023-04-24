@@ -50,7 +50,8 @@ const HttpRequest = (function () {
 })();
 
 export const PackagingApi = (function (apiUrl) {
-    //apiUrl = 'http://localhost:5183';
+    //apiUrl = 'http://localhost:5183'; //Este se usa cuando se ejecuta la api con debug de manera local
+    //apiUrl = ' http://localhost:5000'; //Este se usa cuando se ejecuta la api sin debug de manera local
     return {
         fetchHourlyProduction: async (lineCode) =>
             HttpRequest.get(`${apiUrl}/api/lines/${lineCode}/hourlyproduction`),

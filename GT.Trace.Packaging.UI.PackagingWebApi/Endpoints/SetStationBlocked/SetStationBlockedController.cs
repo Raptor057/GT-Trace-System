@@ -10,13 +10,14 @@ namespace GT.Trace.Packaging.UI.PackagingWebApi.Endpoints.SetStationBlocked
     [ApiController]
     public class SetStationBlockedController : ControllerBase
     {
-        //private readonly ILogger<SetStationBlockedController> _logger;
+        private readonly ILogger<SetStationBlockedController> _logger;
         private readonly IMediator _mediator;
         private readonly GenericViewModel<SetStationBlockedController> _viewModel;
 
-        public SetStationBlockedController(/*ILogger<SetStationBlockedController> logger, */IMediator mediator, GenericViewModel<SetStationBlockedController> viewModel)
+        public SetStationBlockedController(ILogger<SetStationBlockedController> logger, IMediator mediator, GenericViewModel<SetStationBlockedController> viewModel)
         {
-            //_logger=logger;
+
+            _logger=logger;
             _mediator=mediator;
             _viewModel=viewModel;
         }
@@ -35,6 +36,7 @@ namespace GT.Trace.Packaging.UI.PackagingWebApi.Endpoints.SetStationBlocked
             {
                 var innerEx = ex;
                 while (innerEx.InnerException != null) innerEx = innerEx.InnerException!;
+                _logger.LogError(Convert.ToString(innerEx)/*, "Ha ocurrido un error al procesar la solicitud"*/); //Nueva linea agregada
                 return StatusCode(500, _viewModel.Fail(innerEx.Message));
             }
         }

@@ -2,6 +2,7 @@
 using GT.Trace.Packaging.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace GT.Trace.Packaging.Infra.Services
@@ -19,7 +20,6 @@ namespace GT.Trace.Packaging.Infra.Services
         public const string EndOfTransmission = "\u0004";
 
         private static string RiderLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{RiderLabelFormatRegExPatternName}";
-
         private static string WalkBehindLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{WalkBehindLabelFormatRegExPatternName}";
 
         /// <summary>
@@ -32,6 +32,7 @@ namespace GT.Trace.Packaging.Infra.Services
         private static string GetJulianDay() => $"{DateTime.Now.DayOfYear:000}";
 
         public static bool CheckIsRiderFormat(string value) => Regex.Match(value, RiderLabelFormatRegExPattern).Success;
+
 
         public bool TryParseRiderFormat(string value, out Label? labelData)
         {
