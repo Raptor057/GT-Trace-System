@@ -28,12 +28,12 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
             var currentUnitsProcess = await GetUnitsCurrentProcess(unitID, lineCode).ConfigureAwait(false);
             if (string.IsNullOrEmpty(currentUnitsProcess))
             {
-                return StatusCode(StatusCodes.Status404NotFound, new ApiResponse($"Unidad #{unitID} no encontrada en la línea {lineCode}."));
+                return StatusCode(StatusCodes.Status404NotFound, new ApiResponse($"Unidad #{unitID} no encontrada en la linea {lineCode}."));
             }
 
             if (!await RouteTransitionIsValid(lineCode, currentUnitsProcess, processNo).ConfigureAwait(false))
             {
-                return StatusCode(StatusCodes.Status403Forbidden, new ApiResponse($"Unidad #{unitID} se encuentra en el proceso \"{currentUnitsProcess}\" el cual no es aceptable en el proceso \"{processNo}\" o el proceso \"{processNo}\" no se encuentra definido para la línea \"{lineCode}\"."));
+                return StatusCode(StatusCodes.Status403Forbidden, new ApiResponse($"Unidad #{unitID} se encuentra en el proceso \"{currentUnitsProcess}\" el cual no es aceptable en el proceso \"{processNo}\" o el proceso \"{processNo}\" no se encuentra definido para la linea \"{lineCode}\"."));
             }
 
             await RecordProcess(unitID, processNo, lineCode).ConfigureAwait(false);

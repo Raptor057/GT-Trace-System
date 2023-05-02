@@ -35,14 +35,14 @@
         private readonly CegidSqlDB _cegid;
         private readonly GttSqlDB _gtt;
 
-        private readonly ILogger<StationRepository> _logger;
+        //private readonly ILogger<StationRepository> _logger;
 
-        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt, ILogger<StationRepository> logger)
+        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt/*, ILogger<StationRepository> logger*/)
         {
             _traza = traza;
             _apps = apps;
             _cegid = cegid;
-            _logger = logger;
+            //_logger = logger;
             _gtt = gtt;
         }
 

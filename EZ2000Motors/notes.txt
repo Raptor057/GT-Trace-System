@@ -1,0 +1,43 @@
+    //public record Ez2000Motor(string Website, string Voltage, string RPM, string Date, string Time, string ProductionID);
+    //public record Label(long UnitID, string Part, string ClientPartNo, string JulianDay);
+    //public interface ILabelParserService
+    //{
+    //    bool TryParseRiderFormat(string value, out Label? labelData);
+    //    bool TryParseNewWBFormat(string value, out Label? labelData);
+    //    bool TryParseEzMotorFormat(string value, out Ez2000Motor? labelData);
+
+    //    //bool TryParseNewWBFormat(string value, out Label? labelData);
+    //}
+    //public sealed record LabelParserService(ILogger<LabelParserService> Logger, IConfigurationRoot Configuration) : ILabelParserService
+    //{
+    //    private const string LabelFormatRegExPatternsSectionName = "LabelFormatRegExPatterns";
+
+    //    private const string RiderLabelFormatRegExPatternName = "Rider";
+
+    //    private const string WalkBehindLabelFormatRegExPatternName = "WalkBehind";
+
+    //    private const string MotorsEZ2000LabelFormatRegExPatternName = "MotorsEZ2000";
+
+    //    public const string InformationSeparatorThree = "\u001d";
+
+    //    public const string EndOfTransmission = "\u0004";
+
+    //    private static string RiderLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{RiderLabelFormatRegExPatternName}";
+    //    private static string WalkBehindLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{WalkBehindLabelFormatRegExPatternName}";
+    //    private static string MotorsEZ2000LabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{MotorsEZ2000LabelFormatRegExPatternName}";
+
+    //    public bool TryParseRiderFormat(string value, out Label? labelData)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public bool TryParseNewWBFormat(string value, out Label? labelData)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public bool TryParseEzMotorFormat(string value, out Ez2000Motor? labelData)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
