@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using System.Globalization;
+//using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ2000
@@ -94,14 +94,14 @@ namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ200
         private static async Task<SqlConnection> GetGttConnection() =>
         await GetOpenConnection("Data Source=MXSRVAPPS\\SQLEXPRESS, 1433;Initial Catalog=gtt;UID=svc_trace_v2;PWD=svc_trace_v2;TrustServerCertificate=True;").ConfigureAwait(false);
 
-        private static async Task JoinMotors(long unitID, string web, string voltaje, string rpm, string date, string time, string productionID, string voltaje2, string rpm2, string date2, string time2, string productionID2)
+        private static async Task JoinMotors(long unitID, string web, string No_Load_Current, string No_Load_Speed, string date, string time, string Motor_number, string No_Load_Current2, string No_Load_Speed2, string date2, string time2, string Motor_number2)
         {
             using var con = await GetGttConnection().ConfigureAwait(false);
             await con.ExecuteAsync(
-                "INSERT INTO [dbo].[EZ2000Motors]([UnitID],[Website],[Voltage],[RPM],[Date],[Time],[ProductionID])VALUES" +
-                "(@unitID,@web,@voltaje,@rpm,@date,@time,@productionID)," +
-                "(@unitID,@web,@voltaje2,@rpm2,@date2,@time2,@productionID2)",
-                new { unitID, web, voltaje, rpm, date, time, productionID, voltaje2, rpm2, date2, time2, productionID2 });
+                "INSERT INTO [dbo].[EZ2000Motors]([UnitID],[Website],[No_Load_Current],[No_Load_Speed],[Date],[Time],[Motor_number])VALUES" +
+                "(@unitID,@web,@No_Load_Current,@No_Load_Speed,@date,@time,@Motor_number)," +
+                "(@unitID,@web,@No_Load_Current2,@No_Load_Speed2,@date2,@time2,@Motor_number2)",
+                new { unitID, web, No_Load_Current, No_Load_Speed, date, time, Motor_number, No_Load_Current2, No_Load_Speed2, date2, time2, Motor_number2 });
         }
     }
 }

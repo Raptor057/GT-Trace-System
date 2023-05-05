@@ -92,27 +92,6 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
 
             await _stations.SaveAsync(station).ConfigureAwait(false);
 
-            if (printJrLabel) //Este IF se movio debido a que no se imprimia la ultima Etiqueta JR al terminar la tarima.
-            {
-                var date = DateTime.Now.Date;
-                var container = new ContainerDto
-                {
-                    ApprovalDate = station.Line.Pallet.Approval?.Date,
-                    Approver = station.Line.Pallet.Approval?.Username,
-                    Customer = station.Line.WorkOrder.Client.Description,
-                    CustomerPartNo = station.Line.WorkOrder.CustomerPartNo,
-                    Date = date,
-                    JulianDate = $"{date.DayOfYear:000}{date.Year - 2000}",
-                    LineName = station.Line.Name,
-                    PartDescription = station.Line.WorkOrder.Part!.Description,
-                    PartNo = station.Line.WorkOrder.Part!.Number,
-                    PurchaseOrderNo = station.Line.WorkOrder.PO.Number,
-                    Quantity = containerQuantity,
-                    Revision = station.Line.WorkOrder.Part.Revision.OriginalValue
-                };
-                return new ContainerCompleteResponse(station.Line.Code, unit.ID, station.Line.QcContainerApprovalInWarning, station.Line.QcContainerApprovalIsRequired, container, station.Line.WorkOrder.Code);
-            }
-
             if (printMasterLabel)
             {
                 long? masterLabelID = await _stations.GetLatestMasterLabelFolioByLineAsync(station.Line.Name).ConfigureAwait(false);
@@ -140,9 +119,26 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 };
                 return new PalletCompleteResponse(station.Line.Code, unit.ID, station.Line.QcContainerApprovalInWarning, station.Line.QcContainerApprovalIsRequired, pallet, station.Line.WorkOrder.Code); //Aqui se envia el dato Origen
             }
-
-            
-
+            if (printJrLabel) //Este IF se movio debido a que no se imprimia la ultima Etiqueta JR al terminar la tarima.
+            {
+                var date = DateTime.Now.Date;
+                var container = new ContainerDto
+                {
+                    ApprovalDate = station.Line.Pallet.Approval?.Date,
+                    Approver = station.Line.Pallet.Approval?.Username,
+                    Customer = station.Line.WorkOrder.Client.Description,
+                    CustomerPartNo = station.Line.WorkOrder.CustomerPartNo,
+                    Date = date,
+                    JulianDate = $"{date.DayOfYear:000}{date.Year - 2000}",
+                    LineName = station.Line.Name,
+                    PartDescription = station.Line.WorkOrder.Part!.Description,
+                    PartNo = station.Line.WorkOrder.Part!.Number,
+                    PurchaseOrderNo = station.Line.WorkOrder.PO.Number,
+                    Quantity = containerQuantity,
+                    Revision = station.Line.WorkOrder.Part.Revision.OriginalValue
+                };
+                return new ContainerCompleteResponse(station.Line.Code, unit.ID, station.Line.QcContainerApprovalInWarning, station.Line.QcContainerApprovalIsRequired, container, station.Line.WorkOrder.Code);
+            }
             return new UnitPackedResponse(station.Line.Code, unit.ID, station.Line.QcContainerApprovalInWarning, station.Line.QcContainerApprovalIsRequired, station.Line.WorkOrder.Part.Number, station.Line.WorkOrder.Code);
         }
     }

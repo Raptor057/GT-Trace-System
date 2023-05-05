@@ -80,7 +80,7 @@ namespace GT.Trace.Infra.Repositories
                 prod_unit.active_revision = production.rev;
                 prod_unit.codew = production.codew;
             }
-            var bom = await _bom.FetchBomAsync(prod_unit.modelo, prod_unit.letter).ConfigureAwait(false);
+            var bom = await _bom.FetchBomAsync(prod_unit.modelo, prod_unit.letter).ConfigureAwait(false); //Esta linea busca el bom del modelo en la tabla bom de la DB Trazab
             var set = await _pointsOfUse.FindActiveTraceEtisAsync(prod_unit.letter, prod_unit.modelo, prod_unit.codew).ConfigureAwait(false);
             var loadedEtis = await _pointsOfUse.FetchAllLoadedEtisAsync(prod_unit.letter).ConfigureAwait(false);
 
