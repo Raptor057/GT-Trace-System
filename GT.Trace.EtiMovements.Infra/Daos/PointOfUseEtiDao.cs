@@ -18,7 +18,9 @@ WHERE s.UtcExpirationTime = '2099-12-31 23:59:59.997';", new { pointOfUseCode, c
         public async Task<int> AddAsync(PointOfUseEtis movement)
         {
             return await Connection.ExecuteAsync(
-                "INSERT INTO dbo.PointOfUseEtis (PointOfUseCode, EtiNo, ComponentNo, UtcEffectiveTime, LotNo) VALUES(@PointOfUseCode, @EtiNo, @ComponentNo, @UtcEffectiveTime, @LotNo);",
+                "INSERT INTO dbo.PointOfUseEtis (PointOfUseCode, EtiNo, ComponentNo, UtcEffectiveTime, LotNo) VALUES(@PointOfUseCode, @EtiNo, @ComponentNo, @UtcEffectiveTime, @LotNo);" +
+                "EXECUTE [dbo].[UpsCopyEtiInV2] @EtiNo;",//Esta linea agrega en la tabla [PointOfUseEtisV2] el dato recien agregado, se hizo asi ya que en el update se utiliza
+                //el ID para actualizar y no el numero de eti.
                 movement
             ).ConfigureAwait(false);
         }
@@ -26,7 +28,8 @@ WHERE s.UtcExpirationTime = '2099-12-31 23:59:59.997';", new { pointOfUseCode, c
         public async Task<int> UpdateAsync(PointOfUseEtis movement)
         {
             return await Connection.ExecuteAsync(
-                "UPDATE dbo.PointOfUseEtis SET UtcEffectiveTime = @UtcEffectiveTime, UtcUsageTime = @UtcUsageTime, UtcExpirationTime = @UtcExpirationTime, IsDepleted = @IsDepleted WHERE ID = @ID;",
+                "UPDATE dbo.PointOfUseEtis SET UtcEffectiveTime = @UtcEffectiveTime, UtcUsageTime = @UtcUsageTime, UtcExpirationTime = @UtcExpirationTime, IsDepleted = @IsDepleted WHERE ID = @ID;" +
+                "UPDATE dbo.PointOfUseEtisV2 SET UtcEffectiveTime = @UtcEffectiveTime, UtcUsageTime = @UtcUsageTime, UtcExpirationTime = @UtcExpirationTime, IsDepleted = @IsDepleted WHERE ID = @ID;",
                 movement
             ).ConfigureAwait(false);
         }
@@ -35,6 +38,13 @@ WHERE s.UtcExpirationTime = '2099-12-31 23:59:59.997';", new { pointOfUseCode, c
         {
             return await Connection.QueryFirstAsync<PointOfUseEtis>("SELECT TOP 1 * FROM dbo.PointOfUseEtis WHERE EtiNo = @etiNo ORDER BY ID DESC;", new { etiNo }).ConfigureAwait(false);
         }
+
+        //agregado para guardar las etis removidas en la tabla SaveRemoveEtis
+        public async Task<int> SaveRemoveEtiAsync(PointOfUseEtis movement)
+        {
+            return await Connection.ExecuteAsync("EXEC InsertSaveRemoveEti @etiNo;",movement).ConfigureAwait(false);
+        }
+
 
         public async Task<PointOfUseEtis?> GetLastUsedNotReturnedEtiAsync(string pointOfUseCode, string componentNo)
         {

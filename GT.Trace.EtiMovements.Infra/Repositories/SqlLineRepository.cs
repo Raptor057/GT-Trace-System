@@ -101,6 +101,9 @@ namespace GT.Trace.EtiMovements.Infra.Repositories
             var movement = await _movements.GetEtiLastMovementAsync(e.EtiNo).ConfigureAwait(false)
                 ?? throw new NullReferenceException($"Ultimo movimiento de la ETI {e.EtiNo} no encontrado.");
             movement.UtcExpirationTime = e.EndTime.ToUniversalTime();
+
+            await _movements.SaveRemoveEtiAsync(movement).ConfigureAwait(false);//esta linea guarda la etiqueta descargada.
+            
             await _movements.UpdateAsync(movement).ConfigureAwait(false);
         }
 
