@@ -57,55 +57,37 @@ const HttpRequest = (function () {
     };
 })();
 
-export const EtiMovementsApi = (function (apiUrl) {
-    //apiUrl = 'http://localhost:5183';
-    //apiUrl = 'http://localhost:5072';
-    return {
-        useEti: (lineCode, etiNo) =>
-            HttpRequest.put(`${apiUrl}/api/lines/${lineCode}/etis`, { EtiInput: etiNo }),
-    
-        returnEti: (lineCode, etiNo) =>
-            HttpRequest.delete(`${apiUrl}/api/lines/${lineCode}/etis`, { EtiInput: etiNo, IsReturn: true }),
-    };
-})("http://mxsrvapps.gt.local/gtt/services/etimovements");
-
 export const MaterialLoadingApi = (function (apiUrl) {
     //apiUrl = 'http://localhost:5183';
     return {
         getLine: (lineCode) =>
-            HttpRequest.get(`${apiUrl}/api/lines/${lineCode}`)
+            HttpRequest.get(`${apiUrl}/api/lines/${lineCode}`),
+        /**
+         * Poka Yoke implemented to block the lines requested as a corrective action for 8D ACIN-2223-005.
+        2 endpoints were added in the Packaging api
+        1) set a line lock and unlock when the assembly UI scans for something wrong.
+        2) supervisor password validation.
+        */
+        getEtiPointsOfUse: async (etiNo,lineCode,partNo ) =>
+        HttpRequest.get(`${apiUrl}/api/etis/${etiNo}/pointsofuse?lineCode=${lineCode}&partNo=${partNo}`),      
+
     };
 })("http://mxsrvapps.gt.local/gtt/services/materialloading");
 
-export const CommonApi = (function (apiUrl) {
-    //apiUrl = 'http://localhost:5183';
-    return {
-        getCurrentHourProduction: async (lineCode) =>
-            HttpRequest.get(`${apiUrl}/api/lines/${lineCode}/production/hours/current`),
-    };
-})("http://mxsrvapps/gtt/services/common");
-
 export const ProcessHistoryApi = (function (apiUrl) {
-    //apiUrl = 'http://localhost:5183';
+    //apiUrl = 'http://localhost:5270';
     return {
-        recordProcess: async (lineCode, processNo, unitID) =>
-            HttpRequest.post(`${apiUrl}/api/units/${unitID}/lines/${lineCode}/processes/${processNo}`),
+        UpdateEtis: async (EtiNo) =>
+            HttpRequest.post(`${apiUrl}/api/eti/${EtiNo}`),
+
+        SaveElectricalMotors: async (ProductionID,LineCode) =>
+//        HttpRequest.post(`${apiUrl}/api/ProductionID/${ProductionID}/Line/${LineCode}`),
+        HttpRequest.post(`${apiUrl}/api/ProductionID/${ProductionID}/Line/${LineCode}`),
+        ///api/ProductionID/{ProductionID}/Line/{LineCode}
+
+        RecordProcessNo: async (UnitID,LineCode) =>
+        //HttpRequest.post(`${apiUrl}/api/units/{unitID}/lines/${LineCode}/processes/${UnitID}`),
+        HttpRequest.post(`${apiUrl}/api/UnitID/${UnitID}/Line/${LineCode}`),
+        ///api/UnitID/{unitID}/Line/{LineCode}
     };
 })("http://mxsrvapps/gtt/services/processhistory");
-
-/**
- * Poka Yoke implemented to block the lines requested as a corrective action for 8D ACIN-2223-005.
-2 endpoints were added in the Packaging api
-1) set a line lock and unlock when the assembly UI scans for something wrong.
-2) supervisor password validation.
- */
-export const PackagingApi = (function (apiUrl) {
-    //apiUrl = 'http://localhost:5183';
-    return {       
-        getAuthorizedUserPassword : async (AuthorizedUserPassword) =>
-        HttpRequest.get(`${apiUrl}/api/Auth/${AuthorizedUserPassword}`),
-
-        SetStationBlocked : async (is_blocked,lineName) =>
-        HttpRequest.put(`${apiUrl}/api/StationBlocked/${is_blocked}/${lineName}`),
-        };
-})("http://mxsrvapps.gt.local/gtt/services/packaging");

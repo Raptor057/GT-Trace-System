@@ -6,29 +6,25 @@ async function playAudio(audio) {
 };
 
 const Sfx = new class {
-    constructor(success, failure) {
-        this.playSuccessSoundAsync = success;
-        this.playFailureSoundAsync = failure;
+
+    constructor() {
+        this.counter = 0;
     }
 
-    playEtiUsedAudio = async () => {
-        playAudio(new Audio("./sfx/smb_coin.wav"));
+    playSuccessSoundAsync = async function () {
+        this.counter = this.counter || 0;
+        let sounds = ['mario-ya', 'mario-woohoo', 'mario-yahoo'];
+        await playAudio(new Audio(`./sfx/${sounds[this.counter]}.wav`));
+        this.counter = ++this.counter % 3;
     };
 
-    playEtiLoadedAudio = async () => {
-        playAudio(new Audio("./sfx/smb_jumpsmall.wav"));
+    playFailureSoundAsync = async function () {
+        let sounds = ['invalid', 'mario-doh', 'mario-mamamia'];
+        await playAudio(new Audio(`./sfx/${sounds[Math.floor(Math.random() * 3)]}.wav`));
     };
 
-    playEtiUnloadedAudio = async () => {
-        playAudio(new Audio("./sfx/smb_kick.wav"));
-    };
-
-    playEtiReturnedAudio = async () => {
-        playAudio(new Audio("./sfx/smb_stomp.wav"));
-    };
-
-    playUnitPackedAudio = async () => {
-        playAudio(new Audio("./sfx/smb_coin.wav"));
+    playPickingSoundAsync = async function () {
+        await playAudio(new Audio(`./sfx/boing.wav`));
     };
 };
 
