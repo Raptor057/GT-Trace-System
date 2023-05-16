@@ -1,25 +1,29 @@
 <script>
   import { onMount } from "svelte";
+
   export let curTime = new Date();
+
   onMount(async () => setInterval(async () => (curTime = new Date()), 500));
 </script>
 
-<footer>
+<div class="footer">
   <span class="cur-time">{curTime.toLocaleString()}</span>
-</footer>
+</div>
 
-<style>
-  footer {
+<style lang="scss">
+  div.footer {
     background-color: #061933;
     bottom: 0;
     color: white;
-    height: 2em;
+    height: 2rem;
+    left: 0;
     line-height: 2em;
-    padding-left: 1em;
+    overflow: hidden;
+    padding: 0 0.25em;
     position: absolute;
-    width: 100%;
-  }
-  footer > span.cur-time {
+    right: 0;
+    > span.cur-time {
       float: right;
     }
+  }
 </style>

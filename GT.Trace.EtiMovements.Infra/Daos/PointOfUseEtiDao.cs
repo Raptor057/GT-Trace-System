@@ -20,7 +20,7 @@ WHERE s.UtcExpirationTime = '2099-12-31 23:59:59.997';", new { pointOfUseCode, c
             return await Connection.ExecuteAsync(
                 "INSERT INTO dbo.PointOfUseEtis (PointOfUseCode, EtiNo, ComponentNo, UtcEffectiveTime, LotNo) VALUES(@PointOfUseCode, @EtiNo, @ComponentNo, @UtcEffectiveTime, @LotNo);" +
                 "EXECUTE [dbo].[UpsCopyEtiInV2] @EtiNo;",//Esta linea agrega en la tabla [PointOfUseEtisV2] el dato recien agregado, se hizo asi ya que en el update se utiliza
-                //el ID para actualizar y no el numero de eti.
+                                                         //el ID para actualizar y no el numero de eti.
                 movement
             ).ConfigureAwait(false);
         }
@@ -42,7 +42,7 @@ WHERE s.UtcExpirationTime = '2099-12-31 23:59:59.997';", new { pointOfUseCode, c
         //agregado para guardar las etis removidas en la tabla SaveRemoveEtis
         public async Task<int> SaveRemoveEtiAsync(PointOfUseEtis movement)
         {
-            return await Connection.ExecuteAsync("EXEC InsertSaveRemoveEti @etiNo;",movement).ConfigureAwait(false);
+            return await Connection.ExecuteAsync("EXEC InsertSaveRemoveEti @etiNo;", movement).ConfigureAwait(false);
         }
 
 

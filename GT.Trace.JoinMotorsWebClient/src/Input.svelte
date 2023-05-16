@@ -2,6 +2,9 @@
   import { onMount } from "svelte";
   import Sfx from "./utils/Sfx";
   import {JoinMotors} from "./utils/HttpRequests";
+  import MessageLog from "./MessageLog.svelte";
+let addMessage;
+  
   
 let inputValue = "";
 let motor1 = "";
@@ -15,8 +18,9 @@ const motorRegex = /^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])\s+(?<rpm>[0-9]+)
     .then((response)=>{
     console.log(response);
     })
-    .catch((err)=> alert ('Error al enviar los datos: ' +err));
+    .catch((err)=> addMessage ('Error al enviar los datos: ' +err));
   }
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,22 +34,28 @@ const motorRegex = /^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])\s+(?<rpm>[0-9]+)
         const isValidMotor2 = motorRegex.test(motor2);
         if (isValidMotor2) {
         if (motor1 === motor2) {
-          alert("El motor #1 y el motor #2 no pueden ser iguales. Por favor, inténtalo nuevamente.");
+          addMessage("El motor #1 y el motor #2 no pueden ser iguales. Por favor, inténtalo nuevamente.");
           Sfx.playFailureSoundAsync();
         } else {
+          const transmissionID = inputValue.match(transmissionRegex).groups.transmissionID;
+          const motorID1 = motor1.match(motorRegex).groups.id;
+          const motorID2 = motor2.match(motorRegex).groups.id;
+
           FnJoinMotors(inputValue,motor1,motor2);
           Sfx.playSuccessSoundAsync();
+          addMessage(`La Transmision \n ${transmissionID} \n se registro correctamente con los motores ${motorID1} y motores ${motorID2}.`);
         }
+
       } else {
-          alert("Error al ingresar el motor #2, por favor intenta nuevamente");
+        addMessage("Error al ingresar el motor #2, por favor intenta nuevamente");
           Sfx.playFailureSoundAsync();
         }
       } else {
-        alert("Error al ingresar el motor #1, por favor intenta nuevamente");
+        addMessage("Error al ingresar el motor #1, por favor intenta nuevamente");
         Sfx.playFailureSoundAsync();
       }
     } else {
-      alert("Error por favor escanea la etiqueta de transmision!");
+      addMessage("Error por favor escanea la etiqueta de transmision!");
       Sfx.playFailureSoundAsync();
     }
     inputValue = "";
@@ -67,7 +77,7 @@ onMount(() => {
       bind:value={inputValue}
       placeholder="Favor de escanear la etiqueta de la transmision."
     />
-    
+    <MessageLog bind:addMessage />
   </form>
 </div>
 
@@ -76,6 +86,6 @@ onMount(() => {
     width: 100%;
   }
   div.app-child {
-    padding: 0.5rem;
+    padding: 2.5rem;
   }
 </style>

@@ -1,24 +1,3 @@
-/*
-Esta clase es un módulo que utiliza la API fetch de JavaScript para hacer solicitudes HTTP a un servidor y procesar las respuestas.
-La primera función handleRejectedResponse se encarga de procesar los errores de respuesta de la solicitud HTTP. 
-Toma como parámetro el objeto error que representa la respuesta HTTP con errores. 
-La función imprime el error en la consola, y luego construye un mensaje de error a partir del status y statusText de la respuesta HTTP. 
-Luego, si la respuesta contiene datos JSON, la función llama a la función processJson para procesar los datos JSON. 
-Si la respuesta no es JSON, llama a la función processText para procesar el texto. 
-Si la función processJson encuentra errores en la respuesta JSON, construye un mensaje de error más detallado. 
-En última instancia, la función devuelve una promesa rechazada con el mensaje de error.
-La segunda función getOptions construye un objeto de opciones de solicitud HTTP. 
-Toma como parámetros el método HTTP (por ejemplo, GET, PUT, POST o DELETE) y los datos de la solicitud en formato JSON (opcional). 
-La función construye un objeto de encabezados con un tipo de contenido JSON y otros encabezados personalizados necesarios. 
-Luego construye un objeto de opciones con el método, los encabezados y el modo "cors". Si se proporcionan datos, los agrega al objeto de opciones como el cuerpo de la solicitud.
-La clase HttpRequest contiene un objeto httpRequest que es una función asíncrona que toma como parámetros el método HTTP, la URL y los datos (opcional) de la solicitud. 
-La función utiliza la API fetch para realizar una solicitud HTTP con los parámetros proporcionados y devuelve una promesa. 
-Si la respuesta es exitosa, la función devuelve los datos de respuesta en formato JSON. 
-Si la respuesta tiene errores, la función rechaza la promesa y llama a la función handleRejectedResponse para procesar los errores.
-La clase HttpRequest también contiene cuatro métodos que envuelven httpRequest y le proporcionan una abstracción de nivel superior para realizar solicitudes HTTP. 
-Los métodos get, put, post y delete toman la URL y los datos (opcional) de la solicitud y llaman a httpRequest con los parámetros adecuados para el método HTTP correspondiente. 
-Cada método devuelve una promesa que resuelve los datos de respuesta en formato JSON o la rechaza si la solicitud tiene errores.
-*/
 const handleRejectedResponse = async (error) => {
     console.error(error);
     let message = error.message || `${error.status}: ${error.statusText}`;
@@ -58,12 +37,10 @@ const getOptions = (method, data = null) => {
 
 const HttpRequest = (function () {
     const httpRequest = async (method, url, data = null) => {
-        console.debug("method", method);
-        console.debug("url", url);
-        console.debug("data", data);
+        console.debug(method, url);
         return fetch(url, getOptions(method, data))
             .then(response => {
-                console.debug("response", response);
+                console.debug(response);
                 if (!response.ok) {
                     return Promise.reject(response);
                 }
@@ -79,6 +56,77 @@ const HttpRequest = (function () {
         delete: async (url, data) => httpRequest('DELETE', url, data),
     };
 })();
+
+export const EtiMovementsApi = (function (apiUrl) {
+    //apiUrl = 'http://localhost:5183';
+    //apiUrl = 'http://localhost:5072';
+    return {
+        useEti: (lineCode, etiNo) =>
+            HttpRequest.put(`${apiUrl}/api/lines/${lineCode}/etis`, { EtiInput: etiNo }),
+    
+        returnEti: (lineCode, etiNo) =>
+            HttpRequest.delete(`${apiUrl}/api/lines/${lineCode}/etis`, { EtiInput: etiNo, IsReturn: true }),
+    };
+})("http://mxsrvapps.gt.local/gtt/services/etimovements");
+
+export const MaterialLoadingApi = (function (apiUrl) {
+    //apiUrl = 'http://localhost:5183';
+    return {
+        getLine: (lineCode) =>
+            HttpRequest.get(`${apiUrl}/api/lines/${lineCode}`),
+        /**
+         * Poka Yoke implemented to block the lines requested as a corrective action for 8D ACIN-2223-005.
+        2 endpoints were added in the Packaging api
+        1) set a line lock and unlock when the assembly UI scans for something wrong.
+        2) supervisor password validation.
+        */
+        getEtiPointsOfUse: async (etiNo,lineCode,partNo ) =>
+        HttpRequest.get(`${apiUrl}/api/etis/${etiNo}/pointsofuse?lineCode=${lineCode}&partNo=${partNo}`),      
+
+    };
+})("http://mxsrvapps.gt.local/gtt/services/materialloading");
+
+export const CommonApi = (function (apiUrl) {
+    //apiUrl = 'http://localhost:5183';
+    return {
+        getCurrentHourProduction: async (lineCode) =>
+            HttpRequest.get(`${apiUrl}/api/lines/${lineCode}/production/hours/current`),
+    };
+})("http://mxsrvapps/gtt/services/common");
+
+export const ProcessHistoryApi = (function (apiUrl) {
+    //apiUrl = 'http://localhost:5183';
+    return {
+        recordProcess: async (lineCode, processNo, unitID) =>
+            HttpRequest.post(`${apiUrl}/api/units/${unitID}/lines/${lineCode}/processes/${processNo}`),
+    };
+})("http://mxsrvapps/gtt/services/processhistory");
+
+/**
+ * Poka Yoke implemented to block the lines requested as a corrective action for 8D ACIN-2223-005.
+2 endpoints were added in the Packaging api
+1) set a line lock and unlock when the assembly UI scans for something wrong.
+2) supervisor password validation.
+ */
+export const PackagingApi = (function (apiUrl) {
+    //apiUrl = 'http://localhost:5183';
+    return {       
+        getAuthorizedUserPassword : async (AuthorizedUserPassword) =>
+        HttpRequest.get(`${apiUrl}/api/Auth/${AuthorizedUserPassword}`),
+
+        SetStationBlocked : async (is_blocked,lineName) =>
+        HttpRequest.put(`${apiUrl}/api/StationBlocked/${is_blocked}/${lineName}`),
+        };
+})("http://mxsrvapps.gt.local/gtt/services/packaging");
+//--------------------------------------------------------------------------------
+export const EventsHistory = (function (apiUrl) {
+    //apiUrl = 'http://localhost:1117';
+    
+    return {
+        recordHistory: async (clientmessage, lineCode) =>
+            HttpRequest.post(`${apiUrl}/api/message/${clientmessage}/lines/${lineCode}`),
+    };
+})("http://mxsrvapps/gtt/services/eventshistory");
 
 export const JoinMotors = (function (apiUrl) {
     //apiUrl = 'https://localhost:7274';

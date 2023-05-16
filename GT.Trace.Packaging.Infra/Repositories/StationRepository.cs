@@ -111,17 +111,13 @@
             if (stationIsBlocked.is_blocked == true)
                 throw new InvalidCastException($"No se puede continuar. La estación {hostname} de la linea {selectedLineCode} está bloqueada debido a: [{messagefromassembly}]." +
                     $"Ingrese la contraseña de supervisor / inspector de calidad en la estación de ensamble para continuar.");
-
-            //var StationIsBlocked = await _traza.TryGetStationIsBlockedAsync(hostname).ConfigureAwait(false);
-            //if (StationIsBlocked.is_blocked == true)
-            //    throw new InvalidCastException($"No puedes continuar, la estacion {hostname} se encuentra bloqueada, Ingresa la contraseña de supervisor en la estacion de ensamble para continuar");
-
             #endregion
 
             var qc_approval = await _traza.TryGetApprovalByWorkOrderAsync(production.codew.Trim()).ConfigureAwait(false);
 
             var intervalProduction = Enumerable.Empty<DataSources.Entities.ProductionTimeInterval>();
 
+            //En esta linea se valida el proceso
             var validSourceProcessesForPackagingProcess = (await _gtt.GetLineRoutingByLineCode(prod_unit.letter.Trim().ToUpper()).ConfigureAwait(false))
                 .Where(item => item.ProcessNo == PackagingProcessNo)
                 .Select(item => item.PrevProcessNo)

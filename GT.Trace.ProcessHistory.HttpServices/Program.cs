@@ -5,7 +5,8 @@ using Serilog.Events;
 Action<CorsPolicyBuilder> cors = builder => builder
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .SetIsOriginAllowed(_ => true)
+                .SetIsOriginAllowed(_ => 
+                true)
                 .AllowCredentials();
 
 var builder = WebApplication.CreateBuilder(args);

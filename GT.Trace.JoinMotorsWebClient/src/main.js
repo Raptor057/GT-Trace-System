@@ -6,7 +6,7 @@ const params = Object.fromEntries(urlSearchParams.entries());
 const app = new App({
 	target: document.body,
 	props: {
-		//lineCode: params["line"]
+		lineCode: params["line"]
 	}
 });
 

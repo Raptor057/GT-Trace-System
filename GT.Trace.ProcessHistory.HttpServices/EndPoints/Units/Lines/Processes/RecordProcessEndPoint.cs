@@ -1,9 +1,60 @@
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
 {
+    //Hoy estoy en modo huevon y no quiero hacer una API solo para hacer un test ya que realmente tuve un mal dia com mi Laptop que no fue nada agradable.
+    //RA: 05/10/2023
+    #region
+
+    public record Label(long UnitID);
+    public record MotorData(string Volt, string RPM, DateTime DateTime, string SerialNumber);
+
+    public static class Labels
+    {
+        public const string InformationSeparatorThree = "\u001d";
+        public const string EndOfTransmission = "\u0004";
+        private static string WalkBehindLabelFormatRegExPattern => $"\\[\\)>06SWB(?<transmissionID>\\d+)P(?<clientPartNo>.+)Z.+1T(?<partNo>.+)2T(?<partRev>.+)3T(?<julianDay>\\d+)$";
+        private static string ClearInputFromSpecialCharacters(string input) => input.Replace(InformationSeparatorThree, "").Replace(EndOfTransmission, "");
+
+        public static Label? TryParseNewWBFormat(string value)
+        {
+            var match = Regex.Match(
+                ClearInputFromSpecialCharacters(value),
+                WalkBehindLabelFormatRegExPattern,
+                RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            if (match.Success)
+            {
+                return new Label(
+                long.Parse(match.Groups["transmissionID"].Value));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static MotorData? ParseMotorData(string input)
+        {
+            var regex = new Regex(@"^(?<Volt>[0-9\.]+[A-Z])\|(?<RPM>[0-9]+)\|(?<datetime>\d{6}-\d{6})\|(?<SerialNumber>[0-9A-Z]+)$");
+            var match = regex.Match(input);
+            if (!match.Success) return null;
+            var dateTimeString = match.Groups["datetime"].Value;
+            var dateTime = DateTime.ParseExact(dateTimeString, "yyMMdd-HHmmss", CultureInfo.InvariantCulture);
+
+            return new MotorData(
+                match.Groups["Volt"].Value,
+                match.Groups["RPM"].Value,
+                dateTime,
+                match.Groups["SerialNumber"].Value
+            );
+        }
+    }
+    #endregion
+
     [ApiController]
     public class RecordProcessEndPoint : ControllerBase
     {
@@ -42,6 +93,88 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
 
             return Ok(new ApiResponse("OK"));
         }
+
+        //Hoy estoy en modo huevon y no quiero hacer una API solo para hacer un test ya que realmente tuve un mal dia com mi Laptop que no fue nada agradable.
+        //RA: 05/10/2023
+        //---------------
+        #region
+        [HttpPost]
+        [Route("/api/eti/{EtiNo}")]
+        public async Task<IActionResult> Execute3([FromRoute] string EtiNo)
+        {
+            
+            await UpdateEtiNoUtcUsageTime(EtiNo).ConfigureAwait(false);
+            return Ok(new ApiResponse("OK"));
+        }
+
+        private async Task UpdateEtiNoUtcUsageTime(string EtiNo)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "UPDATE PointOfUseEtisV2 SET UtcUsageTime = GETUTCDATE() WHERE EtiNo = @EtiNo AND UtcExpirationTime is NULL and UtcUsageTime is not NULL and IsDepleted != 1",
+                new { EtiNo});
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("/api/UnitID/{ezLabel}/Line/{LineCode}")]
+        public async Task<IActionResult> Execute([FromRoute] string ezLabel, [FromRoute] string LineCode)
+        {
+            try
+            {
+                var label = Labels.TryParseNewWBFormat(ezLabel);
+
+                if (ezLabel == null)
+                {
+                    return BadRequest(new ApiResponse("Datos inválidos."));
+                }
+                await RecordProcess2(label.UnitID,"0",LineCode).ConfigureAwait(false);
+                return Ok(new ApiResponse($"Unidad {label.UnitID} registrada correctamente."));
+                //return Ok(new ApiResponse("OK"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse($"Ocurrió un error al registrar los datos: {ex.Message}"));
+            }
+        }
+        private async Task RecordProcess2(long unitID, string processNo, string lineCode)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "INSERT INTO dbo.ProcessHistory (UnitID, ProcessID, LineCode) VALUES(@unitID, @processNo, @lineCode);",
+                new { unitID, processNo, lineCode });
+        }
+        //-------------------------------------------------------------------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("/api/ProductionID/{ProductionID}/Line/{LineCode}")]
+        public async Task<IActionResult> Execute5([FromRoute] string ProductionID, [FromRoute] string LineCode)
+        {
+            try
+            {
+                var label = Labels.ParseMotorData(ProductionID);
+
+                if (ProductionID == null)
+                {
+                    return BadRequest(new ApiResponse("Datos inválidos."));
+                }
+                await RecordProcess3(label.SerialNumber,label.Volt, label.RPM,label.DateTime, LineCode).ConfigureAwait(false);
+                return Ok(new ApiResponse($"Unidad {label.SerialNumber} registrada correctamente."));
+                //return Ok(new ApiResponse("OK"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse($"Ocurrió un error al registrar los datos: {ex.Message}"));
+            }
+        }
+        private async Task RecordProcess3(string SerialNumber,string Volt, string RPM, DateTime DateTimeMotor, string LineCode)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);",
+                new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode });
+        }
+        //------------------------------------------------
+        #endregion
 
         public record ApiResponse(string Message);
 
