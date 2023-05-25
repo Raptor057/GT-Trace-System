@@ -9,6 +9,8 @@ namespace GT.Trace.Infra.Daos
             : base(connection)
         { }
 
+
+        //Estatus de las lineas de aqui salen las que son sub ensamble
         public async Task<pro_prod_units> GetLineByLineCodeAsync(string lineCode) =>
             await Connection.QuerySingleAsync<pro_prod_units>("SELECT * FROM APPS.dbo.pro_prod_units WHERE letter=@lineCode;", new { lineCode })
             .ConfigureAwait(false);

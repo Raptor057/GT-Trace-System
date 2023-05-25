@@ -76,6 +76,7 @@ export const MaterialLoadingApi = (function (apiUrl) {
 
 export const ProcessHistoryApi = (function (apiUrl) {
     //apiUrl = 'http://localhost:5270';
+    //apiUrl = 'https://localhost:1117';
     return {
         UpdateEtis: async (EtiNo) =>
             HttpRequest.post(`${apiUrl}/api/eti/${EtiNo}`),

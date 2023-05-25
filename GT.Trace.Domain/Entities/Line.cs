@@ -45,6 +45,7 @@ namespace GT.Trace.Domain.Entities
 
         public IReadOnlyCollection<object> GetEvents() => _events;
 
+        //aqui se puede agregar una validacion extra, para la comparativa del boom tambien.
         public bool CanUseMaterial(string etiNo, out ErrorList errors)
         {
             errors = new();

@@ -6,6 +6,7 @@ namespace GT.Trace.Domain.Entities
     {
         private readonly Dictionary<string, EtiList> _components = new();
 
+        //Parte donde se valida si la eti pertenece al bom de materiales del numero cargado en la linea.
         public PointOfUse(string code, IEnumerable<BomComponent> bom, IEnumerable<SetComponent> set, Dictionary<string, List<string>>? loadedEtisByComponent)
         {
             Code = code;

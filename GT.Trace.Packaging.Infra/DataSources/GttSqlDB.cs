@@ -52,14 +52,15 @@ namespace GT.Trace.Packaging.Infra.DataSources
 
         public async Task<IEnumerable<PointOfUseEtis>> GetActiveSetByLineAsync(string lineCode) =>
             await _con.QueryAsync<PointOfUseEtis>(@"SELECT e.* FROM dbo.LinePointsOfUse p
-JOIN dbo.PointOfUseEtis e
-    ON e.PointOfUseCode = p.PointOfUseCode AND e.UtcUsageTime IS NOT NULL AND e.UtcExpirationTime IS NULL
-WHERE LineCode = @lineCode;", new { lineCode }).ConfigureAwait(false);
+            JOIN dbo.PointOfUseEtis e
+                ON e.PointOfUseCode = p.PointOfUseCode AND e.UtcUsageTime IS NOT NULL AND e.UtcExpirationTime IS NULL
+            WHERE LineCode = @lineCode;", new { lineCode }).ConfigureAwait(false);
 
         internal async Task<IEnumerable<LineRouting>> GetLineRoutingByLineCode(string lineCode) =>
             await _con.QueryAsync<LineRouting>("SELECT * FROM LineRouting WHERE LineCode=@lineCode;", new { lineCode }).ConfigureAwait(false);
 
         //Esto es nuevo para la trazabilidad
+        //Actualmente esto nunca se uso pero lo dejare por si acaso. RA: 5/22/2023
         public async Task AddTracedUnitAsync(long unitID, string partNo, string lineCode, string workOrderCode) =>
             await _con.ExecuteAsync("EXEC UpsInsertProductionTraceability @unitID, @partNo, @lineCode, @workOrderCode;", new { unitID, partNo , lineCode, workOrderCode }).ConfigureAwait(false);
 
@@ -69,5 +70,11 @@ WHERE LineCode = @lineCode;", new { lineCode }).ConfigureAwait(false);
                 "ClientMessage like ('%corresponde con ningún punto de uso para la gama%') and LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
         //public async Task<string> GetMessageFromAssembly(string linecode) =>
         //    await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
+
+
+        //Agregado para insertar Motor, en la linea LE. aun no utilizado pero se va a usar.
+        public async Task<string> InsertInfoMotorsData(string SerialNumber, string Volt, string RPM, DateTime DateTimeMotor, string LineCode) =>
+            await _con.ExecuteScalarAsync<string>("INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);", 
+                new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode }).ConfigureAwait(false);
     }
 }

@@ -16,6 +16,7 @@ let inputValue = "";
 
   const etis = /^(E|SA)\d{4,9}(-T\d{4,9})?$/;
   //----------------
+  //Etis
   function Etis(EtiNo){
     ProcessHistoryApi.UpdateEtis(EtiNo)
     .then((response)=>{
@@ -24,32 +25,54 @@ let inputValue = "";
     .catch((error) => {
         Sfx.playFailureSoundAsync();
         addMessage(error);
+        inputValue = "";
       });
   }
 
+  //Frameless
   function SaveMotors(ProductionID,LineCode){
     ProcessHistoryApi.SaveElectricalMotors(ProductionID,LineCode)
     .then((response)=>{
       Sfx.playSuccessSoundAsync();
+      //addMessage(response);
+      const match = ProductionID.match(motorRegex);
+      if (match) {
+        const SerialNumber = match.groups.SerialNumber;
+        addMessage(`La Unidad \n ${SerialNumber} \n se registró con exito.`);
+      } else {
+        addMessage(`No se pudo extraer el transmissionID de ${SerialNumber}.`);
+      }
     })
     .catch((error) => {
         Sfx.playFailureSoundAsync();
         addMessage(error);
       });
+      inputValue = "";
   }
 
-
-
+  //EZ
   function RecordProcess(UnitID,LineCode){
     ProcessHistoryApi.RecordProcessNo(UnitID,LineCode)
     .then((response)=>{
     Sfx.playSuccessSoundAsync();
+    //addMessage(response);
+    const match = UnitID.match(transmissionRegex);
+      if (match) {
+        const transmissionID = match.groups.transmissionID;
+        addMessage(`El valor \n ${transmissionID} \n se registró con exito.`);
+      } else {
+        addMessage(`No se pudo extraer el transmissionID de ${UnitID}.`);
+      }
     })
     .catch((error) => {
         Sfx.playFailureSoundAsync();
         addMessage(error);
+        //inputValue = "";
       });
+      inputValue = "";
   }
+
+
   //----------------
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -59,18 +82,19 @@ let inputValue = "";
 
     if (isEti) {  
     Etis(inputValue);
-    addMessage(`La Eti \n ${inputValue} \n se registro correctamente para la linea: ${lineCode}.`);
+    //addMessage(`La Eti \n ${response} \n se registro correctamente para la linea: ${lineCode}.`);
   } else if (isTransmissionInput) {
     RecordProcess(inputValue,lineCode);
-    addMessage(`El valor \n ${inputValue} \n se registro en: ${lineCode}.`);
+    //addMessage(`El valor \n ${inputValue} \n se registro en: ${lineCode}.`);
+    addMessage (`${response}`);
   } else if(isMotor){
     SaveMotors(inputValue,lineCode);
-    addMessage(`El valor \n ${inputValue} \n se registro en: ${lineCode}.`);
+    //addMessage(`El valor \n ${inputValue} \n se registro en: ${lineCode}.`);
   }
   else{
     Sfx.playFailureSoundAsync();
       //alert(`El valor \n ${inputValue} \n no es válido para la linea ${lineCode}.`);
-      addMessage(`El valor \n ${inputValue} \n no es válido para la linea ${lineCode}.`);
+      addMessage(`La ETI \n ${inputValue} \n no es válido para la linea ${lineCode}.`);
       
   }
     inputValue = "";

@@ -1,6 +1,7 @@
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -124,19 +125,42 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
             {
                 var label = Labels.TryParseNewWBFormat(ezLabel);
 
-                if (ezLabel == null)
+                if (label == null)
                 {
                     return BadRequest(new ApiResponse("Datos inválidos."));
                 }
-                await RecordProcess2(label.UnitID,"0",LineCode).ConfigureAwait(false);
-                return Ok(new ApiResponse($"Unidad {label.UnitID} registrada correctamente."));
-                //return Ok(new ApiResponse("OK"));
+
+                var unitId = label.UnitID;
+
+                if (!await TraceInEZ2000Motors(label.UnitID).ConfigureAwait(false))
+                {
+                    throw new TraceException("La etiqueta no ha sido trazada en la estación de Join Motors.");
+                }
+                else if(await TraceInProcessHistory(label.UnitID).ConfigureAwait(false))
+                {
+                    throw new TraceException("La etiqueta ya ha sido trazada en esta estación.");
+                }
+                else
+                {
+                    await RecordProcess2(label.UnitID, "0", LineCode).ConfigureAwait(false);
+                    return new OkObjectResult(new ApiResponse($"Unidad {label.UnitID} registrada correctamente."));
+                }
+            }
+            catch (TraceException ex)
+            {
+                return StatusCode(400, new ApiResponse(ex.Message));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse($"Ocurrió un error al registrar los datos: {ex.Message}"));
+                return StatusCode(500, new ApiResponse(ex.Message));
             }
         }
+        public class TraceException : Exception
+        {
+            public TraceException(string message) : base(message)
+            { }
+        }
+
         private async Task RecordProcess2(long unitID, string processNo, string lineCode)
         {
             using var con = await GetGttConnection().ConfigureAwait(false);
@@ -144,6 +168,22 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
                 "INSERT INTO dbo.ProcessHistory (UnitID, ProcessID, LineCode) VALUES(@unitID, @processNo, @lineCode);",
                 new { unitID, processNo, lineCode });
         }
+
+        private async Task<bool> TraceInEZ2000Motors(long unitID)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            return con.ExecuteScalar<int>(
+                "SELECT COUNT(DISTINCT(UnitID)) AS [EZ2000Motors] FROM EZ2000Motors WHERE UnitID = @unitID",
+                new { unitID }) > 0;
+        }
+        private async Task<bool> TraceInProcessHistory(long unitID)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            return con.ExecuteScalar<int>(
+                "SELECT COUNT(UnitID) AS UnitID  FROM [gtt].[dbo].[ProcessHistory] where UnitID = @unitID AND ProcessID = 0",
+                new { unitID }) > 0;
+        }
+
         //-------------------------------------------------------------------------------------------------------------------------------------------
         [HttpPost]
         [Route("/api/ProductionID/{ProductionID}/Line/{LineCode}")]
@@ -151,27 +191,45 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
         {
             try
             {
+                if (string.IsNullOrEmpty(ProductionID))
+                {
+                    throw new TraceException("Datos inválidos.");
+                }
+
                 var label = Labels.ParseMotorData(ProductionID);
 
-                if (ProductionID == null)
+                if (await TraceInMotorsDataFrameless(label.SerialNumber).ConfigureAwait(false))
                 {
-                    return BadRequest(new ApiResponse("Datos inválidos."));
+                    throw new TraceException($"La Unidad {label.SerialNumber} ya se encuentra registrada.");
                 }
-                await RecordProcess3(label.SerialNumber,label.Volt, label.RPM,label.DateTime, LineCode).ConfigureAwait(false);
+
+                await RecordProcess3(label.SerialNumber, label.Volt, label.RPM, label.DateTime, LineCode).ConfigureAwait(false);
                 return Ok(new ApiResponse($"Unidad {label.SerialNumber} registrada correctamente."));
-                //return Ok(new ApiResponse("OK"));
+            }
+            catch (TraceException ex)
+            {
+                return StatusCode(400, new ApiResponse(ex.Message));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse($"Ocurrió un error al registrar los datos: {ex.Message}"));
+                return StatusCode(500, new ApiResponse(ex.Message));
             }
         }
+
         private async Task RecordProcess3(string SerialNumber,string Volt, string RPM, DateTime DateTimeMotor, string LineCode)
         {
             using var con = await GetGttConnection().ConfigureAwait(false);
             await con.ExecuteAsync(
                 "INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);",
                 new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode });
+        }
+
+        private async Task<bool> TraceInMotorsDataFrameless(string ProductionID)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            return con.ExecuteScalar<int>(
+                "SELECT COUNT(DISTINCT(SerialNumber)) FROM MotorsData WHERE SerialNumber = @ProductionID",
+                new { ProductionID }) > 0;
         }
         //------------------------------------------------
         #endregion

@@ -1,5 +1,5 @@
 ﻿using GT.Trace.Common;
-
+//Ver este metodo a detalle.
 namespace GT.Trace.Domain.Entities
 {
     public sealed class Eti
