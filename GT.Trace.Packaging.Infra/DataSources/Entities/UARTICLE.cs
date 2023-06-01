@@ -89,8 +89,11 @@
         public string ARKTINTAUT { get; set; } = "";
 
         public decimal? ARKTIMETO { get; set; }
+        public int? APKNPCECO2 { get; set; }//Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre cantidades en EZ RA: 5/31/2023
 
         public int PalletSize => APKNPCECON ?? 0;
+
+        public int PalletSize2 => APKNPCECO2 ?? 0; //Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre cantidades en EZ RA: 5/31/2023
 
         public int ContainerSize => APKSTDPACK ?? 0;
 

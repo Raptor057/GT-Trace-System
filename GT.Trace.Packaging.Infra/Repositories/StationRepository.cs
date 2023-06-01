@@ -4,13 +4,18 @@
     using GT.Trace.Packaging.Domain.Entities;
     using GT.Trace.Packaging.Domain.Events;
     using GT.Trace.Packaging.Domain.Repositories;
+    using System.Linq;
+
 
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
+    using Microsoft.Extensions.Configuration;
+    using Org.BouncyCastle.Bcpg;
 
     internal class StationRepository : IStationRepository
     {
         public const string PackagingProcessNo = "999";
+        
 
         private static string GetLineCode(bool canChangeLine, string? selectedLineCode, string stationLineName)
         {
@@ -34,22 +39,30 @@
         private readonly AppsSqlDB _apps;
         private readonly CegidSqlDB _cegid;
         private readonly GttSqlDB _gtt;
+        private readonly IConfiguration _configuration; //Aqui se agrego el Iconfiguration RA: 5/31/2023
+        private readonly string[] _cegidBisPartNumbers;
 
         //private readonly ILogger<StationRepository> _logger;
 
-        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt/*, ILogger<StationRepository> logger*/)
+        //Aqui se agrego el Iconfiguration RA: 5/31/2023
+        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt, IConfiguration configuration/*, ILogger<StationRepository> logger*/)
         {
             _traza = traza;
             _apps = apps;
             _cegid = cegid;
             //_logger = logger;
             _gtt = gtt;
+            _configuration = configuration; //Aqui se agrego el _configuration RA: 5/31/2023
+            _cegidBisPartNumbers = _configuration.GetSection("CegidBisPartNumber").Get<string[]>();
         }
 
         private Station? _station;
 
         public async Task<Station> GetStationByHostnameAsync(string hostname, string? lineCode, int? palletSize, int? containerSize, string? poNumber)
         {
+            //CegidBisPartNumber
+            var bisPartNumbers = _cegidBisPartNumbers; //Aqui se agrego el _configuration RA: 5/31/2023
+
             var pcmx = await _traza.TryGetStationByHostnameAsync(hostname).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Estación \"{hostname}\" no encontrada.");
 
@@ -75,7 +88,7 @@
             {
                 production = await _apps.GetWorkOrderByCodeAsync(activeWorkOrder).ConfigureAwait(false)
                     ?? throw new InvalidOperationException($"No hay orden de fabricación activa asociada a la línea #{prod_unit.id} ({prod_unit.comments}).");
-                prod_unit.modelo = production.part_number.Trim();
+                prod_unit.modelo = production.part_number.Trim(); //Aqui se obtiene el modelo que se esta corriendo.
                 prod_unit.active_revision = production.rev.Trim();
                 prod_unit.codew = production.codew.Trim();
             }
@@ -136,8 +149,43 @@
             var bom = await _traza.GetBomAsync(production.part_number, prod_unit.letter).ConfigureAwait(false);
             var set = await _gtt.GetActiveSetByLineAsync(prod_unit.letter).ConfigureAwait(false);
 
-            if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+            #region Original
+            //if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;            
             if ((containerSize ?? 0) == 0) containerSize = uarticle.ContainerSize;
+            #endregion
+
+
+            #region Modificado para EZ
+            /*Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre cantidades en EZ , posiblemente eso
+            * se implemente directo en la UI RA:5/31/2023*/
+            if (bisPartNumbers.Contains(prod_unit.modelo))
+            {
+                var QuantityFromLastMasterID = await _traza.GetQuantityFromLastMasterID(prod_unit.letter, prod_unit.modelo).ConfigureAwait(false);
+                QuantityFromLastMasterID = QuantityFromLastMasterID != null ? QuantityFromLastMasterID : 0;
+
+                if (QuantityFromLastMasterID >= 0 && QuantityFromLastMasterID < uarticle.PalletSize)
+                {
+                    if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+                }
+                else if (QuantityFromLastMasterID == uarticle.PalletSize)
+                {
+                    if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize2;
+                }
+                else if (QuantityFromLastMasterID == uarticle.PalletSize2)
+                {
+                    if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+                }
+                else
+                {
+                    if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+                }
+            }
+            else
+            {
+                if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+            }
+
+            #endregion
             var containerPlaceholders = Enumerable.Range(0, scannedUnits.Count() / (containerSize ?? 0) + 1);
 
             var purchaseOrder = new PurchaseOrder(poNumber ?? refext.PO.Trim());

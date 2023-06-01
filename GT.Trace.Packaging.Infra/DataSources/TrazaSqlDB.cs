@@ -11,6 +11,12 @@ namespace GT.Trace.Packaging.Infra.DataSources
             _con = con;
         }
 
+        #region Para Usar el parametro Bis de CEGID
+        public async Task<int> GetQuantityFromLastMasterID(string lineCode, string partNo) => 
+            await _con.ExecuteScalarAsync<int>("SELECT  top 1 qty FROM Master_labels_WB WHERE line LIKE (CONCAT('%',@lineCode,'%')) AND part_num = @partNo and is_active != 0 order BY id DESC", new {lineCode, partNo}).ConfigureAwait(false);
+
+        #endregion
+
         public async Task<int> GetCurrentContainerQuantity(string lineCode, string partNo) =>
             await _con.ExecuteScalarAsync<int>("", new { lineCode, partNo }).ConfigureAwait(false);
 

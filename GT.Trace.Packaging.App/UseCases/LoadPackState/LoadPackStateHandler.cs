@@ -41,9 +41,10 @@ namespace GT.Trace.Packaging.App.UseCases.LoadPackState
             var packagingImageFileName = Path.Combine(packfol, $"{station.Line.WorkOrder.Part.ProductFamily}.jpg");
             if (!File.Exists(packagingImageFileName))
             {
-                packagingImageFileName = string.Empty;
+                //packagingImageFileName = string.Empty;
+                packagingImageFileName = Path.Combine(packfol, "no-especificado.jpg");
             }
-            else
+            if (File.Exists(packagingImageFileName))
             {
                 var bytes = File.ReadAllBytes(packagingImageFileName);
                 packagingImageBase64 = Convert.ToBase64String(bytes);
@@ -62,6 +63,7 @@ namespace GT.Trace.Packaging.App.UseCases.LoadPackState
                 sampleImageBase64 = Convert.ToBase64String(bytes);
             }
 
+            
             return new SuccessLoadPackStateResponse(new PackStateDto(
                 station.Line.Name,
                 station.Line.Code,

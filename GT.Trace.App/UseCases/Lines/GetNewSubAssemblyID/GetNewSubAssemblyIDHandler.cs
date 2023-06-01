@@ -5,6 +5,7 @@ using GT.Trace.Common.CleanArch;
 
 namespace GT.Trace.App.UseCases.Lines.GetNewSubAssemblyID
 {
+    //Aqui se obtienen los sub ensambles
     internal sealed class GetNewSubAssemblyIDHandler : ResultInteractorBase<GetNewSubAssemblyIDRequest, GetNewSubAssemblyIDResponse>
     {
         private readonly IGetNewSubAssemblyIDRepository _getNewSubAssmblyID;

@@ -15,12 +15,19 @@ namespace GT.Trace.Packaging.Infra.Services
 
         private const string WalkBehindLabelFormatRegExPatternName = "WalkBehind";
 
+        private const string FramelessLabelFormatRegExPatternName = "PMDCMotor700"; //se agrego nuevo
+
+        private const string EZMotorsLabelFormatRegExPatternName = "MotorsEZ2000"; //se agrego nuevo
+
         public const string InformationSeparatorThree = "\u001d";
 
         public const string EndOfTransmission = "\u0004";
 
         private static string RiderLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{RiderLabelFormatRegExPatternName}";
         private static string WalkBehindLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{WalkBehindLabelFormatRegExPatternName}";
+        private static string FramelessLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{FramelessLabelFormatRegExPatternName}";
+        private static string EZMotorsLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{EZMotorsLabelFormatRegExPatternName}";
+
 
         /// <summary>
         /// Removes separator and end of transmission characters from input.
