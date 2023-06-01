@@ -6,17 +6,14 @@
     using GT.Trace.Packaging.Domain.Repositories;
     using System.Linq;
 
-
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Microsoft.Extensions.Configuration;
-    using Org.BouncyCastle.Bcpg;
 
     internal class StationRepository : IStationRepository
     {
         public const string PackagingProcessNo = "999";
         
-
         private static string GetLineCode(bool canChangeLine, string? selectedLineCode, string stationLineName)
         {
             if (!canChangeLine && !string.IsNullOrWhiteSpace(selectedLineCode))
