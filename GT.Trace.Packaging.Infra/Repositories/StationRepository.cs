@@ -36,21 +36,21 @@
         private readonly AppsSqlDB _apps;
         private readonly CegidSqlDB _cegid;
         private readonly GttSqlDB _gtt;
-        private readonly IConfiguration _configuration; //Aqui se agrego el Iconfiguration RA: 5/31/2023
-        private readonly string[] _cegidBisPartNumbers;
+        //private readonly IConfiguration _configuration; //Aqui se agrego el Iconfiguration RA: 5/31/2023
+        //private readonly string[] _cegidBisPartNumbers;
 
         //private readonly ILogger<StationRepository> _logger;
 
         //Aqui se agrego el Iconfiguration RA: 5/31/2023
-        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt, IConfiguration configuration/*, ILogger<StationRepository> logger*/)
+        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt/*, IConfiguration configuration, ILogger<StationRepository> logger*/)
         {
             _traza = traza;
             _apps = apps;
             _cegid = cegid;
             //_logger = logger;
             _gtt = gtt;
-            _configuration = configuration; //Aqui se agrego el _configuration RA: 5/31/2023
-            _cegidBisPartNumbers = _configuration.GetSection("CegidBisPartNumber").Get<string[]>();
+            //_configuration = configuration; //Aqui se agrego el _configuration RA: 5/31/2023
+            //_cegidBisPartNumbers = _configuration.GetSection("CegidBisPartNumber").Get<string[]>();
         }
 
         private Station? _station;
@@ -58,7 +58,8 @@
         public async Task<Station> GetStationByHostnameAsync(string hostname, string? lineCode, int? palletSize, int? containerSize, string? poNumber)
         {
             //CegidBisPartNumber
-            var bisPartNumbers = _cegidBisPartNumbers; //Aqui se agrego el _configuration RA: 5/31/2023
+            //var bisPartNumbers = _cegidBisPartNumbers; //Aqui se agrego el _configuration RA: 5/31/2023
+
 
             var pcmx = await _traza.TryGetStationByHostnameAsync(hostname).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Estación \"{hostname}\" no encontrada.");
@@ -92,6 +93,8 @@
 
             var revision = Revision.New(production.rev);
 
+            var CegidBis = await _cegid.IsSpackBis(production.part_number.Trim(), revision.Number).ConfigureAwait(false); //Aqui se agrego el _configuration RA: 6/01/2023
+
             var refext = await _cegid.GetRefExtAsync(production.part_number.Trim(), revision.Number, production.client_code ?? 0).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No hay información de empaque para {production.part_number.Trim()} Rev {revision.Number}, cliente: {production.client_code}");
 
@@ -113,7 +116,6 @@
 
             var qc_params = await _traza.GetContainerApprovalParamsAsync(picking_config.tipo, refext.PackType.Trim()).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No se encontraron parametros de aprobación de calidad para tipo \"{picking_config.tipo}\" con empaque \"{refext.PackType.Trim()}\".");
-
 
             #region Modulo agregado por 5 why, pockayoke agregado por problemas en ****** produccion ***** 2/5/2023
             var stationIsBlocked = await _traza.TryGetStationIsBlockedAsync(hostname).ConfigureAwait(false);
@@ -153,12 +155,12 @@
 
 
             #region Modificado para EZ
-            /*Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre cantidades en EZ , posiblemente eso
-            * se implemente directo en la UI RA:5/31/2023*/
-            if (bisPartNumbers.Contains(prod_unit.modelo))
+            /*Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre Spack y Spack Bis RA:5/31/2023*/
+            //if (bisPartNumbers.Contains(prod_unit.modelo)) //Esta linea se dejo de usar el 6/01/2023
+            if (CegidBis) // Se agrego esta linea RA:5/31/2023
             {
                 var QuantityFromLastMasterID = await _traza.GetQuantityFromLastMasterID(prod_unit.letter, prod_unit.modelo).ConfigureAwait(false);
-                QuantityFromLastMasterID = QuantityFromLastMasterID != null ? QuantityFromLastMasterID : 0;
+                //QuantityFromLastMasterID = QuantityFromLastMasterID != null ? QuantityFromLastMasterID : 0;
 
                 if (QuantityFromLastMasterID >= 0 && QuantityFromLastMasterID < uarticle.PalletSize)
                 {

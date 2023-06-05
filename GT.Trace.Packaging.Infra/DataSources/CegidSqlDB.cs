@@ -35,5 +35,8 @@ namespace GT.Trace.Packaging.Infra.DataSources
                     await _con.QuerySingleAsync<CLIENT>(
                         "SELECT * FROM dbo.CLIENT WHERE CLKTSOC = 300 AND RTRIM(CLKTCODE) = @clientCode;",
                         new { clientCode }).ConfigureAwait(false);
+        public async Task<bool> IsSpackBis(string partNo, string revision)=>
+            await _con.ExecuteScalarAsync<bool>("SELECT count(APKNPCECO2) from UARTICLE WHERE ARKTSOC = 300 and ARKTCODART = @partNo and ARKTCOMART = @revision and rtrim(APKNPCECO2) != '' and rtrim(APKNPCECO2) != 0",
+                new {partNo,revision}).ConfigureAwait(false);
     }
 }

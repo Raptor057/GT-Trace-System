@@ -75,7 +75,7 @@ StyleCopReport.xml
 **/bundle.js.map
 **/launchSettings.json
 **/dotnet-tools.json
-*.csproj
+
 
 *_i.c
 *_p.c
@@ -96,7 +96,7 @@ StyleCopReport.xml
 *.tlh
 *.tmp
 *.tmp_proj
-*_wpftmp.csproj
+
 *.log
 *.vspscc
 *.vssscc
