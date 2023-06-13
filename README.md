@@ -1,10 +1,8 @@
 ## GT Trace System
 # Introduction 
-TODO: 
 This is the source code of the traceability system and its services.
 also called Trace v2, created in 2022 by Engineer MJV.
 # Getting Started
-TODO:
 - [Documentation](https://francereducteurs.sharepoint.com/:f:/s/SIGroupe/Eu4qX7N7639GissQQmdW6KkB76s_mjo_HMwiTWoUhUJb0w?e=b9NthL) 
 - [Git](https://git-scm.com/download/win)
 - [GitHub Desktop](https://desktop.github.com/)
@@ -66,32 +64,32 @@ TODO:
 - Svelte Intellisense
 - Svelte Preview
 - Test Runner for Java
-- TODO Highlight
+- Highlight
 - Tokyo Night
 - vscode-icons
 - XML Tools
 - Arduino
 
 # Build and Test
-TODO:  
+
 - 
 # Actualizaciones
-TODO: 
+
 - 03 / 16 / 2023: Copied the project from the DefaultCollection Collection to the General_Transmissions_Dev Collection.
 
 
 ## GTT
 # Introduction 
-TODO: 
+
 This is the source code of the traceability system and its services.
 also called Trace v2, created in 2022 by Engineer MJV.
 # Getting Started
-TODO:
+
 
 
 # Build and Test
-TODO:  
+
 - 
 # Actualizaciones
-TODO: 
+
 - 03 / 16 / 2023: Copied the project from the DefaultCollection Collection to the General_Transmissions_Dev Collection.

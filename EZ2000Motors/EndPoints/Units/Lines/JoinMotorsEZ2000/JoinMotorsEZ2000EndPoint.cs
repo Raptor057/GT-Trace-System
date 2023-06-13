@@ -7,14 +7,14 @@ using System.Text.RegularExpressions;
 namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ2000
 {
     public record Ez2000Motor(string? Website, string? Voltage, string? RPM, string Date, string? Time, string? ProductionID);
-    public record Label(long UnitID);
+    public record Label(long? UnitID);
 
     public static class Labels
     {
         public const string InformationSeparatorThree = "\u001d";
         public const string EndOfTransmission = "\u0004";
-        private static string WalkBehindLabelFormatRegExPattern => $"\\[\\)>06SWB(?<transmissionID>\\d+)P(?<clientPartNo>.+)Z.+1T(?<partNo>.+)2T(?<partRev>.+)3T(?<julianDay>\\d+)$";
-        private static string MotorsLabelFormatRegExPattern => @"^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])\s+(?<rpm>[0-9]+)\s+(?<date>\d{4}-\d{1,2}-\d{1,2})\s+(?<time>\d{1,2}:\d{2})\s+(?<id>[0-9]+)$";
+        private static string WalkBehindLabelFormatRegExPattern => @"\[\)>06SWB(?<transmissionID>\d+)P(?<clientPartNo>.+)Z.+1T(?<partNo>.+)2T(?<partRev>.+)3T(?<julianDay>\d+)$";
+        private static string MotorsLabelFormatRegExPattern => @"^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])(?:\s+)?(?<rpm>[0-9]+)\s+(?<date>\d{4}-\d{1,2}-\d{1,2})\s+(?<time>\d{1,2}:\d{2})\s+(?<id>[0-9]+)$";
         private static string ClearInputFromSpecialCharacters(string input) => input.Replace(InformationSeparatorThree, "").Replace(EndOfTransmission, "");
 
         public static Label? TryParseNewWBFormat(string value)
@@ -42,12 +42,12 @@ namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ200
             if (match.Success)
             {
                 return new Ez2000Motor(
-                Website: match.Groups["website"].Value,
-                Voltage: match.Groups["voltage"].Value,
-                RPM: match.Groups["rpm"].Value,
-                Date: match.Groups["date"].Value,
-                Time: match.Groups["time"].Value,
-                ProductionID: match.Groups["id"].Value);
+                match.Groups["website"].Value,
+                match.Groups["voltage"].Value,
+                match.Groups["rpm"].Value,
+                match.Groups["date"].Value,
+                match.Groups["time"].Value,
+                match.Groups["id"].Value);
             }
             else
             {
@@ -74,8 +74,10 @@ namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ200
                     return BadRequest(new ApiResponse("Datos inválidos."));
                 }
 
-                await JoinMotors(label.UnitID, ez2000Motor1.Website, ez2000Motor1.Voltage, ez2000Motor1.RPM, Convert.ToString(ez2000Motor1.Date), ez2000Motor1.Time, ez2000Motor1.ProductionID,
+                #pragma warning disable CS8604
+                await JoinMotors(label.UnitID ?? 0, ez2000Motor1.Website, ez2000Motor1.Voltage, ez2000Motor1.RPM, Convert.ToString(ez2000Motor1.Date), ez2000Motor1.Time, ez2000Motor1.ProductionID,
                     ez2000Motor2.Voltage, ez2000Motor2.RPM, Convert.ToString(ez2000Motor2.Date), ez2000Motor2.Time, ez2000Motor2.ProductionID).ConfigureAwait(false);
+                #pragma warning restore CS8604
 
                 return Ok(new ApiResponse($"Unidad {label.UnitID} casada con Motores {ez2000Motor1.ProductionID} y {ez2000Motor2.ProductionID} correctamente."));
             }

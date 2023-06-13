@@ -11,7 +11,8 @@ let motor1 = "";
 let motor2 = "";
 
 const transmissionRegex  = /\[\)>06SWB(?<transmissionID>\d+)P(?<clientPartNo>.+)Z.+1T(?<partNo>.+)2T(?<partRev>.+)3T(?<julianDay>\d+)$/;
-const motorRegex = /^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])\s+(?<rpm>[0-9]+)\s+(?<date>\d{4}-\d{1,2}-\d{1,2})\s+(?<time>\d{1,2}:\d{2})\s+(?<id>[0-9]+)$/;
+//const motorRegex = /^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])\s+(?<rpm>[0-9]+)\s+(?<date>\d{4}-\d{1,2}-\d{1,2})\s+(?<time>\d{1,2}:\d{2})\s+(?<id>[0-9]+)$/;
+  const motorRegex = /^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])(?:\s+)?(?<rpm>[0-9]+)\s+(?<date>\d{4}-\d{1,2}-\d{1,2})\s+(?<time>\d{1,2}:\d{2})\s+(?<id>[0-9]+)$/;
 
   function FnJoinMotors(ezlabel,motor1,motor2){
     JoinMotors.Join(ezlabel,motor1,motor2)

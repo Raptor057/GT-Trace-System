@@ -8,7 +8,7 @@
 </script>
 
 <div class="header">
-  <b>GT Trace</b>
+  <b>Join Motors EZ</b>
   <strong>{lineName || "?"}</strong>
   <span>Modelo</span>
   <strong>{partNo || "?"} {revision || ""}</strong>

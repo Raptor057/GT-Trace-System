@@ -17,8 +17,4 @@
     <ProjectReference Include="..\GT.Trace.Packaging.Infra\GT.Trace.Packaging.Infra.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Endpoints\PackMotorUnit\" />
-  </ItemGroup>
-
 </Project>
