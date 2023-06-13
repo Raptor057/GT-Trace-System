@@ -39,7 +39,7 @@ namespace GT.Trace.EtiMovements.Infra.Repositories
             {
                 return Result.Fail<Eti>(errors.ToString());
             }
-
+            #pragma warning disable CS8604
             bool etiIsShared = false;
             if (movement != null)
             {

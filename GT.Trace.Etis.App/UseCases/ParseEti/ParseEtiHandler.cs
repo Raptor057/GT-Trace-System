@@ -17,6 +17,7 @@ namespace GT.Trace.Etis.App.UseCases.ParseEti
             _logger = logger;
         }
 
+        #pragma warning disable CS1998
         public override async Task<Result<ParseEtiResponse>> Handle(ParseEtiRequest request, CancellationToken cancellationToken)
         {
             if (!_parser.TryParseEti(request.EtiInput!, out var etiID, out var etiNo))

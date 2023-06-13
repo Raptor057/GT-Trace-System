@@ -197,7 +197,7 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
                 }
 
                 var label = Labels.ParseMotorData(ProductionID);
-
+                #pragma warning disable CS8602
                 if (await TraceInMotorsDataFrameless(label.SerialNumber).ConfigureAwait(false))
                 {
                     throw new TraceException($"La Unidad {label.SerialNumber} ya se encuentra registrada.");

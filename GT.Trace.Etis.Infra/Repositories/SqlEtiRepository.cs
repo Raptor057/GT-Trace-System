@@ -10,7 +10,7 @@ namespace GT.Trace.Etis.Infra.Repositories
         {
             if (string.IsNullOrWhiteSpace(etiNo) || etiNo.Length < 3)
                 throw new InvalidOperationException($"Numero de ETI no es valido [{etiNo}].");
-
+            #pragma warning disable CS8602
             if (Eti.CheckEtiIsSubAssembly(etiNo))
             {
                 var subeti = await SubEtis.GetSubEtiByIDAsync(etiID).ConfigureAwait(false) ?? throw new InvalidOperationException($"Sub ensamble ETI#{etiID} no encontrado.");
