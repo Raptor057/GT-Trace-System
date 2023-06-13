@@ -75,6 +75,7 @@ namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ200
                 }
 
                 #pragma warning disable CS8604
+                #pragma warning disable CS8602
                 await JoinMotors(label.UnitID ?? 0, ez2000Motor1.Website, ez2000Motor1.Voltage, ez2000Motor1.RPM, Convert.ToString(ez2000Motor1.Date), ez2000Motor1.Time, ez2000Motor1.ProductionID,
                     ez2000Motor2.Voltage, ez2000Motor2.RPM, Convert.ToString(ez2000Motor2.Date), ez2000Motor2.Time, ez2000Motor2.ProductionID).ConfigureAwait(false);
                 #pragma warning restore CS8604
