@@ -20,6 +20,8 @@ namespace GT.Trace.Packaging.App.UseCases.Auth
             {
                 return OK(new AuthResponse(false));
             }
+            #region Oculto
+            //TODO: Factorizar esto
             //if (string.IsNullOrWhiteSpace(request.AuthorizedUserPassword))
             //{
             //    return Fail("La contraseña no puede estar en blanco.");
@@ -28,6 +30,7 @@ namespace GT.Trace.Packaging.App.UseCases.Auth
             //{
             //    return Fail("La contraseña no pertenece a un usuario autorizado.");
             //}
+            #endregion
             return OK(new AuthResponse(Pass));
         }
     }
