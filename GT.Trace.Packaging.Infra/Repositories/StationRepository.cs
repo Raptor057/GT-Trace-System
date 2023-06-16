@@ -72,6 +72,13 @@
             var prod_unit = await _apps.GetLineByCodeAsync(selectedLineCode).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Línea \"{selectedLineCode}\" no encontrada.");
 
+            //TODO: Pendiente Corregir el bug que consiste en 2 ordenes activas en una misma linea simultaneamente en la tabla LineProductionSchedule
+            //agregado para corregir el bug de la tabla LineProductionSchedule RA: 06/15/2023
+            var countLineProductionSchedule = await _gtt.CountProductionScheduleAsync(prod_unit.letter).ConfigureAwait(false);
+            if (countLineProductionSchedule > 1)
+                throw new InvalidOperationException($"Comunicarse con sistemas, Existen 2 ordenes activas en esta misma linea en la tabla \"LineProductionSchedule\" para la linea {prod_unit.letter}");
+           
+
             if (string.IsNullOrWhiteSpace(prod_unit.modelo))
                 throw new InvalidOperationException($"No existe modelo asociado a la línea \"{prod_unit.letter}\", se requiere cambio de modelo.");
 

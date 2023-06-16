@@ -154,6 +154,8 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
                 new { partNo, partRev });
             return origen;
         }
+        public async Task UpdateGamaTRAZABAsync(string partNo, string lineCode)=>
+            await _con.ExecuteAsync("EXECUTE [MXSRVTRACA].[TRAZAB].[dbo].[usp_update_bom_info] @partNo,@lineCode", new {partNo, lineCode}).ConfigureAwait(false);
 
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using GT.Trace.Common;
 using System;
 using GT.Trace.Packaging.App.UseCases.PackUnit;

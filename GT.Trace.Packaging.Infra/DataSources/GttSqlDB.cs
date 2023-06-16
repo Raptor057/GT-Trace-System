@@ -76,5 +76,10 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task<string> InsertInfoMotorsData(string SerialNumber, string Volt, string RPM, DateTime DateTimeMotor, string LineCode) =>
             await _con.ExecuteScalarAsync<string>("INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);", 
                 new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode }).ConfigureAwait(false);
+
+        //agregado para "Corregir" problema de 2 ordenes activas en una misma linea RA: 06/15/2023
+        public async Task<int> CountProductionScheduleAsync(string LineCode)=>
+            await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
+                new { LineCode }).ConfigureAwait(false);
     }
 }
