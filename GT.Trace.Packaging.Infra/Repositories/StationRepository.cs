@@ -76,8 +76,7 @@
             //agregado para corregir el bug de la tabla LineProductionSchedule RA: 06/15/2023
             var countLineProductionSchedule = await _gtt.CountProductionScheduleAsync(prod_unit.letter).ConfigureAwait(false);
             if (countLineProductionSchedule > 1)
-                throw new InvalidOperationException($"Comunicarse con sistemas, Existen 2 ordenes activas en esta misma linea en la tabla \"LineProductionSchedule\" para la linea {prod_unit.letter}");
-           
+                throw new InvalidOperationException($"Comunicarse con sistemas, Existen 2 ordenes activas en la linea {prod_unit.letter} en la tabla \"LineProductionSchedule\"");
 
             if (string.IsNullOrWhiteSpace(prod_unit.modelo))
                 throw new InvalidOperationException($"No existe modelo asociado a la línea \"{prod_unit.letter}\", se requiere cambio de modelo.");
@@ -98,6 +97,22 @@
                 prod_unit.codew = production.codew.Trim();
             }
 
+            /*/TODO: En el futuro, se debe mejorar este código para que la gama de CEGID coincida con la gama de la base de datos de TRAZAB. 
+             * Actualmente existe un error que permite el escaneo en empaque cuando no hay ninguna gama en la tabla cegid.bom de TRAZAB. 
+             * Se debe investigar y solucionar este problema para asegurar el correcto funcionamiento del sistema y garantizarr la trababilidad
+             * de momento la linea que se excluye aqui solamente es la LE
+             RA: 06/16/2023*/
+            if (prod_unit.letter != "LE")
+            {
+                var countcomponentsbom = await _gtt.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
+                if (!countcomponentsbom)
+                {
+                    await _traza.UpdateGamaTRAZABAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
+                    throw new InvalidOperationException($"El bom actual no coincide con CEGID para el numero de parte \"{production.part_number.Trim()}\" para la linea \"{prod_unit.letter}\" " +
+                        $"intenta actualizar la pantalla de Empaque y GT Trace y comuníquese con el supervisor");
+                }
+            }
+            
             var revision = Revision.New(production.rev);
 
             var CegidBis = await _cegid.IsSpackBis(production.part_number.Trim(), revision.Number).ConfigureAwait(false); //Aqui se agrego el _configuration RA: 6/01/2023
