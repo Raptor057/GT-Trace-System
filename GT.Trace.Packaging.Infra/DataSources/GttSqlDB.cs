@@ -72,7 +72,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
         //    await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
 
 
-        //Agregado para insertar Motor, en la linea LE. aun no utilizado pero se va a usar.
+        //Agregado para insertar Motor, en la linea Frameless. aun no utilizado pero se va a usar.
         public async Task<string> InsertInfoMotorsData(string SerialNumber, string Volt, string RPM, DateTime DateTimeMotor, string LineCode) =>
             await _con.ExecuteScalarAsync<string>("INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);", 
                 new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode }).ConfigureAwait(false);
@@ -81,5 +81,10 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task<int> CountProductionScheduleAsync(string LineCode)=>
             await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
                 new { LineCode }).ConfigureAwait(false);
+
+        //Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
+        public async Task<bool> CountComponentsBomAsync(string partNo, string linecode)=>
+            await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];"
+                , new { partNo, linecode}).ConfigureAwait(false);
     }
 }

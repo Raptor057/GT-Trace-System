@@ -2,7 +2,8 @@
 
 namespace GT.Trace.Packaging.Infra.DataSources
 {
-    internal class TrazaSqlDB
+    public class TrazaSqlDB //Se declaro como publica para futuras pruebas unitarias.
+    //internal class TrazaSqlDB
     {
         private readonly DapperSqlDbConnection _con;
 
@@ -135,12 +136,15 @@ INSERT INTO temp_pack_WB (linea, modelo, telesis,num_p,LEVEL,is_partial,master_i
 UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@workOrderCode AND id_line = @lineID;",
                         new { lineName, clientName, unitID = unitID.ToString(), partNo, julianDay, isPartial, masterID = masterID.ToString(), approvalID, workOrderCode, lineID }).ConfigureAwait(false);
 
-        public async Task UpdateProduction() =>
-            await _con.ExecuteAsync("").ConfigureAwait(false);
+        /*Se comentaron debido a que no estaban siendo usadas o referenciadas en ninguna parte y daba problemas para una prueba unitaria
+         06/20/2023*/
 
-        public async Task<IEnumerable<HourlyProductionEntry>> GetHourlyProductionAsync(string lineCode) =>
-            await _con.QueryAsync<HourlyProductionEntry>("EXEC dbo.usp_get_line_hourly_production @lineCode;", new { lineCode })
-            .ConfigureAwait(false);
+        //public async Task UpdateProduction() =>
+        //    await _con.ExecuteAsync("").ConfigureAwait(false);
+
+        //public async Task<IEnumerable<HourlyProductionEntry>> GetHourlyProductionAsync(string lineCode) =>
+        //    await _con.QueryAsync<HourlyProductionEntry>("EXEC dbo.usp_get_line_hourly_production @lineCode;", new { lineCode })
+        //    .ConfigureAwait(false);
 
         public async Task<long?> GetLastMasterFolioByLineAsync(string lineName) =>
             await _con.ExecuteScalarAsync<long?>("SELECT MAX(id) [Folio] FROM dbo.Master_labels_WB WHERE line=@lineName;", new { lineName });

@@ -102,7 +102,7 @@
              * Se debe investigar y solucionar este problema para asegurar el correcto funcionamiento del sistema y garantizarr la trababilidad
              * de momento la linea que se excluye aqui solamente es la LE
              RA: 06/16/2023*/
-            if (prod_unit.letter != "LE")
+            if (prod_unit.letter != "LE" || prod_unit.letter != "LN")
             {
                 var countcomponentsbom = await _gtt.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
                 if (!countcomponentsbom)

@@ -58,7 +58,8 @@ const Animator = new class {
         this.animate(pointOfUseComponent, "bounceOutDown");
 
     flipInX = (pointOfUseComponent) =>
-        this.animate(pointOfUseComponent, "flipInX");
+        //this.animate(pointOfUseComponent, "flipInX");
+        this.animate(pointOfUseComponent, "fadeOutDown"); // rotateOut
 };
 
 export default Animator;
