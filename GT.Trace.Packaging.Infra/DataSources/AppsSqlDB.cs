@@ -64,7 +64,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
            ,[last_location]
            ,[ft_mata_date]
            ,[ft_mata_status])
-     VALUES
+            VALUES
            (@is_ok
            ,@is_locked
            ,@line
@@ -81,7 +81,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
            ,@line
            ,@ft_mata_date
            ,@ft_mata_status);
-SELECT SCOPE_IDENTITY();",
+            SELECT SCOPE_IDENTITY();",
                 new
                 {
                     is_ok = true,
