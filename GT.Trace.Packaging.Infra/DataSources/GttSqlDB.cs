@@ -86,5 +86,27 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task<bool> CountComponentsBomAsync(string partNo, string linecode)=>
             await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];"
                 , new { partNo, linecode}).ConfigureAwait(false);
+
+        //Agregado para LP + Frameless Join RA: 6/23/2023
+        public async Task AddJoinFramelessMotors(long unitID, string componentID, string lineCode, string partNo) => await _con.ExecuteAsync("INSERT INTO [dbo].[ComponentJoining] ([UnitID],[ComponentID],[LineCode],[PartNo])VALUES(@unitID,@componentID,@lineCode,@partNo)",
+               new { unitID, componentID, lineCode, partNo }).ConfigureAwait(false);
+        public async Task DelJoinFramelessMotors(long unitID, string componentID) => await _con.ExecuteAsync("UPDATE ComponentJoining SET isEnable = 0 WHERE UnitID = @unitID AND ComponentID = @componentID",
+               new { unitID, componentID}).ConfigureAwait(false);
+
+        public async Task<int> FramelessRegisteredInformation(long unitID, string componentID)
+        {
+            return await _con.ExecuteScalarAsync<int>("SELECT CASE WHEN ((SELECT COUNT(UnitID) FROM ComponentJoining WHERE UnitID = @unitID AND isEnable = 1) + (SELECT COUNT(ComponentID) FROM ComponentJoining WHERE ComponentID = @componentID AND isEnable = 1)) > 0 THEN 1 ELSE 0 END AS Result"
+                 , new { unitID, componentID }).ConfigureAwait(false);
+        }
+        public async Task<int> FramelessRegisteredInformationUnitID(long unitID)
+        {
+            return await _con.ExecuteScalarAsync<int>("SELECT COUNT(UnitID) FROM ComponentJoining WHERE UnitID = @unitID AND isEnable = 1"
+                 , new { unitID }).ConfigureAwait(false);
+        }
+        public async Task<int> FramelessRegisteredInformationComponentID(string componentID)
+        {
+            return await _con.ExecuteScalarAsync<int>("SELECT COUNT(ComponentID) FROM ComponentJoining WHERE ComponentID = @componentID AND isEnable = 1"
+                 , new { componentID }).ConfigureAwait(false);
+        }
     }
 }

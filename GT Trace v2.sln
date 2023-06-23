@@ -273,7 +273,29 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GT.Trace.JoinMotorsWebClien
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EzMotors", "EzMotors", "{8EA4C3C7-26F3-431D-82CD-0A5C4F278840}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.Packaging.AppTests", "GT.Trace.Packaging.AppTests\GT.Trace.Packaging.AppTests.csproj", "{8A2BCA1A-6FF6-4496-BFFF-88E3D7CAE41B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ComponentJoining", "ComponentJoining", "{2EC34C47-7E9D-4487-BD47-5E794947BEF1}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GT.Trace.ComponentJoining", "GT.Trace.ComponentJoining\", "{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_55735"
+		Debug.AspNetCompiler.PhysicalPath = "GT.Trace.ComponentJoining\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55735\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_55735"
+		Release.AspNetCompiler.PhysicalPath = "GT.Trace.ComponentJoining\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55735\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "55735"
+		SlnRelativePath = "GT.Trace.ComponentJoining\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -433,10 +455,10 @@ Global
 		{11CD614A-4D16-4590-A54A-327D9B8F1404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11CD614A-4D16-4590-A54A-327D9B8F1404}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{11CD614A-4D16-4590-A54A-327D9B8F1404}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{8A2BCA1A-6FF6-4496-BFFF-88E3D7CAE41B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A2BCA1A-6FF6-4496-BFFF-88E3D7CAE41B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A2BCA1A-6FF6-4496-BFFF-88E3D7CAE41B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A2BCA1A-6FF6-4496-BFFF-88E3D7CAE41B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -480,7 +502,8 @@ Global
 		{0F5164B8-3A3B-4841-8585-4BC5FF46B560} = {8EA4C3C7-26F3-431D-82CD-0A5C4F278840}
 		{11CD614A-4D16-4590-A54A-327D9B8F1404} = {8EA4C3C7-26F3-431D-82CD-0A5C4F278840}
 		{8EA4C3C7-26F3-431D-82CD-0A5C4F278840} = {0C003E87-1ADA-401A-8B04-175AA9E7B907}
-		{8A2BCA1A-6FF6-4496-BFFF-88E3D7CAE41B} = {04CBCAEE-5CDD-43CD-AB11-760C19CA2C38}
+		{2EC34C47-7E9D-4487-BD47-5E794947BEF1} = {0C003E87-1ADA-401A-8B04-175AA9E7B907}
+		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4} = {2EC34C47-7E9D-4487-BD47-5E794947BEF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {039C2DDD-2AF1-4968-B2EF-A133A505BCD9}

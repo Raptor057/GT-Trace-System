@@ -8,7 +8,8 @@
   export let workOrderCode = "";
 
   let input = null;
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => 
+  {
     e.preventDefault();
     input.disabled = true;
     PackagingApi.packUnit(
