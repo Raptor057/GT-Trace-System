@@ -52,7 +52,6 @@
         margin: 0 0.5em;
         min-width: 3rem;
         padding: 0 0.5em;
-        
       }
 
     }
