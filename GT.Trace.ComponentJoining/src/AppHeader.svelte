@@ -3,6 +3,7 @@
     export let partNo = null;
     export let revision = null;
     export let workOrderCode = null;
+    export let btnDel;
   
   </script>
   
@@ -14,6 +15,8 @@
     <strong>{partNo || "?"} {revision || ""}</strong>
     <span>&Oacute;rden</span>
     <strong>{workOrderCode || "?"}</strong>
+    <button id="btnDel" on:click={btnDel}>Desenlazar</button>
+
   </header>
   
   <style lang="scss">
@@ -39,6 +42,17 @@
         margin: 0 0.5em;
         min-width: 3rem;
         padding: 0 0.5em;
+      }
+      > button{
+        background-color: #ffffff33;
+        color: #ff9500;
+        border-radius: 0.25em;
+        float: right;
+        height: 1.5em;
+        margin: 0 0.5em;
+        min-width: 3rem;
+        padding: 0 0.5em;
+        
       }
 
     }

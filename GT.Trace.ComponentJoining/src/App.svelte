@@ -6,8 +6,13 @@
   import MessageLog from "./MessageLog.svelte";
   import AppFooter from "./AppFooter.svelte";
 
+  import Sfx from "./utils/Sfx";
+  import { PackagingApi } from "./utils/HttpRequests";
+
   export let lineCode = "";
   export let partNo = "";
+  let unitID = null;
+  let qrMotor = null;
   let addMessage;
   
   let state = {
@@ -16,6 +21,45 @@
     activeWorkOrderCode: null,
     pointsOfUse: [],
     workOrder: { size: null, quantity: null },
+  };
+
+
+  const btnDelTransmissions = () => 
+ {
+    unitID = prompt("Escanea el QR del motor:");
+    if(unitID != "")
+    {
+      qrMotor= prompt("Escanea el QR del motor:");
+        if(qrMotor != "")
+        {
+          PackagingApi.JoinFramelessMotors(
+            unitID,
+            qrMotor,
+            "",
+            "")
+            .then((data) => 
+            {
+              Sfx.playSuccessSoundAsync();
+              addMessage(data);
+            })
+              .catch((error) => 
+              {
+                Sfx.playFailureSoundAsync();
+                addMessage(error);
+              })
+                .then(() => 
+                {});
+                return false;
+        }
+          else
+          {
+            addMessage('No se acepta el campo del motor vacio.');
+          }
+    }
+    else
+    {
+    addMessage('No se acepta el campo de la transmision vacio.');
+    }
   };
 
   // Handle for the timeout used to update the screen info.
@@ -50,6 +94,7 @@
   partNo={state.activePart.number}
   revision={state.activePart.revision}
   workOrderCode={state.activeWorkOrderCode}
+  btnDel={btnDelTransmissions}
 />
 <Input partNo={state.activePart.number} {lineCode}{addMessage}/>
 <MessageLog bind:addMessage />

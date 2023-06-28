@@ -33,7 +33,7 @@ namespace GT.Trace.Packaging.App.UseCases.JoinFramelessMotors
                     {
                         string QR = framelessMotorQR.SerialNumber;
 
-                        if (request.LineCode == null && request.PartNo == null)
+                        if (request.LineCode == null || request.PartNo == null || request.LineCode == "" || request.PartNo == "")
                         {
                             var RegisteredInformation = await _gateway.FramelessRegisteredInformationAsync(unitID, QR) > 0;
                             if (RegisteredInformation)

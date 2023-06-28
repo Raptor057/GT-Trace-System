@@ -21,9 +21,7 @@
       overflow: hidden;
       padding: 0 0.25em;      
       //position: absolute;
-
       right: 0;
-
       > span.cur-time {
         float: right;
       }

@@ -66,6 +66,8 @@ In short, this function uses an API to look up the usage points of an ETI and ha
   MaterialLoadingApi.getEtiPointsOfUse(etiNo, selectedLineCode, selectedPartNo)
     .then((data) => {
       pointsOfUse = [...pointsOfUse, ...data];
+      
+
       if (data.length === 0) {
         const getEtimessage = (`- La ETI "${etiNo}" no corresponde con ningún punto de uso para la gama "${selectedPartNo} en la Linea ${selectedLineCode}".`);
         //alert(`La ETI "${etiNo}" no corresponde con ningún punto de uso para la gama "${selectedPartNo} en la Linea ${selectedLineCode}".`);
@@ -161,6 +163,12 @@ In short, this function uses an API to look up the usage points of an ETI and ha
   const tryProcessIndividualLabel = (input) => {
     const re = /(?<process>\d+)?\[\).+[A-Z]{2}(?<unit>.+?)P.+/;
     const match = re.exec(input);
+
+            //Solo esto se agrego nuevo para eliminar el prefijo en LP
+            if(lineCode == "LP"){
+              input = input.slice(3);
+            }
+
             getEtiPointsOfUse(input);
     if (match && match.groups && match.groups.unit) {
       if (!match.groups.process) {
