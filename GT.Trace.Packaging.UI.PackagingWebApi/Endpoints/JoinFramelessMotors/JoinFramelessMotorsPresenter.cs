@@ -8,9 +8,9 @@ namespace GT.Trace.Packaging.UI.PackagingWebApi.Endpoints.JoinFramelessMotors
     public sealed class JoinFramelessMotorsPresenter<T> : IPresenter<JoinFramelessMotorsSuccess>, IPresenter<JoinFramelessMotorsFailure>
         where T : JoinFramelessMotorsResponse
     {
-        private readonly GenericViewModel<SetLineHeadcountController> _viewModel;
+        private readonly GenericViewModel<JoinFramelessMotorsController> _viewModel;
 
-        public JoinFramelessMotorsPresenter(GenericViewModel<SetLineHeadcountController> viewModel)
+        public JoinFramelessMotorsPresenter(GenericViewModel<JoinFramelessMotorsController> viewModel)
         {
             _viewModel=viewModel;
         }

@@ -11,11 +11,11 @@ namespace GT.Trace.Packaging.UI.PackagingWebApi.Endpoints.JoinFramelessMotors
     [Route("[controller]")]
     public class JoinFramelessMotorsController : ControllerBase
     {
-        private readonly ILogger<SetLineHeadcountController> _logger;
+        private readonly ILogger<JoinFramelessMotorsController> _logger;
         private readonly IMediator _mediator;
-        private readonly GenericViewModel<SetLineHeadcountController> _viewModel;
+        private readonly GenericViewModel<JoinFramelessMotorsController> _viewModel;
 
-        public JoinFramelessMotorsController(ILogger<SetLineHeadcountController> logger, IMediator mediator, GenericViewModel<SetLineHeadcountController> viewModel)
+        public JoinFramelessMotorsController(ILogger<JoinFramelessMotorsController> logger, IMediator mediator, GenericViewModel<JoinFramelessMotorsController> viewModel)
         {
             _logger = logger;
             _mediator = mediator;

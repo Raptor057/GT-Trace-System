@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GT.Trace.Packaging.App.UseCases.SetStationBlocked;
 using GT.Trace.Packaging.App.UseCases.JoinFramelessMotors;
+using GT.Trace.Packaging.App.UseCases.JoinEZMotors;
 
 namespace GT.Trace.Packaging.Infra
 {
@@ -32,6 +33,7 @@ namespace GT.Trace.Packaging.Infra
                 .AddSingleton<GttSqlDB>()
                 .AddSingleton<ILineHeadcountGateway, SqlLineHeadcountGateway>()
                 .AddSingleton<IJoinFramelessMotorsGateway, SqlJoinFramelessMotorsGateway>()//Se agrega esto para hacer Join de los motores en LP  RA: 06/22/2023
+                .AddSingleton<IJoinEZMotorsGateway,SqlJoinEZMotorsGateway>()//Se agrega esto para hacer Join de los motores en LP  RA: 06/27/2023
                 .AddSingleton<IHourlyProductionGateway, SqlHourlyProductionGateway>()
                 .AddSingleton<IMasterLabelsGateway, SqlMasterLabelsGateway>()
                 .AddSingleton<IPrintingService, PrintingService>()
