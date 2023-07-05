@@ -16,6 +16,7 @@ namespace GT.Trace.Infra.Gateways
             _logger = logger;
         }
 
+        //NOTE: PUEDE QUE AQUI ESTE EL BUG DE DUPLICIDAD
         public async Task IncreaseWorkOrderQuantityAsync(int lineID, string workOrderCode, int amount)
         {
             _logger.LogInformation($"SqlWorkOrderGateway::IncreaseWorkOrderQuantityAsync(lineID = {lineID}, workOrderCode = \"{workOrderCode}\", amount = {amount})");

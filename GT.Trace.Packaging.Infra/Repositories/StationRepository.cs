@@ -72,8 +72,7 @@
             var prod_unit = await _apps.GetLineByCodeAsync(selectedLineCode).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Línea \"{selectedLineCode}\" no encontrada.");
 
-            //TODO: Pendiente Corregir el bug que consiste en 2 ordenes activas en una misma linea simultaneamente en la tabla LineProductionSchedule
-            //agregado para corregir el bug de la tabla LineProductionSchedule RA: 06/15/2023
+            //TODO: Pendiente Corregir el bug que consiste en 2 ordenes activas en una misma linea simultaneamente en la tabla LineProductionSchedule agregado para corregir el bug de la tabla LineProductionSchedule RA: 06/15/2023
             var countLineProductionSchedule = await _gtt.CountProductionScheduleAsync(prod_unit.letter).ConfigureAwait(false);
             if (countLineProductionSchedule > 1)
                 throw new InvalidOperationException($"Comunicarse con sistemas, Existen 2 ordenes activas en la linea {prod_unit.letter} en la tabla \"LineProductionSchedule\"");
@@ -97,15 +96,12 @@
                 prod_unit.codew = production.codew.Trim();
             }
 
-            /*/TODO: En el futuro, se debe mejorar este código para que la gama de CEGID coincida con la gama de la base de datos de TRAZAB. 
-             * Actualmente existe un error que permite el escaneo en empaque cuando no hay ninguna gama en la tabla cegid.bom de TRAZAB. 
-             * Se debe investigar y solucionar este problema para asegurar el correcto funcionamiento del sistema y garantizarr la trababilidad
-             * de momento la linea que se excluye aqui solamente es la LE
-             RA: 06/16/2023*/
+            //Esto se agrego para que la gama se actualice cuando en cegid cambie
+             //RA: 06/16/2023
             if (prod_unit.letter != "LE" || prod_unit.letter != "LN")
             {
                 var countcomponentsbom = await _gtt.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
-                if (!countcomponentsbom)
+                if (countcomponentsbom)
                 {
                     await _traza.UpdateGamaTRAZABAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
                     throw new InvalidOperationException($"El bom actual no coincide con CEGID para el numero de parte \"{production.part_number.Trim()}\" para la linea \"{prod_unit.letter}\" " +

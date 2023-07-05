@@ -130,6 +130,9 @@ VALUES (@unitID,@lineName,@operation,FORMAT(GETDATE(), 'dd-MMM-yyyy'),Format(GET
         /// <param name="workOrderCode"></param>
         /// <param name="lineID"></param>
         /// <returns></returns>
+        
+        //TODO: En este metodo se agrega el +1 a la cantidad de la orden, por aqui ha de estar el bug que duplica todo, como dicen los operadores.
+        //RA:06/27/2023
         public async Task AddPackedUnitAsync(string lineName, string clientName, long unitID, string partNo, string julianDay, bool isPartial, long? masterID, long? approvalID, string workOrderCode, int lineID) =>
                     await _con.ExecuteAsync(@"
 INSERT INTO temp_pack_WB (linea, modelo, telesis,num_p,LEVEL,is_partial,master_id,Aproved) VALUES (@lineName,@clientName,@unitID,@partNo,@julianDay,@isPartial,@masterID,@approvalID);

@@ -187,7 +187,7 @@
                     Line.WorkOrder.PO.Number, "-", Line.WorkOrder.Client.Description, Line.Name, true, Line.Pallet.Quantity, Line.WorkOrder.MasterType.ToString(), false, false, $"{DateTime.Now.DayOfYear:000}",
                     Line.WorkOrder.Part.ProductFamily ?? "", Line.WorkOrder.Code, Line.Pallet.Approval!.ID.Value, Line.Pallet.Approval!.Username, Line.Pallet.Approval!.Date));
 
-                // TODO: Update approval record.
+                // NOTE: Update approval record.
 
                 Line.Pallet.Clear();
                 return true;
@@ -221,7 +221,7 @@
                 Line.WorkOrder.PO.Number, "-", Line.WorkOrder.Client.Description, Line.Name, true, Line.Pallet.Quantity, Line.WorkOrder.MasterType.ToString(), false, true, $"{DateTime.Now.DayOfYear:000}",
                 Line.WorkOrder.Part.ProductFamily ?? "", Line.WorkOrder.Code, Line.Pallet.Approval!.ID.Value, Line.Pallet.Approval!.Username!, Line.Pallet.Approval!.Date!.Value));
 
-            // TODO: Update approval record.
+            // NOTE: Update approval record.
 
             Line.Pallet.Clear();
         }

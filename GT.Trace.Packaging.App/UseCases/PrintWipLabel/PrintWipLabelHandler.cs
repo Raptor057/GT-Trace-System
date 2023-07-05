@@ -30,7 +30,7 @@ namespace GT.Trace.Packaging.App.UseCases.PrintWipLabel
                 Customer = station.Line.WorkOrder.Client.Description,
                 CustomerPartNo = station.Line.WorkOrder.CustomerPartNo,
                 Date = date,
-                //TODO: I'm not sure about this... I decided to left it false as this is for a WIP label.
+                //NOTE: I'm not sure about this... I decided to left it false as this is for a WIP label.
                 IsAteq = false, //station.Line.WorkOrder.MasterType == Domain.Enums.MasterTypes.ATEQ,
                 IsPartial = false,
                 JulianDate = $"{date.DayOfYear:000}{date.Year - 2000}",
