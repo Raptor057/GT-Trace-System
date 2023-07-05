@@ -19,6 +19,14 @@ namespace GT.Trace.Changeover.App.Gateways
         /// <returns>Una lista de objetos GammaItemDto correspondientes a los componentes Gamma encontrados.</returns>
         Task<IEnumerable<GammaItemDto>> GetGammaAsync(string lineCode, string partNo, string revision);
 
+        //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
+        //RA: 07/05/2023.
+        Task<bool> GammaDataAsync(string lineCode, string partNo);
+
+        //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
+        //RA: 07/05/2023.
+        Task UpdateGamaTrazabAsync(string partNo, string lineCode);
+
         /// <summary>
         /// Obtiene una lista de objetos GammaItemDto que corresponden a los componentes Gamma salientes de un número de parte y una
         /// revisión de componente de entrada específicos.

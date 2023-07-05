@@ -15,6 +15,7 @@ CROSS JOIN GlobalSettings gs
 WHERE lps.LineCode = @lineCode AND lps.UtcExpirationTime = gs.DefaultExpirationTime;",
                 new { lineCode });
 
+        //TODO: Aqui hay que ver como solucionar esto, ya que no siempre se guardan en la tabla las ordenes, y eso hace que se pierda la trazabilidad
         public async Task<int> ActivateProductionSchedule(string lineCode, string partNo, string workOrderCode, string revision) =>
             await Connection.ExecuteAsync(@"
 INSERT INTO dbo.LineProductionSchedule(LineCode, WorkOrderCode, PartNo, Revision, UtcEffectiveTime, UtcExpirationTime, HourlyRate)

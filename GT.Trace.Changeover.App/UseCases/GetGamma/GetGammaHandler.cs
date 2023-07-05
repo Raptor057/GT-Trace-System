@@ -1,5 +1,6 @@
 ﻿using GT.Trace.Changeover.App.Gateways;
 using GT.Trace.Changeover.App.UseCases.GetGamma;
+using GT.Trace.Changeover.App.UseCases.GetLine;
 using GT.Trace.Common.CleanArch;
 using Microsoft.Extensions.Logging;
 
@@ -17,10 +18,19 @@ namespace GT.Trace.Changeover.App.Dtos
             _gamma = gamma;
         }
 
+
         public async Task<GetGammaResponse> Handle(GetGammaRequest request, CancellationToken cancellationToken)
         {
+
             var gamma = await _gamma.GetGammaAsync(request.LineCode, request.PartNo, request.Revision).ConfigureAwait(false);
+            if (gamma.Count() == 0)
+            {
+            return new GetGammaFailureResponse($"No se encontró informacion sobre la gama de {request.LineCode}, {request.PartNo} {request.Revision}");
+            }
+            else
+            {
             return new GetGammaSuccessResponse(gamma);
+            }
         }
     }
 }

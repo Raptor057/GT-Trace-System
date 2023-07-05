@@ -13,8 +13,24 @@ namespace GT.Trace.Changeover.Infra.Gateways
             _gamma = gamma;
         }
 
+        //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
+        //RA: 07/05/2023.
+        public async Task<bool> GammaDataAsync(string lineCode, string partNo)
+        {
+            var BoomCountResult = await _gamma.GammaDataAsync(partNo, lineCode).ConfigureAwait(false) > 0;
+            return BoomCountResult;
+        }
+
+        //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
+        //RA: 07/05/2023.
+        public async Task UpdateGamaTrazabAsync(string partNo, string lineCode)
+        {
+            await _gamma.UpdateGamaTrazabAsync(partNo,lineCode).ConfigureAwait(false);
+        }
+
         public async Task<IEnumerable<GammaItemDto>> GetGammaAsync(string lineCode, string partNo, string revision)
         {
+
             return (await _gamma.GetGammaAsync(partNo, revision).ConfigureAwait(false))
                 .Select(item => new GammaItemDto(item.PointOfUse, item.CompNo, item.CompRev, item.CompRev2, item.CompDesc));
         }

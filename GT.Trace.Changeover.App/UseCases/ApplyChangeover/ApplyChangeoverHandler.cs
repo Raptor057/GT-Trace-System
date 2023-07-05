@@ -60,6 +60,16 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
                 return new ChangeoverNotRequiredResponse(line.Code);
             }
 
+            //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
+            //RA: 07/05/2023.
+            var gammaData = await _gamma.GammaDataAsync(line.PartNo, line.Code).ConfigureAwait(false);
+            if(!gammaData)
+            {
+                await _gamma.UpdateGamaTrazabAsync(line.PartNo, line.Code).ConfigureAwait(false);
+                return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! ya que no se encontro Gama de {line.PartNo} para la linea {line.Code} actualiza esta ventana y comunicate con el supervisor de linea o con el ingeniero de mejora continua");
+            }
+            _logger.LogInformation("{GammaData}", gammaData);
+
             var outgoingComponents = await _gamma.GetOutgoingComponentsAsync(line.PartNo, line.Code, workOrder.PartNo, line.Code).ConfigureAwait(false);
 
             _logger.LogInformation("{OutgoingComponents}", outgoingComponents);
