@@ -82,11 +82,11 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
                 new { LineCode }).ConfigureAwait(false);
 
-        //Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
-        public async Task<bool> CountComponentsBomAsync(string partNo, string linecode)=>
-            //await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];" se comento esto para dejarlo de usar ya que la consulta de abajo es mejor RA: 07/05/2023
-            await _con.ExecuteScalarAsync<bool>("SELECT dbo.UfnGetDifferenceCountDataBoom(@partNo, @linecode) AS [CountComponentsBom];"
-                , new { partNo, linecode}).ConfigureAwait(false);
+        ////Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
+        //public async Task<bool> CountComponentsBomAsync(string partNo, string linecode)=>
+        //    //await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];" se comento esto para dejarlo de usar ya que la consulta de abajo es mejor RA: 07/05/2023
+        //    await _con.ExecuteScalarAsync<bool>("SELECT dbo.UfnGetDifferenceCountDataBoom(@partNo, @linecode) AS [CountComponentsBom];"
+        //        , new { partNo, linecode}).ConfigureAwait(false);
 
         //Agregado para EZ Join RA: 6/28/2023
         #region EZ Join

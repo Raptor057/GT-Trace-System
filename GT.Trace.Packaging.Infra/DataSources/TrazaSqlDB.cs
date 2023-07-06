@@ -164,5 +164,10 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
         public async Task UpdateGamaTRAZABAsync(string partNo, string lineCode)=>
             await _con.ExecuteAsync("EXECUTE [MXSRVTRACA].[TRAZAB].[dbo].[usp_update_bom_info] @partNo,@lineCode", new {partNo, lineCode}).ConfigureAwait(false);
 
+        //Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
+        public async Task<bool> CountComponentsBomAsync(string partNo, string linecode) =>
+            //await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];" se comento esto para dejarlo de usar ya que la consulta de abajo es mejor RA: 07/05/2023
+            await _con.ExecuteScalarAsync<bool>("SELECT dbo.UfnGetDifferenceCountDataBoom(@partNo, @linecode) AS [CountComponentsBom];"
+                , new { partNo, linecode }).ConfigureAwait(false);
     }
 }

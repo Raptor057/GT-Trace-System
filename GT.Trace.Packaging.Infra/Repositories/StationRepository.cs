@@ -100,7 +100,7 @@
              //RA: 06/16/2023
             if (prod_unit.letter != "LE" || prod_unit.letter != "LN")
             {
-                var countcomponentsbom = await _gtt.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
+                var countcomponentsbom = await _traza.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
                 if (countcomponentsbom)
                 {
                     await _traza.UpdateGamaTRAZABAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
