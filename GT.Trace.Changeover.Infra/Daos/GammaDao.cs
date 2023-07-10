@@ -16,7 +16,7 @@ namespace GT.Trace.Changeover.Infra.Daos
 
         //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
         //RA: 07/05/2023.
-        public async Task<int> GammaDataAsync(string partNo, string revision)=> await Connection.ExecuteScalarAsync<int>("SELECT CASE WHEN (SELECT COUNT([NOKTCODPF]) AS [COUNT Boom] FROM [TRAZAB].[cegid].[bom] WHERE NOKTCODPF = @partNo AND NOKTCOMPF = @revision) > 1 THEN 1 ELSE 0 END AS Result"
+        public async Task<int> GammaDataAsync(string partNo, string revision)=> await Connection.ExecuteScalarAsync<int>("SELECT CASE WHEN (SELECT COUNT([NOKTCODPF]) AS [COUNT Boom] FROM [TRAZAB].[cegid].[bom] WHERE NOKTCODPF = @partNo AND NOKTCOMPF = @revision) > 0 THEN 1 ELSE 0 END AS Result"
             , new { partNo, revision }).ConfigureAwait(false);
         //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
         //RA: 07/05/2023.

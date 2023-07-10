@@ -3,19 +3,19 @@
     //Objetos de transferencia de datos.
     public sealed class ContainerDto
     {
-        public string LineName { get; set; }
+        public string? LineName { get; set; }
 
-        public string PurchaseOrderNo { get; set; }
+        public string? PurchaseOrderNo { get; set; }
 
-        public string JulianDate { get; set; }
+        public string? JulianDate { get; set; }
 
-        public string Customer { get; set; }
+        public string? Customer { get; set; }
 
-        public string CustomerPartNo { get; set; }
+        public string? CustomerPartNo { get; set; }
 
-        public string PartNo { get; set; }
+        public string? PartNo { get; set; }
 
-        public string Revision { get; set; }
+        public string? Revision { get; set; }
 
         public string? PartDescription { get; set; }
 

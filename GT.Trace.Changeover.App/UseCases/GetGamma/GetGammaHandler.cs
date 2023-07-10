@@ -22,15 +22,17 @@ namespace GT.Trace.Changeover.App.Dtos
         public async Task<GetGammaResponse> Handle(GetGammaRequest request, CancellationToken cancellationToken)
         {
 
+            //var gamma = await _gamma.GetGammaAsync(request.LineCode, request.PartNo, request.Revision).ConfigureAwait(false);
+            //if (gamma.Count() == 0)
+            //{
+            //return new GetGammaFailureResponse($"No se encontró informacion sobre la gama de {request.LineCode}, {request.PartNo} {request.Revision}");
+            //}
+            //else
+            //{
+            //return new GetGammaSuccessResponse(gamma);
+            //}
             var gamma = await _gamma.GetGammaAsync(request.LineCode, request.PartNo, request.Revision).ConfigureAwait(false);
-            if (gamma.Count() == 0)
-            {
-            return new GetGammaFailureResponse($"No se encontró informacion sobre la gama de {request.LineCode}, {request.PartNo} {request.Revision}");
-            }
-            else
-            {
             return new GetGammaSuccessResponse(gamma);
-            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace GT.Trace.Changeover.App.Gateways
 
         //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
         //RA: 07/05/2023.
-        Task<bool> GammaDataAsync(string lineCode, string partNo);
+        Task<bool> GammaDataAsync(string partNo,string lineCode );
 
         //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
         //RA: 07/05/2023.

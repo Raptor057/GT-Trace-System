@@ -15,10 +15,10 @@ namespace GT.Trace.Changeover.Infra.Gateways
 
         //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
         //RA: 07/05/2023.
-        public async Task<bool> GammaDataAsync(string lineCode, string partNo)
+        public async Task<bool> GammaDataAsync(string partNo, string lineCode)
         {
-            var BoomCountResult = await _gamma.GammaDataAsync(partNo, lineCode).ConfigureAwait(false) > 0;
-            return BoomCountResult;
+            var BoomCountResultGammaData = await _gamma.GammaDataAsync(partNo, lineCode).ConfigureAwait(false) >0;
+            return BoomCountResultGammaData;
         }
 
         //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
