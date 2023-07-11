@@ -1,18 +1,13 @@
-<!-- 
-Description: 
-This archive it the body of the interface of Assembly Web Client, 
-here is coding functional (the colors boxes),
-here it view the composition of the gamma or also named boom. 
--->
 <script>
   import { onMount } from "svelte";
+  import { MaterialLoadingApi } from "./utils/HttpRequests";
   import AppHeader from "./AppHeader.svelte";
   import Input from "./Input.svelte";
+  import MessageLog from "./MessageLog.svelte";
   import AppFooter from "./AppFooter.svelte";
-  import Sfx from "./utils/Sfx";
-  import {MaterialLoadingApi} from "./utils/HttpRequests";
 
   export let lineCode = "";
+  let addMessage;
 
   let state = {
     name: null,
@@ -47,15 +42,19 @@ here it view the composition of the gamma or also named boom.
 
 </script>
 
-<AppHeader
+<div id="app">
+  <AppHeader
   lineName={state.name}
   partNo={state.activePart.number}
   revision={state.activePart.revision}
-  workOrderCode={state.activeWorkOrderCode}/>
-
-  <Input/>
-
+  workOrderCode={state.activeWorkOrderCode}
+/>
+<Input {addMessage}/>
+<MessageLog bind:addMessage />
 <AppFooter/>
+
+</div>
+
 
 <style lang="scss">
   :global(*) {
@@ -67,11 +66,52 @@ here it view the composition of the gamma or also named boom.
     -khtml-user-select: none; /* Konqueror HTML */
   }
 
-  :global(body) {
+  :global(body, html) {
     background-color: whitesmoke;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-    font-size: 16px;
+    height: 100%;
+    margin: 0;
     padding: 0;
+  }
+
+  :global(body, input, button) {
+    font-family: "Calibri", "Segoe UI";
+    font-size: 1.5vw;
+  }
+
+  :global(table tbody tr th) {
+    text-align: right;
+    vertical-align: top;
+  }
+
+  :global(#app) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  // :global(#app > .app-child) {
+  //   padding: 0.5rem;
+  // }
+
+  :global(#app > #app-body) {
+    flex-grow: 0;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 5px;
+  }
+
+  :global(#app > #app-body > div) {
+    background: #00000011;
+    border-radius: 5px;
+    padding: 8px;
+    flex: 1;
+  }
+
+  :global(#app table) {
+    width: 100%;
+  }
+
+  :global(#app table > tbody > tr > th) {
+    width: 25%;
   }
 </style>

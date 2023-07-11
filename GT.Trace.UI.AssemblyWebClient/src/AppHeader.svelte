@@ -36,7 +36,7 @@
     <i class={production.forecast < production.requirement ? "bad" : "good"} />
   </strong>
   <!-- Aqui se habilita el boton de desbloqueo de linea -->
-  <button id="btnUnlock" style="background-color: #ff9500;" on:click={btnUnlock}>Desbloquear Linea</button>
+  <button id="btnUnlock" on:click={btnUnlock}>Desbloquear Linea Manualmente</button>
 </div>
 
 <style lang="scss">
@@ -59,6 +59,17 @@
       min-width: 3rem;
       padding: 0 0.5em;
     }
+    > button{
+        background-color: #ffffff33;
+        color: #ff9500;
+        border-radius: 0.25em;
+        float: right;
+        height: 2em;
+        margin: 0 0.5em;
+        min-width: 3rem;
+        padding: 0 0.5em;
+        position: absolute;
+      }
   }
   i {
     font-style: normal;
