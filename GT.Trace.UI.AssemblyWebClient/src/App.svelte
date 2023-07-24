@@ -166,7 +166,9 @@ In short, this function uses an API to look up the usage points of an ETI and ha
 
             //Solo esto se agrego nuevo para eliminar el prefijo en LP
             if(lineCode == "LP"){
+              if(input[0] !="E"){
               input = input.slice(3);
+              }
             }
 
             getEtiPointsOfUse(input);
