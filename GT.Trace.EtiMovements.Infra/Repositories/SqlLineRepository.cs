@@ -120,8 +120,9 @@ namespace GT.Trace.EtiMovements.Infra.Repositories
                 active.IsDepleted = true;
                 active.UtcExpirationTime = DateTime.Now.ToUniversalTime();
                 await _movements.UpdateAsync(active).ConfigureAwait(false);
+                //Esta linea se agrego para que los componentes agotados se escriban en la tabla de WagonLoad
+                await _movements.WagonLoadaAsync(movement.PointOfUseCode, movement.ComponentNo).ConfigureAwait(false);
             }
-
             await _movements.UpdateAsync(movement).ConfigureAwait(false);
         }
 

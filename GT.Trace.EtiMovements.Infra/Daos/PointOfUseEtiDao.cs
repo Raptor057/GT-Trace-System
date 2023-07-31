@@ -45,6 +45,13 @@ WHERE s.UtcExpirationTime >= '2099-12-31 23:59:59.997';", new { pointOfUseCode, 
             return await Connection.ExecuteAsync("EXEC InsertSaveRemoveEti @etiNo;", movement).ConfigureAwait(false);
         }
 
+        public async Task<int> WagonLoadaAsync (string PointOfUseCode, string ComponentNo)
+        {
+            //En esta tabla se guardan los componentes consumidos con estatus IsDepleted = 1
+            return await Connection.ExecuteScalarAsync<int>("INSERT INTO [dbo].[WagonLoad] ([PointOfUseCode],[ComponentNo]) VALUES (@PointOfUseCode,@ComponentNo)",
+                new { PointOfUseCode, ComponentNo}).ConfigureAwait(false);
+        }
+
 
         public async Task<PointOfUseEtis?> GetLastUsedNotReturnedEtiAsync(string pointOfUseCode, string componentNo)
         {
