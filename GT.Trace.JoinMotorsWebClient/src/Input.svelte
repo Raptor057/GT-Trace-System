@@ -1,9 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import Sfx from "./utils/Sfx";
-import { PackagingApi } from "./utils/HttpRequests";
+  import { PackagingApi } from "./utils/HttpRequests";
 
-export let addMessage = null;
+  export let addMessage = null;
 let input = null;
 let qrMotor1 = null;
 let qrMotor2 = null;

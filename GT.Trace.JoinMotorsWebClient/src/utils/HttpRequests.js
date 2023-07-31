@@ -68,7 +68,9 @@ export const MaterialLoadingApi = (function (apiUrl) {
 export const PackagingApi = (function (apiUrl) {
     //apiUrl = 'http://localhost:5183'; //Este se usa cuando se ejecuta la api con debug de manera local
     return {
-        JoinEZMotors: (scannerInputUnitID,scannerOutputMotorID1,scannerOutputMotorID2,isEnable) =>
+        JoinFramelessMotors: (scannerInputUnitID,scannerInputComponentID,lineCode,partNo) =>
+            HttpRequest.post(`${apiUrl}/api/JoinFramelessMotors/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerInputComponentID: scannerInputComponentID, LineCode: lineCode, PartNo: partNo }),
+            JoinEZMotors: (scannerInputUnitID,scannerOutputMotorID1,scannerOutputMotorID2,isEnable) =>
         HttpRequest.post(`${apiUrl}/api/JoinEZMotors/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerOutputMotorID1: scannerOutputMotorID2,ScannerOutputMotorID2: scannerOutputMotorID1,IsEnable: isEnable})
     };
 })("http://mxsrvapps.gt.local/gtt/services/packaging");

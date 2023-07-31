@@ -9,8 +9,8 @@
     messages = [...JSON.parse(localStorage["messages"] || "[]")];
     addMessage = (message) => {
       messages = [
-        { time: new Date().toLocaleTimeString(), message: message },
-        ...messages.slice(0, 25),
+        {time: new Date().toLocaleTimeString(), message: message },
+        ...messages.slice(0, 30),
       ];
       localStorage["messages"] = JSON.stringify(messages);
     };
@@ -28,6 +28,7 @@
     flex-grow: 1;
     border: 2px solid #333;
     border-radius: 0.25rem;
+    /*Aqui se define el margen*/
     margin: 0.25em;
     background-color: #000000fa;
     color: white;
@@ -38,6 +39,7 @@
   }
 
   #message-log > span {
+    /* Aqui se define el interlineado del texto en el message-log */
     display: block;
     padding: 0.25rem;
   }

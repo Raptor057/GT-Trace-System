@@ -6,15 +6,71 @@
   import MessageLog from "./MessageLog.svelte";
   import AppFooter from "./AppFooter.svelte";
 
-  export let lineCode = "";
-  let addMessage;
+  import Sfx from "./utils/Sfx";
+  import { PackagingApi } from "./utils/HttpRequests";
 
+  export let lineCode = "";
+  export let partNo = "";
+  let unitID = null;
+  let qrMotor = null;
+  let qrMotor1 = null;
+  let qrMotor2 = null;
+  let addMessage;
+  
   let state = {
     name: null,
     activePart: { number: null, revision: null },
     activeWorkOrderCode: null,
     pointsOfUse: [],
     workOrder: { size: null, quantity: null },
+  };
+
+
+  const btnDelTransmissions = () => 
+ {
+    unitID = prompt("Escanea el QR de la tranmision:");
+    if(unitID != "")
+    {
+      qrMotor1= prompt("Escanea el QR del motor 1:");
+        if(qrMotor1 != "")
+        {
+          qrMotor2= prompt("Escanea el QR del motor 2:");
+          if(qrMotor2 != "")
+          {
+            PackagingApi.JoinEZMotors(
+            unitID,
+            qrMotor1,
+            qrMotor2,
+            0,)
+            .then((data) => 
+            {
+              Sfx.playSuccessSoundAsync();
+              addMessage(data);
+            })
+              .catch((error) => 
+              {
+                Sfx.playFailureSoundAsync();
+                addMessage(error);
+              })
+                .then(() => 
+                {});
+                return false;
+          }
+          else
+          {
+            addMessage('No se acepta el campo del motor 1 vacio.');
+          }
+          
+        }
+          else
+          {
+            addMessage('No se acepta el campo del motor 1 vacio.');
+          }
+    }
+    else
+    {
+    addMessage('No se acepta el campo de la transmision vacio.');
+    }
   };
 
   // Handle for the timeout used to update the screen info.
@@ -27,6 +83,7 @@
    * Update the local line data on page load.
    */
   onMount(async () => updateLineData(lineCode));
+  onMount(async () => partNo =state.activePart.number);
 
   /**
    * Fetch line data.
@@ -48,8 +105,9 @@
   partNo={state.activePart.number}
   revision={state.activePart.revision}
   workOrderCode={state.activeWorkOrderCode}
+  btnDel={btnDelTransmissions}
 />
-<Input {addMessage}/>
+<Input partNo={state.activePart.number} {lineCode}{addMessage}/>
 <MessageLog bind:addMessage />
 <AppFooter/>
 
