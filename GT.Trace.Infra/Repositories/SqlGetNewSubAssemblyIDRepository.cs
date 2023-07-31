@@ -16,6 +16,7 @@ namespace GT.Trace.Infra.Repositories
             _production = production;
         }
 
+        //NOTE: ESTO PERTENECE A SUB ENSAMBLE
         public async Task<long> ExecuteAsync(string lineCode, string componentNo, string revision, string workOrderCode, int quantity)
         {
             long id;

@@ -19,6 +19,7 @@ namespace GT.Trace.Infra.Services
 
         public Task<bool> LoadMaterialAsync(string lineCode, string etiInput, string pointOfUseCode)
         {
+            //NOTE: ESTO AUN NO SE IMPLEMENTA LA PARTE DE SUB ENSAMBLE
             throw new NotImplementedException();
         }
     }
