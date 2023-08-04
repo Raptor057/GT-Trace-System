@@ -1,4 +1,5 @@
 ﻿using GT.Trace.Common.Infra;
+using GT.Trace.Infra.Entities;
 
 namespace GT.Trace.Infra.Daos
 {
@@ -15,5 +16,10 @@ namespace GT.Trace.Infra.Daos
                 "INSERT INTO dbo.SubAssemblies(LineCode, ComponentNo, Revision, WorkOrderCode, Quantity) VALUES(@lineCode, @componentNo, @revision, @workOrderCode, @quantity); SELECT SCOPE_IDENTITY();",
                 new { lineCode, componentNo, revision, workOrderCode, quantity })
             .ConfigureAwait(false);
+
+        public async Task<SubAssemblies?> TryGetEtiByIDAsync(long etiID) =>
+            await Connection.QuerySingleAsync<SubAssemblies?>("SELECT * FROM SubAssemblies WHERE SubAssemblyID=@id;", new { etiID })
+                .ConfigureAwait(false);
+
     }
 }

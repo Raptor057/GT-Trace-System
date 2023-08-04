@@ -4,7 +4,7 @@ using GT.Trace.Infra.Daos;
 
 namespace GT.Trace.Infra.Repositories
 {
-    internal record SqlEtiRepository(EtiDao Etis, SubEtiDao SubEtis, PointOfUseDao PointsOfUse) : IEtiRepository
+    internal record SqlEtiRepository(EtiDao Etis, SubEtiDao SubEtis, PointOfUseDao PointsOfUse, SubAssemblyDao SubAssembly) : IEtiRepository
     {
         public async Task<Eti> TryGetEtiByIDAsync(long etiID, string etiNo)
         {
@@ -27,6 +27,11 @@ namespace GT.Trace.Infra.Repositories
             {
                 var eti = await Etis.TryGetEtiByIDAsync(etiID).ConfigureAwait(false) ?? throw new InvalidOperationException($"Ensamble ETI#{etiID} no encontrada.");
                 return Eti.Create(etiID, etiNo, Part.Create(eti.part_number, new Revision(eti.rev)), eti.lot, !(eti.Blocked ?? false), etiStatus);
+            }
+            else if (Eti.CheckEtiIsMotorsSubAssembly(etiNo))
+            {
+                var eti = await SubAssembly.TryGetEtiByIDAsync(etiID).ConfigureAwait(false) ?? throw new InvalidOperationException($"Ensamble ETI#{etiID} no encontrada.");
+                return Eti.Create(etiID, etiNo, Part.Create(eti.ComponentNo, new Revision(eti.Revision)), eti.WorkOrderCode, !(eti.IsDisabled ?? false), etiStatus);
             }
             else
             {
