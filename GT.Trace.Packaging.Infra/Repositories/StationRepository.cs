@@ -96,18 +96,19 @@
                 prod_unit.codew = production.codew.Trim();
             }
 
-            //Esto se agrego para que la gama se actualice cuando en cegid cambie
-             //RA: 06/16/2023
-            if (prod_unit.letter != "LE" || prod_unit.letter != "LN")
-            {
-                var countcomponentsbom = await _traza.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
-                if (countcomponentsbom)
-                {
-                    await _traza.UpdateGamaTRAZABAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
-                    throw new InvalidOperationException($"El bom actual no coincide con CEGID para el numero de parte \"{production.part_number.Trim()}\" para la linea \"{prod_unit.letter}\" " +
-                        $"intenta actualizar la pantalla de Empaque y GT Trace y comuníquese con el supervisor");
-                }
-            }
+            ////Esto se agrego para que la gama se actualice cuando en cegid cambie
+            // //RA: 06/16/2023
+            //if (prod_unit.letter != "LE" || prod_unit.letter != "LN")
+            //{
+            //    var countcomponentsbom = await _traza.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
+            //    if (countcomponentsbom)
+            //    {
+            //        await _traza.UpdateGamaTRAZABAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
+            //        throw new InvalidOperationException($"El bom actual no coincide con CEGID para el numero de parte \"{production.part_number.Trim()}\" para la linea \"{prod_unit.letter}\" " +
+            //            $"intenta actualizar la pantalla de Empaque y GT Trace y comuníquese con el supervisor");
+            //    }
+            //}
+            //Comentado el dia 8/15/2023 para descartar un problema de rendimiento se comento, para validar o descartar esto.
             
             var revision = Revision.New(production.rev);
 
