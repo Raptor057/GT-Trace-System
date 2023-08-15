@@ -172,7 +172,7 @@
             #endregion
 
 
-            #region Modificado para EZ
+            #region Modificado para todas las lineas en general
             /*Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre Spack y Spack Bis RA:5/31/2023*/
             //if (bisPartNumbers.Contains(prod_unit.modelo)) //Esta linea se dejo de usar el 6/01/2023
             if (CegidBis) // Se agrego esta linea RA:5/31/2023

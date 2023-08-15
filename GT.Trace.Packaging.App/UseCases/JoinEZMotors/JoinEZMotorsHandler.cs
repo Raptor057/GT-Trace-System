@@ -48,7 +48,7 @@ namespace GT.Trace.Packaging.App.UseCases.JoinEZMotors
 
                                         if (!RegisteredInformation)
                                         {
-                                            await _gateway.AddJoinEZMotorsAsync(unitID, labeldata.Website, labeldata.No_Load_Current, labeldata.No_Load_Speed, labeldata.Date, labeldata.Time, labeldata.Motor_number, labeldata2.Website, labeldata2.No_Load_Current, labeldata2.No_Load_Speed, labeldata2.Date, labeldata2.Time, labeldata2.Motor_number);
+                                            await _gateway.AddJoinEZMotorsAsync(unitID, labeldata.Website, labeldata.No_Load_Current, labeldata.No_Load_Speed, labeldata.Date, labeldata.Time, labeldata.Motor_number,labeldata.PN,labeldata.AEM,labeldata.Rev, labeldata2.Website, labeldata2.No_Load_Current, labeldata2.No_Load_Speed, labeldata2.Date, labeldata2.Time, labeldata2.Motor_number, labeldata2.PN,labeldata2.AEM,labeldata2.Rev);
                                             return new JoinEZMotorsSuccess($"Transmision {label.UnitID} enlazada con {labeldata.Motor_number} & {labeldata2.Motor_number}");
                                         }
                                         else

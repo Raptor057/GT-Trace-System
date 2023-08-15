@@ -123,7 +123,10 @@ namespace GT.Trace.Packaging.Infra.Services
                 match.Groups["rpm"].Value,
                 match.Groups["date"].Value,
                 match.Groups["time"].Value,
-                match.Groups["id"].Value
+                match.Groups["id"].Value,
+                match.Groups["PN"].Value,
+                match.Groups["AEM"].Value,
+                ""//Reservado para la Rev
                 );
             }
             else

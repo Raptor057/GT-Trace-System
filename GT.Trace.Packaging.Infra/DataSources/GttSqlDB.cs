@@ -93,9 +93,9 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task<int> EZRegisteredInformation(long unitID, string Date1, string Time1, string Motor_Number1, string Date2, string Time2, string Motor_Number2)=>
             await _con.ExecuteScalarAsync<int>("SELECT CASE WHEN (SELECT COUNT(UnitID) FROM EZ2000Motors WHERE UnitID = @UnitID AND isEnable = 1 OR [Date] = @Date1 AND [Time] = @Time1 AND Motor_number = @Motor_Number1 AND isEnable = 1 OR [Date] = @Date2 AND [Time] = @Time2 AND Motor_number = @Motor_Number2 AND isEnable = 1) > 0 THEN 1 ELSE 0 END AS Result"
                 , new { unitID,Date1,Time1,Motor_Number1, Date2, Time2, Motor_Number2 }).ConfigureAwait(false);
-        public async Task AddEZJoinMotors(long unitID, string Web1, string Current1, string Speed1, string Date1, string Time1, string Motor_Number1, string Web2, string Current2, string Speed2, string Date2, string Time2, string Motor_Number2) =>
-           await _con.ExecuteAsync("INSERT INTO [dbo].[EZ2000Motors]([UnitID],[Website],[No_Load_Current],[No_Load_Speed],[Date],[Time],[Motor_number])VALUES(@unitID,@Web1,@Current1,@Speed1,@Date1,@Time1,@Motor_Number1),(@unitID,@Web2,@Current2,@Speed2,@Date2,@Time2,@Motor_Number2)",
-               new { unitID, Web1, Current1, Speed1, Date1, Time1, Motor_Number1, Web2, Current2, Speed2, Date2,Time2,Motor_Number2 }).ConfigureAwait(false);
+        public async Task AddEZJoinMotors(long unitID, string Web1, string Current1, string Speed1, string Date1, string Time1, string Motor_Number1, string PN1, string AEM1, string Rev1, string Web2, string Current2, string Speed2, string Date2, string Time2, string Motor_Number2, string PN2, string AEM2, string Rev2) =>
+           await _con.ExecuteAsync("INSERT INTO [dbo].[EZ2000Motors]([UnitID],[Website],[No_Load_Current],[No_Load_Speed],[Date],[Time],[Motor_number],[PN],[AEM],[Rev])VALUES(@unitID,@Web1,@Current1,@Speed1,@Date1,@Time1,@Motor_Number1,@PN1,@AEM1,@Rev1),(@unitID,@Web2,@Current2,@Speed2,@Date2,@Time2,@Motor_Number2,@PN2,@AEM2,@Rev2)",
+               new { unitID, Web1, Current1, Speed1, Date1, Time1, Motor_Number1,PN1,AEM1,Rev1, Web2, Current2, Speed2, Date2,Time2,Motor_Number2,PN2,AEM2,Rev2}).ConfigureAwait(false);
 
         public async Task DelJoinEZMotors(long unitID)=>
             await _con.ExecuteAsync("UPDATE EZ2000Motors SET isEnable = 0 WHERE UnitID = @unitID", new { unitID }).ConfigureAwait(false);
