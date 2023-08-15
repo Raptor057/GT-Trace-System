@@ -23,7 +23,7 @@ namespace GT.Trace.App.UseCases.Lines.GetNewSubAssemblyID
 
         public GetNewSubAssemblyIDHandler(IGetNewSubAssemblyIDRepository getNewSubAssmblyID, IGetLineRepository getLine, ICegidRadioService radio, IBomService bom, IPointOfUseService pointsOfUse, IWorkOrderGateway workOrders)
         {
-            //NOTE: ESTO PERTENECE A SUB ENSAMBLE
+            //NOTE: Aqui se obtienen los datos para la eti de sub ensamble
             _getNewSubAssmblyID = getNewSubAssmblyID;
             _getLine = getLine;
             _radio = radio;

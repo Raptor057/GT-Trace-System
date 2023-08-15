@@ -146,7 +146,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
     (item) => item.activeEti && item.activeEti.number
   ).length;
 
-  // Get the size of the gamma.
+  // Get the size of the gamma.z
   $: gammaSize = state.pointsOfUse.length;
 
   /**
@@ -355,6 +355,23 @@ export const ButtonUnlockLine = () => {
     .then(handleAuthorization);
 };
 
+export const PrintSubAssembly = () => {
+  //alert(lineCode);
+  //MaterialLoadingApi.CreateSubAssemblyEti(lineCode);
+
+  MaterialLoadingApi.CreateSubAssemblyEti(lineCode)
+            .then((data) => 
+            {
+              //Sfx.playSuccessSoundAsync();
+            })
+              .catch((error) => 
+              {
+                //Sfx.playFailureSoundAsync();
+              })
+                .then(() => 
+                {});
+};
+
 
 const handleAuthorization = (passwordResponse) => {
   if (passwordResponse) {
@@ -395,6 +412,7 @@ const handleAuthorization = (passwordResponse) => {
   {gammaSize}
   workOrderCode={state.activeWorkOrderCode}
   btnUnlock={ButtonUnlockLine}
+  btnPrintSubAssembly={PrintSubAssembly}
 />
 
 <Gamma {lineCode} items={state.pointsOfUse} {materialReturnModeIsEnabled} />

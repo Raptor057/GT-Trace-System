@@ -28,11 +28,16 @@ namespace GT.Trace.Infra.Repositories
                 var eti = await Etis.TryGetEtiByIDAsync(etiID).ConfigureAwait(false) ?? throw new InvalidOperationException($"Ensamble ETI#{etiID} no encontrada.");
                 return Eti.Create(etiID, etiNo, Part.Create(eti.part_number, new Revision(eti.rev)), eti.lot, !(eti.Blocked ?? false), etiStatus);
             }
+            #region Esto se agrego el 08/04/2023 para arreglar la carga de sub ensambles con SA
             else if (Eti.CheckEtiIsMotorsSubAssembly(etiNo))
             {
                 var eti = await SubAssembly.TryGetEtiByIDAsync(etiID).ConfigureAwait(false) ?? throw new InvalidOperationException($"Ensamble ETI#{etiID} no encontrada.");
-                return Eti.Create(etiID, etiNo, Part.Create(eti.ComponentNo, new Revision(eti.Revision)), eti.WorkOrderCode, !(eti.IsDisabled ?? false), etiStatus);
+                //var creationTime = eti.UtcCreationTime.ToLocalTime();
+                //var lotNo = $"{creationTime.Year}{creationTime.DayOfYear:000}";
+                //return Eti.Create(etiID, etiNo, Part.Create(eti.ComponentNo, new Revision(eti.Revision)), eti.WorkOrderCode, true/*!(eti.IsDisabled ?? false)*/, etiStatus);
+                return Eti.Create(etiID, etiNo, Part.Create(eti.ComponentNo, new Revision(eti.Revision), null, null), $"{eti.WorkOrderCode}", true, etiStatus);
             }
+            #endregion
             else
             {
                 throw new InvalidOperationException($"ETI no valida [{etiNo}] para sub ensamble o ensamble.");

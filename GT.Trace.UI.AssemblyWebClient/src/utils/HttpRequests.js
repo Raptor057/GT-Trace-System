@@ -81,7 +81,10 @@ export const MaterialLoadingApi = (function (apiUrl) {
         2) supervisor password validation.
         */
         getEtiPointsOfUse: async (etiNo,lineCode,partNo ) =>
-        HttpRequest.get(`${apiUrl}/api/etis/${etiNo}/pointsofuse?lineCode=${lineCode}&partNo=${partNo}`),      
+        HttpRequest.get(`${apiUrl}/api/etis/${etiNo}/pointsofuse?lineCode=${lineCode}&partNo=${partNo}`),
+        
+        CreateSubAssemblyEti:(lineCode)=>
+        HttpRequest.post(`${apiUrl}/api/lines/${lineCode}/subassemblies`)
 
     };
 })("http://mxsrvapps.gt.local/gtt/services/materialloading");

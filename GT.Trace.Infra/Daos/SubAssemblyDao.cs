@@ -18,7 +18,7 @@ namespace GT.Trace.Infra.Daos
             .ConfigureAwait(false);
 
         public async Task<SubAssemblies?> TryGetEtiByIDAsync(long etiID) =>
-            await Connection.QuerySingleAsync<SubAssemblies?>("SELECT * FROM SubAssemblies WHERE SubAssemblyID=@id;", new { etiID })
+            await Connection.QuerySingleAsync<SubAssemblies?>("SELECT * FROM SubAssemblies WHERE SubAssemblyID=@etiID;", new { etiID })
                 .ConfigureAwait(false);
 
     }
