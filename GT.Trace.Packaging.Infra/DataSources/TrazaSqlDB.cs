@@ -41,12 +41,12 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task<pcmx> TryGetStationIsBlockedAsync(string hostname) =>
             await _con.QuerySingleAsync<pcmx>("SELECT is_blocked FROM dbo.pcmx WHERE PCNAME = @hostname;", new { hostname }).ConfigureAwait(false);
 
-        //Metodo agregado para bloquear empaque 2/8/2023
-        public async Task<pcmx> SetStationBlocked(string is_blocked, string lineName) =>
-            await _con.ExecuteScalarAsync<pcmx>("UPDATE pcmx SET is_blocked = @is_blocked WHERE LINE LIKE('%'+@lineName);", new { is_blocked, lineName }).ConfigureAwait(false);
-        //Esto solo fue una prueba para validar la execucion de la linea
-        //public async Task<pcmx> SetStationBlocked(string hostname) =>
-        //    await _con.ExecuteScalarAsync<pcmx>("UPDATE pcmx SET is_blocked = 1 WHERE PCNAME = @hostname;", new { hostname}).ConfigureAwait(false);
+        ////Metodo agregado para bloquear empaque 2/8/2023
+        //public async Task<pcmx> SetStationBlocked(string is_blocked, string lineName) =>
+        //    await _con.ExecuteScalarAsync<pcmx>("UPDATE pcmx SET is_blocked = @is_blocked WHERE LINE LIKE('%'+@lineName);", new { is_blocked, lineName }).ConfigureAwait(false);
+        ////Esto solo fue una prueba para validar la execucion de la linea
+        ////public async Task<pcmx> SetStationBlocked(string hostname) =>
+        ////    await _con.ExecuteScalarAsync<pcmx>("UPDATE pcmx SET is_blocked = 1 WHERE PCNAME = @hostname;", new { hostname}).ConfigureAwait(false);
 
 
         #endregion
