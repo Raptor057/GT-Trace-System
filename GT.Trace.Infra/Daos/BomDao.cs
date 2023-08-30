@@ -17,5 +17,13 @@ namespace GT.Trace.Infra.Daos
             await Connection.QuerySingleAsync<cegidbom?>(
                 "select TOP 1 * from cegid.bom where NOCTCODECP=@componentNo and NOCTCODATE = @lineCode;",
                 new { componentNo, lineCode }).ConfigureAwait(false);
+        
+        /*Se agrego para actualizar la gama mediante endpoint
+         08/17/2023*/
+        public async Task<int> UpdateGamaAsync(string partNo, string lineCode) =>
+            await Connection.ExecuteAsync(
+                "EXECUTE [MXSRVTRACA].[TRAZAB].[dbo].[usp_update_bom_info] @partNo,@lineCode;",
+                new { partNo, lineCode }
+            ).ConfigureAwait(false);
     }
 }

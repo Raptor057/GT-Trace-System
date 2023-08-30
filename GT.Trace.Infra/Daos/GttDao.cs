@@ -54,5 +54,13 @@ GROUP BY PointOfUseCode, ComponentNo;",
                 "UPDATE dbo.PointOfUseEtis SET UtcUsageTime = @utcUsageTime WHERE EtiNo = @etiNo AND UtcEffectiveTime <= GETUTCDATE() AND UtcUsageTime IS NULL AND UtcExpirationTime IS NULL;",
                 new { etiNo, utcUsageTime = usageTime.ToUniversalTime() }
             ).ConfigureAwait(false);
+
+        /*Se agrego esto para crear un endpoint que actualize el la gama de los componentes Agregado el 8/17/2023 */
+        #region 
+        //public async Task<dynamic> GetLineandPartnofromPointOfUseAsync(string PointOfUse) =>
+        //    await Connection.QueryFirst<dynamic>
+        //    ("SELECT top 1 LP.LineCode,LPS.PartNo FROM PointOfUseEtis PO LEFT JOIN LinePointsOfUse LP ON LP.PointOfUseCode = PO.PointOfUseCode LEFT JOIN LineProductionSchedule LPS ON LPS.LineCode = LP.LineCode WHERE PO.PointOfUseCode = @PointOfUse AND PO.UtcExpirationTime IS NULL AND PO.UtcUsageTime IS NOT NULL AND LPS.UtcExpirationTime > GETUTCDATE();"
+        //        , new { PointOfUse }).ConfigureAwait(false);
+        #endregion
     }
 }

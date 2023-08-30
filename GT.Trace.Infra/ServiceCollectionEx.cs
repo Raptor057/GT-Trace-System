@@ -7,6 +7,7 @@ using GT.Trace.App.UseCases.Lines.GetLoadState;
 using GT.Trace.App.UseCases.Lines.GetNewSubAssemblyID;
 using GT.Trace.App.UseCases.Lines.GetPointsOfUse;
 using GT.Trace.App.UseCases.Lines.GetWorkOrder;
+using GT.Trace.App.UseCases.Lines.UpdateGama;
 using GT.Trace.App.UseCases.MaterialLoading.FetchLines;
 using GT.Trace.App.UseCases.MaterialLoading.FetchLineWorkOrders;
 using GT.Trace.App.UseCases.MaterialLoading.FetchPointOfUseEtis;
@@ -70,6 +71,7 @@ namespace GT.Trace.Infra
                 .AddTransient<IGetPointsOfUseGateway, SqlGetLinePointsOfUseGateway>()
                 .AddTransient<IGetWorkOrderGateway, SqlGetLineWorkOrderGateway>()
                 .AddTransient<IGetBomGateway, SqlGetLineBomGateway>()
+                .AddTransient<IUpdateBomLineGateway,SqlUpdateGamaGateway>()// Agregadas el 08/30/2023 para el endpoint de actualizacion de gama
                 .AddTransient<ILoadStateGateway, SqlLoadStateGateway>();
         }
     }
