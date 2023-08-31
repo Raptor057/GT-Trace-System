@@ -12,6 +12,7 @@
     const handleOnClick = () => {
         if (partNo && lineCode) {
             commonApi.getLineMaterialStatus(lineCode, partNo, onGamaState, alert);
+            commonApi.updateLineBom(partNo, lineCode);
         }
         else {
             onGamaState([]);

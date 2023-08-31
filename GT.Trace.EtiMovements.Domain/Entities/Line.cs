@@ -131,13 +131,13 @@ namespace GT.Trace.EtiMovements.Domain.Entities
         public bool CanReturnEti(Eti eti, bool isChangeOver, out ErrorList errors)
         {
             var pointOfUse = PointsOfUse.SingleOrDefault(item => item.ComponentNo == eti.ComponentNo && item.Code == eti.LastMovement!.PointOfUseCode);
+            errors = new();
             if (pointOfUse != null)
             {
                 pointOfUse.CanReturn(eti, isChangeOver, out errors);
             }
             else
             {
-                errors = new();
                 errors.Add($"No se encontró el túnel {eti.LastMovement!.PointOfUseCode} desgnado para el componente {eti.ComponentNo} en el modelo {WorkOrder} {Code}.");
             }
             return errors.IsEmpty;

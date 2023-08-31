@@ -131,6 +131,16 @@ table#gama-state {
         border-radius: 0.25em;
         float: right;
     }
+    table#gama-state button#update-gama-button {
+        cursor: pointer;
+        padding: 0.5em;
+        border: 0;
+        /*vertical-align: text-bottom;*/
+        color: white;
+        background-color: orange;
+        border-radius: 0.25em;
+        float: right;
+    }
 
 /*These 3 color designs are used to color the charge indicator box*/
 .cuadrado {
