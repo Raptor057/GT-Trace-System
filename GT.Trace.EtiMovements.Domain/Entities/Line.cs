@@ -85,7 +85,7 @@ namespace GT.Trace.EtiMovements.Domain.Entities
             //{
             //    errors = new()
             //    {
-            //        $"No se encontró el túnel {eti.LastMovement!.PointOfUseCode} desgnado para el componente {eti.ComponentNo} en el modelo {WorkOrder} {Code}."
+            //        $"No se encontró el túnel {eti.LastMovement!.PointOfUseCode} desgnado para el componente {eti.ComponentNo} en el modelo {WorkOrder.PartNo} {Code}."
             //    };
             //}
             //return errors.IsEmpty;
@@ -113,7 +113,7 @@ namespace GT.Trace.EtiMovements.Domain.Entities
             else
             {
                 errors = new();
-                errors.Add($"No se encontró el túnel {eti.LastMovement!.PointOfUseCode} desgnado para el componente {eti.ComponentNo} en el modelo {WorkOrder} {Code}.");
+                errors.Add($"No se encontró el túnel {eti.LastMovement!.PointOfUseCode} desgnado para el componente {eti.ComponentNo} en el modelo {WorkOrder.PartNo} {Code}.");
             }
             return errors.IsEmpty;
         }
@@ -138,7 +138,7 @@ namespace GT.Trace.EtiMovements.Domain.Entities
             }
             else
             {
-                errors.Add($"No se encontró el túnel {eti.LastMovement!.PointOfUseCode} desgnado para el componente {eti.ComponentNo} en el modelo {WorkOrder} {Code}.");
+                errors.Add($"No se encontró el túnel {eti.LastMovement!.PointOfUseCode} desgnado para el componente {eti.ComponentNo} en el modelo {WorkOrder.PartNo} {Code}.");
             }
             return errors.IsEmpty;
         }
