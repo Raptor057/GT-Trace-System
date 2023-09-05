@@ -16,6 +16,7 @@ WHERE lps.LineCode = @lineCode AND lps.UtcExpirationTime = gs.DefaultExpirationT
                 new { lineCode });
 
         //TODO: Aqui hay que ver como solucionar esto, ya que no siempre se guardan en la tabla las ordenes, y eso hace que se pierda la trazabilidad
+        //BUG: En este metodo hay un Bug explicado en el TODO
         public async Task<int> ActivateProductionSchedule(string lineCode, string partNo, string workOrderCode, string revision) =>
             await Connection.ExecuteAsync(@"
 INSERT INTO dbo.LineProductionSchedule(LineCode, WorkOrderCode, PartNo, Revision, UtcEffectiveTime, UtcExpirationTime, HourlyRate)

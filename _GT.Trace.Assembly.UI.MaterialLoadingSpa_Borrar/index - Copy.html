@@ -1,0 +1,488 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            background-color: #1B2434;
+            color: white;
+            height: 100%;
+            margin: 0;
+        }
+
+        body, input, select, button {
+            font-family: 'Calibri','Segoe UI';
+            font-size: 1.5vw;
+        }
+
+        .flex-container {
+            display: flex;
+            /* flex-flow: column; */
+            flex-direction: column;
+            /*background-color: #bbdefb;*/
+            /*height: 100%;*/
+            padding: 15px;
+            gap: 5px;
+            position: absolute;
+            top: 1.5em;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+            .flex-container > div {
+                background: #FFFFFF0A;
+                /*border: 3px solid #ffcc80;*/
+                border-radius: 0.35rem;
+                padding: 8px;
+            }
+
+        #event-log-list {
+            width: 100%;
+        }
+
+        button, input, select {
+            border: 1px solid transparent;
+            border-radius: 0.35rem;
+        }
+
+        table {
+            table-layout: fixed;
+            width: 100%;
+            text-align: left;
+        }
+
+        .item6 {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        #title-bar {
+            background-image: url(Content/img/LOGO-GT2.png);
+            background-repeat: no-repeat;
+            background-position-x: 0.25em;
+            background-position-y: center;
+            background-size: 2.5rem;
+            /*background-color: #333;*/
+            color: #FF5500;
+            height: 1.5em;
+            line-height: 1.5em;
+            padding-left: 2em;
+        }
+
+        label, th {
+            color: #E66C37;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        createElement = (tag, callback) => {
+            const element = document.createElement(tag);
+            if (callback) {
+                callback(element);
+            }
+            return element;
+        };
+    </script>
+    <template id="event-log-template">
+        <style>
+            #event-log-list {
+                background-color: darkblue;
+                border: 1px solid transparent;
+                border-radius: 0.35rem;
+                color: white;
+                font-family: Consolas;
+                height: 4rem;
+                list-style: none;
+                margin: 0;
+                overflow-y: auto;
+                padding: 0;
+            }
+        </style>
+        <ul id="event-log-list"></ul>
+    </template>
+    <script>
+        class EventLog extends HTMLElement {
+
+            _entries = [];
+
+            connectedCallback() {
+                const template = document.getElementById('event-log-template');
+                const node = document.importNode(template.content, true);
+                this.appendChild(node);
+            }
+
+            logEvent = (msg) => {
+                const list = this.querySelector('#event-log-list');
+                for (let i = Math.min(this._entries.length, 3); i > 0; i--) {
+                    this._entries[i] = this._entries[i - 1];
+                }
+                const timeStamp = new Date();
+                this._entries[0] = `${timeStamp.toLocaleDateString()} ${timeStamp.toLocaleTimeString()} .- ${msg}`;
+                list.innerHTML = '';
+                for (var index in this._entries) {
+                    list.appendChild(createElement('li', li => li.innerText = this._entries[index]));
+                }
+            };
+        }
+        customElements.define("event-log", EventLog);
+    </script>
+
+    <template id="etis-table-template">
+        <table id="etis-table">
+            <thead>
+                <tr>
+                    <th>#ETI</th>
+                    <th>#Parte</th>
+                    <th>Orden de Fab.</th>
+                    <th>#Componente</th>
+                    <th>Fecha de Carga</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </template>
+    <script>
+        class EtisTable extends HTMLElement {
+            connectedCallback() {
+                const template = document.getElementById('etis-table-template');
+                const node = document.importNode(template.content, true);
+                this.appendChild(node);
+            }
+
+            refresh = (etis) => {
+                const etisTable = this.querySelector('#etis-table');
+                const tbody = etisTable.querySelector('tbody');
+                tbody.innerHTML = '';
+                [...etis].forEach((eti) => {
+                    tbody.appendChild(createElement('tr', (tr) => {
+                        tr.appendChild(createElement('td', (td) => td.innerText = eti.etiNo));
+                        tr.appendChild(createElement('td', (td) => td.innerText = eti.partNo));
+                        tr.appendChild(createElement('td', (td) => td.innerText = eti.workOrderCode));
+                        tr.appendChild(createElement('td', (td) => td.innerText = eti.componentNo));
+                        tr.appendChild(createElement('td', (td) => td.innerText = (new Date(eti.effectiveTime)).toLocaleString('en-US', dateOptions)));
+                        tr.appendChild(createElement('td', (td) => td.innerHTML = '<button id="unload-eti-button">&#10060;</button>'));
+                    }));
+                });
+            };
+        }
+        customElements.define("etis-table", EtisTable);
+    </script>
+
+    <div id="title-bar">
+        Carga de Materiales
+    </div>
+
+    <div class="flex-container">
+
+        <div class="item1">
+            <select id="lines-list"></select>
+            <input id="point-of-use-code-filter-input" autofocus type="text" />
+            <div style="display: inline-block;">
+                <input id="can-change-part-check" type="checkbox" disabled />
+                <select style="display: none;" id="work-order-list"></select>
+                <div style="display: inline-block;" id="selected-part-pane">
+                    <label># Parte</label> <strong id="active-part-no-output"></strong>
+                    <label>Orden de Fabricación</label> <strong id="active-work-order-code-output"></strong>
+                </div>
+            </div>
+        </div>
+        <div class="item2">
+            <input id="eti-no-input" type="text" />
+        </div>
+        <div class="item3">
+            <div id="eti-points-of-use-container"><span>&nbsp;</span></div>
+        </div>
+        <div class="item4">
+            <input id="point-of-use-code-input" type="text" />
+        </div>
+
+        <div class="item6">
+            <etis-table id="etisTable" />
+        </div>
+        <event-log id="eventLog" />
+    </div>
+    <script>
+        const dateOptions = {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour12: false,
+            hour: 'numeric',
+            minute: '2-digit'
+        };
+
+        const linesList = document.querySelector('#lines-list');
+        const pointOfUseFilterInput = document.querySelector('#point-of-use-code-filter-input');
+        const etiNoInput = document.querySelector('#eti-no-input');
+        const activePartNoOutput = document.querySelector('#active-part-no-output');
+        const activeWorkOrderCodeOutput = document.querySelector('#active-work-order-code-output');
+        const etisTable = document.querySelector('#etisTable');
+        const etiPointsOfUseContainer = document.querySelector('#eti-points-of-use-container');
+        const pointOfUseCodeInput = document.querySelector('#point-of-use-code-input');
+        const eventLog = document.querySelector('#eventLog');
+        const workOrderList = document.querySelector('#work-order-list');
+        const canChangePartCheck = document.querySelector('#can-change-part-check');
+
+        let _lines = [];
+        let _workOrders = [];
+
+        function updateLinesList(lines) {
+            _lines = lines;
+            linesList.options.innerHTML = '';
+            for (index in lines) {
+                linesList.options[index] = new Option(lines[index].code, lines[index].id);
+            }
+        }
+
+        function trySelectLine(lineCodeArray) {
+            if (lineCodeArray != null && lineCodeArray.length > 0) {
+                linesList.selectedIndex = [...linesList.options].findIndex(option => option.text.toLowerCase() === lineCodeArray[0].toLowerCase());
+                handleLineListChange();
+                etiNoInput.focus();
+            }
+        }
+
+        function refreshWorkOrderList(workOrders) {
+            _workOrders = workOrders;
+            workOrderList.innerHTML = '';
+            for (index in workOrders) {
+                workOrderList.options[index] = new Option(`${workOrders[index].code} / ${workOrders[index].partNo.trim()} Rev ${workOrders[index].revision.trim()}`);
+            }
+            canChangePartCheck.checked = false;
+            canChangePartCheck.dispatchEvent(new Event('change'));
+            canChangePartCheck.disabled = _workOrders.length === 0;
+        }
+
+        function refreshEtiPointsOfUse(pointOfUseCodes) {
+            if (pointOfUseCodes.length > 0) {
+                etiPointsOfUseContainer.innerHTML = '';
+                [...pointOfUseCodes].forEach(function (item) {
+                    etiPointsOfUseContainer.appendChild(createElement('span', function (span) {
+                        span.setAttribute('data-value', item); span.innerText = item;
+                    }));
+                });
+            }
+            else {
+                etiPointsOfUseContainer.innerHTML = '<span>&nbsp;</span>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            workOrderList.addEventListener('change', handleWorkOrderListChange);
+            pointOfUseFilterInput.addEventListener('keypress', handlePointOfUseFilterInputKeyPress);
+            etiNoInput.addEventListener('keypress', handleEtiNoInputKeyPress);
+            pointOfUseCodeInput.addEventListener('keypress', handlePointOfUseCodeInputKeyPress);
+            linesList.addEventListener('change', handleLineListChange);
+            fetchLines(updateLinesList, eventLog.logEvent);
+
+            pointOfUseFilterInput.focus();
+        });
+
+        document.addEventListener('click', (event) => {
+            if (event.target.tagName === 'BUTTON' && event.target.id === 'unload-eti-button') {
+                const button = event.target;
+                const tr = button.parentElement.parentElement;
+
+                const etiNo = tr.childNodes[0].innerText;
+
+                if (!confirm(`ETI#${etiNo} será removida del túnel. Presióne OK para continuar...`)) return;
+
+                unloadEti(pointOfUseFilterInput.dataset.code, etiNo, linesList.options[linesList.selectedIndex].text, '5766', () => {
+                    pointOfUseFilterInput.value = pointOfUseFilterInput.dataset.code;
+                    pointOfUseFilterInput.dispatchEvent(new KeyboardEvent('keypress', { keyCode: 13 }));
+                }, eventLog.logEvent);
+            }
+        });
+    </script>
+    <script>
+        function handleWorkOrderListChange(event) {
+            const workOrder = _workOrders[workOrderList.selectedIndex];
+            activePartNoOutput.innerText = workOrder.partNo;
+            activeWorkOrderCodeOutput.innerText = workOrder.code;
+        }
+
+        function handleLineListChange(event) {
+            fetchLineWorkOrders(linesList.value, refreshWorkOrderList, eventLog.logEvent);
+            activePartNoOutput.innerText = _lines[linesList.selectedIndex].partNo;
+            activeWorkOrderCodeOutput.innerText = _lines[linesList.selectedIndex].workOrderCode;
+            //console.log(_lines[linesList.selectedIndex]);
+            pointOfUseFilterInput.focus();
+
+            canChangePartCheck.checked = false;
+        }
+
+        function handlePointOfUseFilterInputKeyPress(event) {
+            if (event.keyCode === 13) {
+                etiNoInput.value = '';
+                pointOfUseCodeInput.value = '';
+                etiPointsOfUseContainer.innerHTML = '<span>&nbsp;</span>';
+                const pointOfUseCode = pointOfUseFilterInput.value;
+                fetchPointOfUseLines(pointOfUseCode, trySelectLine, eventLog.logEvent);
+                fetchPointOfUseEtis(pointOfUseCode, etisTable.refresh, eventLog.logEvent);
+                pointOfUseFilterInput.dataset.code = pointOfUseCode;
+                pointOfUseFilterInput.value = '';
+            }
+        }
+
+        function handleEtiNoInputKeyPress(event) {
+            if (event.keyCode === 13) {
+                fetchEtiPointsOfUse(etiNoInput.value, activePartNoOutput.innerText, linesList.options[linesList.selectedIndex].text, refreshEtiPointsOfUse, eventLog.logEvent);
+                pointOfUseCodeInput.focus();
+            }
+        }
+
+        function handlePointOfUseCodeInputKeyPress(event) {
+            if (event.keyCode === 13) {
+                const pointOfUseCode = pointOfUseCodeInput.value;
+                const selector = `span[data-value="${pointOfUseCode}"]`;
+                const span = etiPointsOfUseContainer.querySelector(selector);
+                if (span) {
+                    loadEti(pointOfUseCode, etiNoInput.value, linesList.options[linesList.selectedIndex].text, '5766', () => {
+                        etiNoInput.value = '';
+                        pointOfUseCodeInput.value = '';
+                        pointOfUseFilterInput.value = pointOfUseCode;
+                        pointOfUseFilterInput.dispatchEvent(new KeyboardEvent('keypress', { keyCode: 13 }));
+                    },
+                        (msg) => {
+                            eventLog.logEvent(msg);
+                            pointOfUseCodeInput.value = '';
+                            etiPointsOfUseContainer.innerHTML = '';
+                            etiNoInput.focus();
+                            etiNoInput.select();
+                        })
+                }
+            }
+        }
+
+        canChangePartCheck.addEventListener('change', function (e) {
+            document.querySelector('#work-order-list').style.display = e.target.checked ? 'inline-block' : 'none';
+            document.querySelector('#selected-part-pane').style.display = !e.target.checked ? 'inline-block' : 'none';
+        });
+    </script>
+    <script>
+        const httpGet = (url, onSuccess, onFailure) =>
+            fetch(url)
+                .then(response => response.json())
+                .then(jsonResponse => {
+                    if (jsonResponse.isSuccess) {
+                        //console.log('HTTP Response', jsonResponse.data);
+                        onSuccess(jsonResponse.data);
+                    }
+                    else {
+                        onFailure(jsonResponse.message);
+                    }
+                });
+
+        const httpPost = (url, data, onSuccess, onFailure) =>
+            fetch(url, {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(jsonResponse => {
+                    if (jsonResponse.isSuccess) {
+                        console.log('HTTP Response', jsonResponse.data);
+                        onSuccess(jsonResponse.data);
+                    }
+                    else {
+                        onFailure(jsonResponse.message);
+                    }
+                });
+
+        const httpDelete = (url, onSuccess, onFailure) =>
+            fetch(url, {
+                method: 'DELETE',
+                mode: 'cors',
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(jsonResponse => {
+                    if (jsonResponse.isSuccess) {
+                        onSuccess(jsonResponse.data);
+                    }
+                    else {
+                        onFailure(jsonResponse.message);
+                    }
+                });
+
+        const apiServer = 'http://mxsrvapps.gt.local/gtt/services/materialloading';
+
+        const fetchLines = (onSuccess, onFailure) =>
+            httpGet(`${apiServer}/api/lines`, onSuccess, onFailure);
+
+        const fetchLineWorkOrders = (lineID, onSuccess, onFailure) =>
+            httpGet(`${apiServer}/api/lines/${lineID}/workorders`, onSuccess, onFailure);
+
+        const fetchPointOfUseLines = (pointOfUseCode, onSuccess, onFailure) =>
+            httpGet(`${apiServer}/api/pointsofuse/${pointOfUseCode}/lines`, onSuccess, onFailure);
+
+        const fetchPointOfUseEtis = (pointOfUseCode, onSuccess, onFailure) => {
+            console.log('fetchPointOfUseEtis', pointOfUseCode);
+            httpGet(`${apiServer}/api/pointsofuse/${pointOfUseCode}/etis`, onSuccess, onFailure);
+        }
+
+        const fetchEtiPointsOfUse = (etiNo, partNo, lineCode, onSuccess, onFailure) =>
+            httpGet(`${apiServer}/api/etis/${etiNo}/pointsofuse?lineCode=${lineCode}&partNo=${partNo}`, onSuccess, onFailure);
+
+        const loadEti = (pointOfUseCode, etiNo, lineCode, operatorNo, onSuccess, onFailure) =>
+            httpPost(
+                `${apiServer}/api/pointsofuse/${pointOfUseCode}/etis`,
+                { lineCode: lineCode, etiNo: etiNo, operatorNo, operatorNo },
+                onSuccess, onFailure);
+
+        const unloadEti = (pointOfUseCode, etiNo, lineCode, operatorNo, onSuccess, onFailure) =>
+            httpDelete(
+                `${apiServer}/api/pointsofuse/${pointOfUseCode}/etis/${etiNo}?operatorNo=${operatorNo}&lineCode=${lineCode}`,
+                onSuccess, onFailure);
+    </script>
+    <script src="lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl('http://mxsrvapps.gt.local/gtt/services/materialloading/hubs/pointsofuse')
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        async function start() {
+            try {
+                await connection.start({ withCredentials: false });
+                console.log("SignalR Connected.");
+            } catch (err) {
+                console.log('SignalR /', err);
+                setTimeout(start, 3000);
+            }
+        };
+
+        connection.onclose(async () => {
+            await start();
+        });
+
+        connection.on("Material Used", (lineCode, etiNo, pointOfUseCode, utcTimeStamp) => {
+            console.log('Material Used', pointOfUseCode);
+            if (pointOfUseFilterInput.dataset.code === pointOfUseCode) {
+                console.log('Looking for...', etiNo);
+                var xpath = `//td[text()="${etiNo}"]`;
+                var cell = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                if (cell) cell.parentElement.parentElement.removeChild(cell.parentElement);
+            }
+            //console.log(`${etiNo} removida del tunel ${pointOfUseCode} en ${utcTimeStamp}`);
+        });
+
+        start();
+    </script>
+</body>
+</html>

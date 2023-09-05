@@ -5,10 +5,8 @@ using GT.Trace.Common.CleanArch;
 
 namespace GT.Trace.App.UseCases.Lines.GetNewSubAssemblyID
 {
-    //Aqui se obtienen los sub ensambles
     internal sealed class GetNewSubAssemblyIDHandler : ResultInteractorBase<GetNewSubAssemblyIDRequest, GetNewSubAssemblyIDResponse>
     {
-        //NOTE: ESTO PERTENECE A SUB ENSAMBLE
         private readonly IGetNewSubAssemblyIDRepository _getNewSubAssmblyID;
 
         private readonly IGetLineRepository _getLine;
@@ -73,7 +71,6 @@ namespace GT.Trace.App.UseCases.Lines.GetNewSubAssemblyID
                 var nextLine = await _getLine.GetLineByCodeAsync(bomEntry.LineCode)
                     .ConfigureAwait(false);
 
-                //NOTE: ESTO PERTENECE A SUB ENSAMBLE
                 await _pointsOfUse.LoadMaterialAsync(bomEntry.LineCode, $"SA{etiID:00000000}", bomEntry.PointOfUseCode)
                     .ConfigureAwait(false);
 
