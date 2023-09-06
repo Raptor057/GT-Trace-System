@@ -109,7 +109,39 @@
             //    }
             //}
             //Comentado el dia 8/15/2023 para descartar un problema de rendimiento se comento, para validar o descartar esto.
-            
+
+            #region Torquimetros para LE
+            if (prod_unit.letter == "LE")
+            {
+                //string ubicacionArchivo = @"C:\ISS\CrystalReportViewer1.csv";
+                string ubicacionArchivo = @"\\mxsrvdata\DATA\IT\Proyects\GTInvMtto\Proteus Linea E TORQUIMETROS GRUPO 4\CrystalReportViewer1.csv";
+                System.IO.StreamReader archivo = new(ubicacionArchivo);
+                string separador = ",";
+                string? linea;
+                var datenow = DateTime.Now;
+                //bool encontrado = false;
+                while ((linea = archivo.ReadLine()) != null)
+                {
+                    string[] fila = linea.Split(separador);
+                    string ID = fila[3].Trim('\"');
+                    string Descipcion = fila[5];
+                    DateTime FechaPM = Convert.ToDateTime(fila[6]);
+                    //var Activo = fila[8];
+
+                    if (Descipcion == "TORQUIMETROS GRUPO 4" && datenow >= FechaPM)
+                    {
+                        //encontrado = true;
+                        //Console.WriteLine("El PM de \"TORQUIMETROS GRUPO 4\" se encuentra vencido");
+                        throw new InvalidOperationException($"TORQUIMETROS GRUPO 4 esta fuera de tiempo, cominicate con mantenimiento y posteriormente con sistemas.");
+                    }
+                    else
+                    {
+                        //encontrado = false;
+                    }
+                }
+            }
+            #endregion
+
             var revision = Revision.New(production.rev);
 
             var CegidBis = await _cegid.IsSpackBis(production.part_number.Trim(), revision.Number).ConfigureAwait(false); //Aqui se agrego el _configuration RA: 6/01/2023
