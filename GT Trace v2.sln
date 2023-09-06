@@ -99,28 +99,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GT.Trace.Packaging.UI.Packa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.UI.CommonWebApi", "GT.Trace.UI.CommonWebApi\GT.Trace.UI.CommonWebApi.csproj", "{BBCC1497-F609-4316-A377-548C6BACA7DD}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GT.Trace.Assembly.UI.MaterialLoadingSpa", "GT.Trace.Assembly.UI.MaterialLoadingSpa\", "{E3A77D7F-F4E6-488A-A5E8-129C46A421AC}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.7.2"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_59162"
-		Debug.AspNetCompiler.PhysicalPath = "GT.Trace.Assembly.UI.MaterialLoadingSpa\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_59162\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_59162"
-		Release.AspNetCompiler.PhysicalPath = "GT.Trace.Assembly.UI.MaterialLoadingSpa\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_59162\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "59162"
-		SlnRelativePath = "GT.Trace.Assembly.UI.MaterialLoadingSpa\"
-		DefaultWebSiteLanguage = "Visual C#"
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.Etis.UI.WebApi", "GT.Trace.Etis.UI.WebApi\GT.Trace.Etis.UI.WebApi.csproj", "{55CD6FD0-67DC-4572-983F-5C78747BF17E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.Etis.App", "GT.Trace.Etis.App\GT.Trace.Etis.App.csproj", "{68C54413-7B5E-4438-BDD8-E7B431DF7745}"
@@ -361,10 +339,6 @@ Global
 		{BBCC1497-F609-4316-A377-548C6BACA7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBCC1497-F609-4316-A377-548C6BACA7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBCC1497-F609-4316-A377-548C6BACA7DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3A77D7F-F4E6-488A-A5E8-129C46A421AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3A77D7F-F4E6-488A-A5E8-129C46A421AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3A77D7F-F4E6-488A-A5E8-129C46A421AC}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3A77D7F-F4E6-488A-A5E8-129C46A421AC}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{55CD6FD0-67DC-4572-983F-5C78747BF17E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55CD6FD0-67DC-4572-983F-5C78747BF17E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55CD6FD0-67DC-4572-983F-5C78747BF17E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -477,7 +451,6 @@ Global
 		{DF780829-B4FF-41A2-8159-E03B0030BC2D} = {600D3039-28A2-4C66-80B0-4E050D5DEF29}
 		{2D1AE720-3B08-4BF1-B47B-A1360DCBEE83} = {04CBCAEE-5CDD-43CD-AB11-760C19CA2C38}
 		{BBCC1497-F609-4316-A377-548C6BACA7DD} = {600D3039-28A2-4C66-80B0-4E050D5DEF29}
-		{E3A77D7F-F4E6-488A-A5E8-129C46A421AC} = {50A623B7-8245-4570-A168-D167671770E2}
 		{55CD6FD0-67DC-4572-983F-5C78747BF17E} = {0DE82D59-8915-4E84-A511-18745EC0A55F}
 		{68C54413-7B5E-4438-BDD8-E7B431DF7745} = {0DE82D59-8915-4E84-A511-18745EC0A55F}
 		{80522340-3912-40AE-905A-AADD49CC570A} = {0DE82D59-8915-4E84-A511-18745EC0A55F}
