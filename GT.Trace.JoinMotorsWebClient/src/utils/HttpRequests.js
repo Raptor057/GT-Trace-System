@@ -69,8 +69,12 @@ export const PackagingApi = (function (apiUrl) {
     //apiUrl = 'http://localhost:5183'; //Este se usa cuando se ejecuta la api con debug de manera local
     return {
         JoinFramelessMotors: (scannerInputUnitID,scannerInputComponentID,lineCode,partNo) =>
-            HttpRequest.post(`${apiUrl}/api/JoinFramelessMotors/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerInputComponentID: scannerInputComponentID, LineCode: lineCode, PartNo: partNo }),
-            JoinEZMotors: (scannerInputUnitID,scannerOutputMotorID1,scannerOutputMotorID2,isEnable) =>
-        HttpRequest.post(`${apiUrl}/api/JoinEZMotors/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerOutputMotorID1: scannerOutputMotorID2,ScannerOutputMotorID2: scannerOutputMotorID1,IsEnable: isEnable})
+        HttpRequest.post(`${apiUrl}/api/JoinFramelessMotors/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerInputComponentID: scannerInputComponentID, LineCode: lineCode, PartNo: partNo }),
+        
+        JoinEZMotors: (scannerInputUnitID,scannerOutputMotorID1,scannerOutputMotorID2,isEnable) =>
+        HttpRequest.post(`${apiUrl}/api/JoinEZMotors/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerOutputMotorID1: scannerOutputMotorID2,ScannerOutputMotorID2: scannerOutputMotorID1,IsEnable: isEnable}),
+        
+        JoinPallet: (scannerInputUnitID,scannerInputPalletID,lineCode,isEnable) =>
+        HttpRequest.post(`${apiUrl}/api/PalletQR/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerInputPalletID: scannerInputPalletID,LineCode: lineCode,IsEnable: isEnable})
     };
 })("http://mxsrvapps.gt.local/gtt/services/packaging");

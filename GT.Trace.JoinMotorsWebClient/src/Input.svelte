@@ -3,13 +3,16 @@
   import Sfx from "./utils/Sfx";
   import { PackagingApi } from "./utils/HttpRequests";
 
-  export let addMessage = null;
+export let addMessage = null;
+export let lineCode = null;
 let input = null;
 let qrMotor1 = null;
 let qrMotor2 = null;
+let PalletQR = null;
 
  const handleSubmit = (event) => 
  {
+    //alert(lineCode);
     event.preventDefault();
     if(input.value != "")
     {
@@ -20,7 +23,10 @@ let qrMotor2 = null;
           qrMotor2= prompt("Escanea el QR del motor 2:");
             if(qrMotor2 != "")
             {
+              PalletQR= prompt("Escanea el QR del Pallet:");
 
+              if(PalletQR != "")
+              {
               PackagingApi.JoinEZMotors(
               input.value,
               qrMotor1,
@@ -46,6 +52,41 @@ let qrMotor2 = null;
                     input.value = "";
                   });
                   return false;
+                  //---------------------------------------------
+                  PackagingApi.JoinEZMotors(
+                  input.value,
+                  PalletQR,
+                  lineCode,
+                  1)
+                  .then((data) => 
+                  {
+                    Sfx.playSuccessSoundAsync();
+                    addMessage(data);
+                    input.disabled = false;
+                    input.focus();
+                    input.value = "";
+                  })
+                    .catch((error) => 
+                    {
+                      Sfx.playFailureSoundAsync();
+                      addMessage(error);
+                    })
+                      .then(() => 
+                      {
+                        input.disabled = false;
+                        input.focus();
+                        input.value = "";
+                      });
+                      return false;
+              }
+                else
+                {
+                  addMessage('No se acepta el campo Pallet vacio');
+                  Sfx.playFailureSoundAsync();
+                  input.disabled = false;
+                  input.focus();
+                  input.value = "";
+                }
             }
             else
             {

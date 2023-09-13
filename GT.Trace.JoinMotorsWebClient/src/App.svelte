@@ -9,8 +9,9 @@
   import Sfx from "./utils/Sfx";
   import { PackagingApi } from "./utils/HttpRequests";
 
-  export let lineCode = "";
-  export let partNo = "";
+   export let lineCode = "";
+   export let partNo = "";
+
   let unitID = null;
   let qrMotor = null;
   let qrMotor1 = null;
@@ -60,7 +61,6 @@
           {
             addMessage('No se acepta el campo del motor 1 vacio.');
           }
-          
         }
           else
           {
@@ -84,7 +84,7 @@
    */
   onMount(async () => updateLineData(lineCode));
   onMount(async () => partNo =state.activePart.number);
-
+  
   /**
    * Fetch line data.
    * @param lineCode Two-char line code.
@@ -107,7 +107,7 @@
   workOrderCode={state.activeWorkOrderCode}
   btnDel={btnDelTransmissions}
 />
-<Input partNo={state.activePart.number} {lineCode}{addMessage}/>
+<Input lineCode={lineCode} {addMessage}/>
 <MessageLog bind:addMessage />
 <AppFooter/>
 
