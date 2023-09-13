@@ -132,7 +132,7 @@
                     {
                         //encontrado = true;
                         //Console.WriteLine("El PM de \"TORQUIMETROS GRUPO 4\" se encuentra vencido");
-                        throw new InvalidOperationException($"TORQUIMETROS GRUPO 4 esta fuera de tiempo, cominicate con mantenimiento y posteriormente con sistemas.");
+                        throw new InvalidOperationException($"Mantenimiento a TORQUIMETROS GRUPO 4 no registrado. Favor de comunicarse con Mantenimiento / Sistemas.");
                     }
                     else
                     {

@@ -99,6 +99,11 @@ namespace GT.Trace.Packaging.Infra.DataSources
 
         public async Task DelJoinEZMotors(long unitID)=>
             await _con.ExecuteAsync("UPDATE EZ2000Motors SET isEnable = 0 WHERE UnitID = @unitID", new { unitID }).ConfigureAwait(false);
+
+        public async Task AddPalletQR(long UnitID, string PalletID, string LineCode)
+            => await _con.ExecuteAsync("INSERT INTO [dbo].[LinePallet]([UnitID],[PalletID],[LineCode])VALUES(@UnitID,@PalletID,@LineCode)",new {UnitID,PalletID,LineCode}).ConfigureAwait(false);
+        public async Task<int> PalletRegisteredInformation(long UnitID)=>
+            await _con.ExecuteScalarAsync<int>("SELECT COUNT([UnitID]) FROM [gtt].[dbo].[LinePallet] WHERE UnitID = @UnitID", new {UnitID}).ConfigureAwait(false);
         #endregion
 
         //Agregado para LP + Frameless Join RA: 6/23/2023

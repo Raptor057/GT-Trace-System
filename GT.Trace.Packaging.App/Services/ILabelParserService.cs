@@ -8,5 +8,6 @@ namespace GT.Trace.Packaging.App.Services
         bool TryParseNewWBFormat(string value, out Label? labelData);
         bool TryParseFramelessFormat(string value, out FramelessMotorQR? labelData);
         bool TryParseEZMotorsFormat(string value, out EZ2000MotorsQR? labelData);
+        bool TryParsePalletFormat(string value, out PalletQR? palletData);
     }
 }

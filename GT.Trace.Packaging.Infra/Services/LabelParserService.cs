@@ -16,9 +16,11 @@ namespace GT.Trace.Packaging.Infra.Services
 
         private const string WalkBehindLabelFormatRegExPatternName = "WalkBehind";
 
-        private const string FramelessLabelFormatRegExPatternName = "FramlessMotorQR"; //se agrego nuevo
+        private const string FramelessLabelFormatRegExPatternName = "FramlessMotorQR";
 
-        private const string EZMotorsLabelFormatRegExPatternName = "EZ2000MotorsQR"; //se agrego nuevo
+        private const string EZMotorsLabelFormatRegExPatternName = "EZ2000MotorsQR";
+
+        private const string PalletLabelFormatRegExPatternName = "PalletQR";
 
         public const string InformationSeparatorThree = "\u001d";
 
@@ -28,6 +30,7 @@ namespace GT.Trace.Packaging.Infra.Services
         private static string WalkBehindLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{WalkBehindLabelFormatRegExPatternName}";
         private static string FramelessLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{FramelessLabelFormatRegExPatternName}";
         private static string EZMotorsLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{EZMotorsLabelFormatRegExPatternName}";
+        private static string PalletLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{PalletLabelFormatRegExPatternName}";
 
 
         /// <summary>
@@ -134,6 +137,26 @@ namespace GT.Trace.Packaging.Infra.Services
                 labelData = null;
             }
             return labelData != null;
+        }
+
+        public bool TryParsePalletFormat(string value, out PalletQR? palletData)
+        {
+            var match = Regex.Match(
+                ClearInputFromSpecialCharacters(value),
+                //Configuration.GetSection(PalletLabelFormatRegExPattern).Value,
+                "^[LM][A-Z0-9]{5}$",
+                RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            if (match.Success)
+            {
+                //palletData = new PalletQR(
+                //match.Groups["letraInicial"].Value);
+                palletData = new PalletQR(match.Value);
+            }
+            else
+            {
+                palletData = null;
+            }
+            return palletData != null;
         }
     }
 }
