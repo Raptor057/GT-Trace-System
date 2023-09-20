@@ -142,6 +142,19 @@
             }
             #endregion
 
+            #region Correccion de Bug de trazabilidad en la tabla LineProductionSchedule
+            var Productionschedulerecordedinlinetable = _gtt.LineProductionScheduleAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo);
+            //if (Productionschedulerecordedinlinetable.Result == null || Productionschedulerecordedinlinetable.Result.WorkOrderCode != prod_unit.codew)
+            //{
+            //    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
+            //}
+
+            if (Productionschedulerecordedinlinetable.Result == null)
+            {
+                await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
+            }
+            #endregion
+
             var revision = Revision.New(production.rev);
 
             var CegidBis = await _cegid.IsSpackBis(production.part_number.Trim(), revision.Number).ConfigureAwait(false); //Aqui se agrego el _configuration RA: 6/01/2023

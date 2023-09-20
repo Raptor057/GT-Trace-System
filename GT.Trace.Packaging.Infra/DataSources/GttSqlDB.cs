@@ -50,6 +50,16 @@ namespace GT.Trace.Packaging.Infra.DataSources
                 "SELECT WorkOrderCode FROM dbo.LineProductionSchedule WHERE LineCode = @lineCode AND UtcEffectiveTime <= GETUTCDATE() AND UtcExpirationTime > GETUTCDATE();",
                 new { lineCode }).ConfigureAwait(false);
 
+        //Agregado para validar que el dato de la orden este en la tabla LineProductionSchedule ya que si el dato no esta ahi, se pierde la trazabilidad
+        #region Agregado para correguir Bug de trazabilidad
+        public async Task<LineProductionSchedule> LineProductionScheduleAsync(string lineCode, string workOrderCode, string partNo) =>
+            await _con.QuerySingleAsync<LineProductionSchedule>("SELECT TOP (1) * FROM [gtt].[dbo].[LineProductionSchedule] where LineCode = @lineCode AND WorkOrderCode = @workOrderCode AND PartNo = @partNo and UtcExpirationTime >= GETUTCDATE() order by UtcExpirationTime DESC", 
+                new {lineCode,workOrderCode,partNo}).ConfigureAwait(false);
+        public async Task RecordProductionNewAsync(string lineCode, string workOrderCode, string partNo, string revision) =>
+            await _con.ExecuteAsync("INSERT INTO LineProductionSchedule (LineCode,WorkOrderCode,PartNo,HourlyRate,UtcEffectiveTime,Revision) values (@lineCode,@workOrderCode,@partNo,ISNULL((SELECT TOP 1 HourlyRate FROM LineProductionSchedule WHERE LineCode = @lineCode AND PartNo = @partNo ORDER BY UtcExpirationTime DESC),0),GETUTCDATE(),@revision)",
+                new {lineCode,workOrderCode,partNo,revision}).ConfigureAwait(false);
+        #endregion
+
         public async Task<IEnumerable<PointOfUseEtis>> GetActiveSetByLineAsync(string lineCode) =>
             await _con.QueryAsync<PointOfUseEtis>(@"SELECT e.* FROM dbo.LinePointsOfUse p
             JOIN dbo.PointOfUseEtis e
@@ -64,6 +74,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task AddTracedUnitAsync(long unitID, string partNo, string lineCode, string workOrderCode) =>
             await _con.ExecuteAsync("EXEC UpsInsertProductionTraceability @unitID, @partNo, @lineCode, @workOrderCode;", new { unitID, partNo , lineCode, workOrderCode }).ConfigureAwait(false);
 
+
         //Se agrego para obtener el ultimo mensaje de la linea, se piensa usar para el bloqueo de linea, que de la info y se imprima en la pantalla
         public async Task<string> GetMessageFromAssembly(string linecode) =>
             await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where " +
@@ -71,16 +82,19 @@ namespace GT.Trace.Packaging.Infra.DataSources
         //public async Task<string> GetMessageFromAssembly(string linecode) =>
         //    await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
 
+        //agregado para "Corregir" problema de 2 ordenes activas en una misma linea RA: 06/15/2023
+        public async Task<int> CountProductionScheduleAsync(string LineCode) =>
+            await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
+                new { LineCode }).ConfigureAwait(false);
 
+        //Agregados especiales para EZ
+        #region EZ
         //Agregado para insertar Motor, en la linea Frameless. aun no utilizado pero se va a usar.
         public async Task<string> InsertInfoMotorsData(string SerialNumber, string Volt, string RPM, DateTime DateTimeMotor, string LineCode) =>
             await _con.ExecuteScalarAsync<string>("INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);", 
                 new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode }).ConfigureAwait(false);
 
-        //agregado para "Corregir" problema de 2 ordenes activas en una misma linea RA: 06/15/2023
-        public async Task<int> CountProductionScheduleAsync(string LineCode)=>
-            await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
-                new { LineCode }).ConfigureAwait(false);
+       
 
         ////Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
         //public async Task<bool> CountComponentsBomAsync(string partNo, string linecode)=>
@@ -89,7 +103,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
         //        , new { partNo, linecode}).ConfigureAwait(false);
 
         //Agregado para EZ Join RA: 6/28/2023
-        #region EZ Join
+        
         public async Task<int> EZRegisteredInformation(long unitID, string Date1, string Time1, string Motor_Number1, string Date2, string Time2, string Motor_Number2)=>
             await _con.ExecuteScalarAsync<int>("SELECT CASE WHEN (SELECT COUNT(UnitID) FROM EZ2000Motors WHERE UnitID = @UnitID AND isEnable = 1 OR [Date] = @Date1 AND [Time] = @Time1 AND Motor_number = @Motor_Number1 AND isEnable = 1 OR [Date] = @Date2 AND [Time] = @Time2 AND Motor_number = @Motor_Number2 AND isEnable = 1) > 0 THEN 1 ELSE 0 END AS Result"
                 , new { unitID,Date1,Time1,Motor_Number1, Date2, Time2, Motor_Number2 }).ConfigureAwait(false);
