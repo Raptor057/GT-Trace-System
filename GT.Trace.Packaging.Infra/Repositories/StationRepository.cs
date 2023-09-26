@@ -96,6 +96,7 @@
                 prod_unit.codew = production.codew.Trim();
             }
 
+
             ////Esto se agrego para que la gama se actualice cuando en cegid cambie
             // //RA: 06/16/2023
             //if (prod_unit.letter != "LE" || prod_unit.letter != "LN")
@@ -109,6 +110,7 @@
             //    }
             //}
             //Comentado el dia 8/15/2023 para descartar un problema de rendimiento se comento, para validar o descartar esto.
+
 
             #region Torquimetros para LE
             if (prod_unit.letter == "LE")

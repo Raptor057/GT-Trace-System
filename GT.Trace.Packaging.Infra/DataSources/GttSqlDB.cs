@@ -50,8 +50,11 @@ namespace GT.Trace.Packaging.Infra.DataSources
                 "SELECT WorkOrderCode FROM dbo.LineProductionSchedule WHERE LineCode = @lineCode AND UtcEffectiveTime <= GETUTCDATE() AND UtcExpirationTime > GETUTCDATE();",
                 new { lineCode }).ConfigureAwait(false);
 
-        //Agregado para validar que el dato de la orden este en la tabla LineProductionSchedule ya que si el dato no esta ahi, se pierde la trazabilidad
+        //Agregado para validar que el dato de la orden este en la tabla LineProductionSchedule ya que si el dato no esta ahi, se pierde la trazabilidad RA: 09/20/2023
         #region Agregado para correguir Bug de trazabilidad
+        /*Esto se agrego debido a que por algun extraño Bug no se guardaba la informacion en esta tabla, la cual es de alta importancia para obtener la trazabilidad, sin la informacion en esta tabla la trazabilidad
+         no apareceria, lo cual es medianamente critico, ya que si se agrega el dato en el rango de tiempo correcto, la trazabilidad volveria a aparecer, esto afectaba a todas las lineas de manera aleatoria en modelos aleatorios
+        con esta correccion ya no deberia de suceder eso.*/
         public async Task<LineProductionSchedule> LineProductionScheduleAsync(string lineCode, string workOrderCode, string partNo) =>
             await _con.QuerySingleAsync<LineProductionSchedule>("SELECT TOP (1) * FROM [gtt].[dbo].[LineProductionSchedule] where LineCode = @lineCode AND WorkOrderCode = @workOrderCode AND PartNo = @partNo and UtcExpirationTime >= GETUTCDATE() order by UtcExpirationTime DESC", 
                 new {lineCode,workOrderCode,partNo}).ConfigureAwait(false);
