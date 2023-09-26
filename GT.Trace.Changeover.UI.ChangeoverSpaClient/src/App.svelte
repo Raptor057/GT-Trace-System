@@ -2,7 +2,7 @@
   import Body from "./Body.svelte";
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
-  import { ChangeoverApi } from "./utils/HttpRequests";
+  import { ChangeoverApi,CommonApi } from "./utils/HttpRequests";
   export let lineCode = "";
 
   const changeoverStatues = {
@@ -39,9 +39,31 @@
           line.workOrderCode === data.code && line.partNo === data.partNo
             ? changeoverStatues.MATCH
             : changeoverStatues.REQUIRED;
+            CommonApi.UpdateGama(workOrder.partNo, line.code);
       })
       .catch(window.alert);
   };
+
+//   const updateWorkOrder = () => {
+//   ChangeoverApi.getWorkOrderByLineID(line.id)
+//     .then((data) => {
+//       console.debug("getWorkOrderByLineID", data);
+//       workOrder = { ...data };
+//       if (line.workOrderCode === data.code && line.partNo === data.partNo) {
+//         status = changeoverStatues.MATCH;
+//       } else {
+//         status = changeoverStatues.REQUIRED;
+//         CommonApi.UpdateGama(workOrder.partNo, line.code);
+//           .then(() => window.location.reload(true))
+//           .catch((msg) => {
+//             disabled = false;
+//             window.alert(msg);
+//           });
+//       }
+//     })
+//     .catch(window.alert);
+// };
+
 
   /**
    * Get gammas for the line and work order correspondiong models

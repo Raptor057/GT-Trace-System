@@ -72,3 +72,11 @@ export const ChangeoverApi = (function (apiUrl) {
             HttpRequest.put(`${apiUrl}/api/lines/${lineCode}/codew`, { }),
     };
 })("http://mxsrvapps.gt.local/gtt/services/changeovers");
+
+export const CommonApi = (function (apiUrl) {
+    //apiUrl = 'http://localhost:5183';
+    return {
+        UpdateGama: async (partNo,lineCode) =>
+            HttpRequest.put(`${apiUrl}/api/lines/updategama/partno/${partNo}/lineCode/${lineCode}`),
+    };
+})("http://mxsrvapps/gtt/services/common");

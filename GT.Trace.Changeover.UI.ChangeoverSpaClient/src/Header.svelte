@@ -1,5 +1,5 @@
 <script>
-  import { ChangeoverApi } from "./utils/HttpRequests";
+  import { ChangeoverApi,CommonApi } from "./utils/HttpRequests";
 
   export let line;
   export let workOrder;
@@ -18,6 +18,15 @@
         });
     }
   };
+
+
+  const handleUpdateGamaClick = () => {
+  const confirmationMessage = `Se actualizara la gama de la línea ${line.code} del modelo ${workOrder.partNo}`;
+  CommonApi.UpdateGama(workOrder.partNo, line.code)
+  .then(() => window.location.reload(true));
+  alert(confirmationMessage);
+};
+
 </script>
 
 <header>
@@ -46,7 +55,14 @@
     &bull;
     {workOrder.partNo}
     {workOrder.revision}
-  </strong>
+  </strong>  
+  <button
+  id="update-gama-button"
+  on:click={handleUpdateGamaClick}
+  {disabled}
+>
+  Actualizar Gamma
+</button>
 </header>
 
 <style>
@@ -93,6 +109,34 @@
   }
 
   button#apply-changeover-button:hover {
+    background-color: #48c78e;
+    border-color: transparent;
+    color: #fff;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+  }
+
+  button#update-gama-button {
+    background-color: transparent;
+    color: #48c78e;
+    display: inline;
+    /* float: right; */
+    padding: 0 0.5em;
+    border: none;
+    height: 2em;
+    line-height: 2em;
+    cursor: pointer;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+  }
+
+  button#update-gama-button:hover {
     background-color: #48c78e;
     border-color: transparent;
     color: #fff;
