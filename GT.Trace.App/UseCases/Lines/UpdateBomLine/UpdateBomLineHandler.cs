@@ -16,7 +16,9 @@ namespace GT.Trace.App.UseCases.Lines.UpdateGama
 
         public async Task<UpdateBomLineResponse> Handle(UpdateBomLineRequest request, CancellationToken cancellationToken)
         {
-            _ = await _updateBomLine.UpdateGama(request.PartNo, request.LineCode).ConfigureAwait(false);
+            _ = await _updateBomLine.UpdateGamaTrazab(request.PartNo, request.LineCode).ConfigureAwait(false);
+            _ = await _updateBomLine.UpdateGamaGtt(request.PartNo, request.LineCode).ConfigureAwait(false);
+
             return new UpdateBomLineSuccessResponse("Gama Actualizada");
         }
     }
