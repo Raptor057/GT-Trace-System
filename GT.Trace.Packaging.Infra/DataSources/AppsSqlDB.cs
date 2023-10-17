@@ -103,5 +103,8 @@ namespace GT.Trace.Packaging.Infra.DataSources
 
         public async Task<long?> GetUnitIDBySerialCodeAsync(string serialCode) =>
             await _con.ExecuteScalarAsync<long?>("SELECT id FROM dbo.pro_tms WHERE serial_code = @serialCode;", new { serialCode }).ConfigureAwait(false);
+
+    public async Task<int?> GetActiveWorkOrderByLine(int id_line) =>
+            await _con.ExecuteScalarAsync<int?>("SELECT COUNT(codew) as [Orden Activa] FROM dbo.pro_production WHERE id_line=@id_line AND is_running=1 AND is_stoped=0 AND is_finished=0", new { id_line }).ConfigureAwait(false);
     }
 }

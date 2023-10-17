@@ -56,11 +56,11 @@ namespace GT.Trace.Packaging.Infra.DataSources
          no apareceria, lo cual es medianamente critico, ya que si se agrega el dato en el rango de tiempo correcto, la trazabilidad volveria a aparecer, esto afectaba a todas las lineas de manera aleatoria en modelos aleatorios
         con esta correccion ya no deberia de suceder eso.*/
         public async Task<LineProductionSchedule> LineProductionScheduleAsync(string lineCode, string workOrderCode, string partNo) =>
-            await _con.QuerySingleAsync<LineProductionSchedule>("SELECT TOP (1) * FROM [gtt].[dbo].[LineProductionSchedule] where LineCode = @lineCode AND WorkOrderCode = @workOrderCode AND PartNo = @partNo and UtcExpirationTime >= GETUTCDATE() order by UtcExpirationTime DESC", 
-                new {lineCode,workOrderCode,partNo}).ConfigureAwait(false);
+            await _con.QuerySingleAsync<LineProductionSchedule>("SELECT TOP (1) * FROM [gtt].[dbo].[LineProductionSchedule] where LineCode = @lineCode AND WorkOrderCode = @workOrderCode AND PartNo = @partNo and UtcExpirationTime >= GETUTCDATE() order by UtcExpirationTime DESC",
+                new { lineCode, workOrderCode, partNo }).ConfigureAwait(false);
         public async Task RecordProductionNewAsync(string lineCode, string workOrderCode, string partNo, string revision) =>
             await _con.ExecuteAsync("INSERT INTO LineProductionSchedule (LineCode,WorkOrderCode,PartNo,HourlyRate,UtcEffectiveTime,Revision) values (@lineCode,@workOrderCode,@partNo,ISNULL((SELECT TOP 1 HourlyRate FROM LineProductionSchedule WHERE LineCode = @lineCode AND PartNo = @partNo ORDER BY UtcExpirationTime DESC),0),GETUTCDATE(),@revision)",
-                new {lineCode,workOrderCode,partNo,revision}).ConfigureAwait(false);
+                new { lineCode, workOrderCode, partNo, revision }).ConfigureAwait(false);
         #endregion
 
         public async Task<IEnumerable<PointOfUseEtis>> GetActiveSetByLineAsync(string lineCode) =>
@@ -74,8 +74,8 @@ namespace GT.Trace.Packaging.Infra.DataSources
 
         //Esto es nuevo para la trazabilidad
         //Actualmente esto nunca se uso pero lo dejare por si acaso. RA: 5/22/2023
-        public async Task AddTracedUnitAsync(long unitID, string partNo, string lineCode, string workOrderCode) =>
-            await _con.ExecuteAsync("EXEC UpsInsertProductionTraceability @unitID, @partNo, @lineCode, @workOrderCode;", new { unitID, partNo , lineCode, workOrderCode }).ConfigureAwait(false);
+        //public async Task AddTracedUnitAsync(long unitID, string partNo, string lineCode, string workOrderCode) =>
+        //    await _con.ExecuteAsync("EXEC UpsInsertProductionTraceability @unitID, @partNo, @lineCode, @workOrderCode;", new { unitID, partNo , lineCode, workOrderCode }).ConfigureAwait(false);
 
 
         //Se agrego para obtener el ultimo mensaje de la linea, se piensa usar para el bloqueo de linea, que de la info y se imprima en la pantalla
@@ -85,10 +85,17 @@ namespace GT.Trace.Packaging.Infra.DataSources
         //public async Task<string> GetMessageFromAssembly(string linecode) =>
         //    await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
 
+        #region Correccion de BUG
         //agregado para "Corregir" problema de 2 ordenes activas en una misma linea RA: 06/15/2023
-        public async Task<int> CountProductionScheduleAsync(string LineCode) =>
-            await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
-                new { LineCode }).ConfigureAwait(false);
+        //Se corrigio este bug con el metodo Updateproductionscheduling, cuando hay 2 ordenes activas en automatico quita la orden repetida y deja la que deberia de estar activa en GT-APP
+        public async Task<int> CountProductionScheduleAsync(string lineCode) =>
+                        await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @lineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
+            //await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= GETUTCDATE();" +
+            //    "UPDATE LineProductionSchedule SET UtcExpirationTime = GETUTCDATE() WHERE LineCode = @LineCode AND UtcExpirationTime >= GETUTCDATE() AND WorkOrderCode != @workOrderCode;",
+            new { lineCode }).ConfigureAwait(false);
+        public async Task Updateproductionscheduling(string lineCode, string workOrderCode) =>
+            await _con.ExecuteAsync("UPDATE LineProductionSchedule SET UtcExpirationTime = GETUTCDATE() WHERE LineCode = @lineCode AND UtcExpirationTime >= GETUTCDATE() AND WorkOrderCode != @workOrderCode", new { lineCode, workOrderCode }).ConfigureAwait(false);
+        #endregion
 
         //Agregados especiales para EZ
         #region EZ

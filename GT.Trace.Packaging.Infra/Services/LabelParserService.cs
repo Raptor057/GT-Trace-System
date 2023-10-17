@@ -112,6 +112,8 @@ namespace GT.Trace.Packaging.Infra.Services
             return labelData != null;
         }
 
+        //Original
+        //"EZ2000MotorsQR": "^(?<PN>\\d{5})(?<id>\\d{5})(?<AEM>\\d{4})(?<date>\\d{4}-\\d{1,2}-\\d{1,2})\\s+(?<time>\\d{1,2}:\\d{2})(?<rpm>\\d{5})(?<voltage>[0-9.]+[A-Z])(?<website>.{18})$",
         public bool TryParseEZMotorsFormat(string value, out EZ2000MotorsQR? labelData)
         {
             var match = Regex.Match(
@@ -120,11 +122,17 @@ namespace GT.Trace.Packaging.Infra.Services
                 RegexOptions.IgnoreCase | RegexOptions.Singleline);
             if (match.Success)
             {
+                string rawDate = match.Groups["date"].Value;
+                string formattedDate = rawDate.Replace("/", "-"); // Convierte el formato de fecha
+
+
+
                 labelData = new EZ2000MotorsQR(
                 match.Groups["website"].Value,
                 match.Groups["voltage"].Value,
                 match.Groups["rpm"].Value,
-                match.Groups["date"].Value,
+                //match.Groups["date"].Value,
+                formattedDate, // Usa la fecha convertida
                 match.Groups["time"].Value,
                 match.Groups["id"].Value,
                 match.Groups["PN"].Value,

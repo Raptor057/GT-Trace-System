@@ -75,7 +75,10 @@
             //TODO: Pendiente Corregir el bug que consiste en 2 ordenes activas en una misma linea simultaneamente en la tabla LineProductionSchedule agregado para corregir el bug de la tabla LineProductionSchedule RA: 06/15/2023
             var countLineProductionSchedule = await _gtt.CountProductionScheduleAsync(prod_unit.letter).ConfigureAwait(false);
             if (countLineProductionSchedule > 1)
-                throw new InvalidOperationException($"Comunicarse con sistemas, Existen 2 ordenes activas en la linea {prod_unit.letter} en la tabla \"LineProductionSchedule\"");
+            {
+                _ = _gtt.Updateproductionscheduling(prod_unit.letter, prod_unit.codew).ConfigureAwait(false);
+                throw new InvalidOperationException($"Actualizar esta pantalla para solucionar el problema de: Existen 2 ordenes activas en la linea {prod_unit.letter} en la tabla \"LineProductionSchedule\"");
+            }
 
             if (string.IsNullOrWhiteSpace(prod_unit.modelo))
                 throw new InvalidOperationException($"No existe modelo asociado a la línea \"{prod_unit.letter}\", se requiere cambio de modelo.");
@@ -96,6 +99,8 @@
                 prod_unit.codew = production.codew.Trim();
             }
 
+            #region Parte del codigo comentada por mala optimizacion.
+            /*Se hizo un endpoint para remplazar esto, ya que hacia que el escaneo fuera mas lento de lo usual*/
 
             ////Esto se agrego para que la gama se actualice cuando en cegid cambie
             // //RA: 06/16/2023
@@ -110,6 +115,7 @@
             //    }
             //}
             //Comentado el dia 8/15/2023 para descartar un problema de rendimiento se comento, para validar o descartar esto.
+            #endregion
 
 
             #region Torquimetros para LE
@@ -154,6 +160,21 @@
             if (Productionschedulerecordedinlinetable.Result == null)
             {
                 await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
+            }
+            #endregion
+
+            #region Correccion de Bug sin orden activa en GT-APPS
+            /*Esta region se creo para informar cuando una linea no imprime etiquetas individuales !!solamente en 1 linea!!
+             ya que significa que no hay orden activa en GT-APPS*/
+            var GetActiveWorkOrderByLine = await _apps.GetActiveWorkOrderByLine(production.id_line).ConfigureAwait(false) < 1;
+            if (GetActiveWorkOrderByLine)
+            {
+                throw new InvalidOperationException($"No hay orden activa en GT-APP para la linea {prod_unit.letter}");
+            }
+            var GetActiveWorkOrderByLine2 = await _apps.GetActiveWorkOrderByLine(production.id_line).ConfigureAwait(false);
+            if (GetActiveWorkOrderByLine2 > 1)
+            {
+                throw new InvalidOperationException($"!!!!ERROR FATAL!!!! HAY 2 ORDENES ACTIVAS SIMULTANEAMENTE EN GT-APPS PARA LA LINEA {prod_unit.letter}");
             }
             #endregion
 

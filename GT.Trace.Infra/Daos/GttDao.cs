@@ -57,7 +57,7 @@ GROUP BY PointOfUseCode, ComponentNo;",
 
         public async Task<int> UpdateGamaAsync(string partNo, string lineCode) =>
             await Connection.ExecuteAsync(
-                "EXEC dbo.UspUpdateLineGamma @lineCode, @partNo, @lineCode;;",
+                "EXEC dbo.UspUpdateLineGamma @lineCode, @partNo, @lineCode;",
                 new { partNo, lineCode }
             ).ConfigureAwait(false);
 
