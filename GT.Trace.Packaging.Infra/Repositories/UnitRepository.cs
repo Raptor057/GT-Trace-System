@@ -1,6 +1,7 @@
 ﻿namespace GT.Trace.Packaging.Infra.Repositories
 {
     using DataSources;
+    using GT.Trace.Common.Infra.DataSources.SqlDB;
     using GT.Trace.Packaging.Domain.Entities;
     using GT.Trace.Packaging.Domain.Repositories;
     using GT.Trace.Packaging.Infra.DataSources.Entities;
@@ -72,5 +73,10 @@
 
         public async Task<long?> GetUnitIDBySerialCodeAsync(string serialCode) =>
             await _apps.GetUnitIDBySerialCodeAsync(serialCode).ConfigureAwait(false);
+
+        public async Task AddMotorsDataAsync(string serialCode, string modelo, string volt, string rpm, DateTime dateTimeSerialCode, string rev)
+        {
+            await _gtt.AddMotorsData(serialCode,modelo,volt,rpm,dateTimeSerialCode,rev).ConfigureAwait(false);
+        }
     }
 }

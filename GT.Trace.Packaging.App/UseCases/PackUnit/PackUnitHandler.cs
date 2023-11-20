@@ -33,8 +33,12 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
 
             long unitID;
 
-            const string pattern = @"^.+\|.+\|(?<datetime>.+)\|(?<serial>.{11})$";
+            const string pattern = @"^.+\|.+\|(?<datetime>.+)\|(?<serial>.{1,})$";
+            //const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
+            const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\w+)\s+(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)\s*$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
+            //
             var match = Regex.Match(request.ScannerInput ?? "", pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            var match2 = Regex.Match(request.ScannerInput ?? "", pattern2, RegexOptions.Singleline | RegexOptions.IgnoreCase); // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
             if (match.Success)
             {
                 var creationTime = DateTime.ParseExact(match.Groups["datetime"].Value, "yyMMdd-HHmmss", System.Globalization.CultureInfo.InvariantCulture);
@@ -47,6 +51,39 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 }
                 else unitID = id.Value;
             }
+            #region RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
+            else if (match2.Success)
+            {
+                string volt = match2.Groups[1].Value;
+                string rpm = match2.Groups[2].Value;
+                string modelo = match2.Groups[3].Value;
+                string rev = match2.Groups[4].Value;
+                string fechaStr = match2.Groups[5].Value;
+                string horaStr = match2.Groups[6].Value;
+                string serialCode = match2.Groups[7].Value;
+
+                // Convertir fecha y hora a objetos DateTime
+                DateTime fecha = DateTime.ParseExact(fechaStr, "yyyy-MM-dd", null);
+                DateTime hora = DateTime.ParseExact(horaStr, "HH:mm:ss", null);
+
+                // Combinar fecha y hora en un solo objeto DateTime
+                DateTime creationTime = fecha.Add(hora.TimeOfDay);
+                long valorEntero = long.Parse(creationTime.ToString("yyyyMMddHHmmss"));
+
+                //convina fecha y hora con serial para sacar un valor unico.
+                serialCode = valorEntero + serialCode;
+
+                var id = await _units.GetUnitIDBySerialCodeAsync(serialCode).ConfigureAwait(false);
+                await _units.AddMotorsDataAsync(serialCode, modelo, volt, rpm, creationTime, rev).ConfigureAwait(false);
+                if (!id.HasValue)
+                {
+                    unitID = await _units.AddUnitAsync(station.Line.Code, 0, serialCode, creationTime).ConfigureAwait(false);
+                    
+                }
+                else unitID = id.Value;
+
+            }
+            #endregion
             else
             {
                 if (!_labelParser.TryParseNewWBFormat(request.ScannerInput ?? "", out var label) || label == null)

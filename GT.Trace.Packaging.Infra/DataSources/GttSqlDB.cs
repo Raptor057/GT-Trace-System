@@ -97,6 +97,12 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.ExecuteAsync("UPDATE LineProductionSchedule SET UtcExpirationTime = GETUTCDATE() WHERE LineCode = @lineCode AND UtcExpirationTime >= GETUTCDATE() AND WorkOrderCode != @workOrderCode", new { lineCode, workOrderCode }).ConfigureAwait(false);
         #endregion
 
+        #region Lineas Motores China MW,MX
+        public async Task  AddMotorsData(string SerialNumber, string modelo, string Volt, string RPM, DateTime DateTimeMotor, string Rev) =>
+            await _con.ExecuteScalarAsync<long>("INSERT INTO MotorsData (modelo,SerialNumber,Volt,RPM,DateTimeMotor,Rev) VALUES (@modelo,@SerialNumber,@Volt,@RPM,@DateTimeMotor,@Rev)", new {SerialNumber,modelo,Volt,RPM,DateTimeMotor,Rev }).ConfigureAwait(false);
+
+        #endregion
+
         //Agregados especiales para EZ
         #region EZ
         //Agregado para insertar Motor, en la linea Frameless. aun no utilizado pero se va a usar.

@@ -51,33 +51,32 @@ let PalletQR = null;
                     input.focus();
                     input.value = "";
                   });
-                  return false;
-                  //---------------------------------------------
-                  PackagingApi.JoinEZMotors(
-                  input.value,
-                  PalletQR,
-                  lineCode,
-                  1)
-                  .then((data) => 
+                                
+              PackagingApi.JoinPallet(
+              input.value,
+              PalletQR,
+              lineCode,
+              1)
+              .then((data) => 
+              {
+                Sfx.playSuccessSoundAsync();
+                addMessage(data);
+                input.disabled = false;
+                input.focus();
+                input.value = "";
+              })
+                .catch((error) => 
+                {
+                  Sfx.playFailureSoundAsync();
+                  addMessage(error);
+                })
+                  .then(() => 
                   {
-                    Sfx.playSuccessSoundAsync();
-                    addMessage(data);
                     input.disabled = false;
                     input.focus();
                     input.value = "";
-                  })
-                    .catch((error) => 
-                    {
-                      Sfx.playFailureSoundAsync();
-                      addMessage(error);
-                    })
-                      .then(() => 
-                      {
-                        input.disabled = false;
-                        input.focus();
-                        input.value = "";
-                      });
-                      return false;
+                  });
+                  return false;
               }
                 else
                 {
