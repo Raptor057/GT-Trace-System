@@ -173,3 +173,9 @@ Se modificó en la clase SqlGetLineWorkOrderGateway en el espacio de nombres GT.
 - 27/09/2023: Se agregó UpdateGamaGtt en CommonApi.
 
 - 17/10/2023: Se agregó Origen en json de Master Label y se corrigió el error en la impresión de la última etiqueta Jr antes de imprimir la etiqueta maestra, Error de pedido activo solucionado en gt-apps La expresión regular se modificó para poder leer 2 tipos de formatos QR diferentes para EZ Engines.
+
+- 20/11/2023: 
+1) The label method for Frameless motors was added to BL Motors
+2) The enpoint put was added to the JoinMotors UI to register the Pallet and the transmission.
+
+- 27/11/2023: Se agrego Endpoint de Save EZ Motors
