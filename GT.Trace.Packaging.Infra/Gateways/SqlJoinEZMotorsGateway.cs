@@ -20,15 +20,5 @@ namespace GT.Trace.Packaging.Infra.Gateways
 
         public async Task<int> EZRegisteredInformationAsync(long unitID, string Date1, string Time1, string Motor_Number1, string Date2, string Time2, string Motor_Number2)=>
             await _gtt.EZRegisteredInformation(unitID,Date1,Time1,Motor_Number1,Date2,Time2,Motor_Number2);
-
-        //public Task<int> EZRegisteredInformationComponentIDAsync(string componentID)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<int> EZRegisteredInformationUnitIDAsync(long unitID)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

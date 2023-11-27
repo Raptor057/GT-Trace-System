@@ -46,10 +46,12 @@
         public async Task<long> AddUnitAsync(string lineCode, int position, string serialCode, DateTime creationTime)
         {
             var line = await _apps.GetLineByCodeAsync(lineCode).ConfigureAwait(false);
+#pragma warning disable IDE0270 // Use coalesce expression
             if (line == null)
             {
                 throw new InvalidOperationException($"Línea _{lineCode}_ no encontrada.");
             }
+#pragma warning restore IDE0270 // Use coalesce expression
 
             pro_production workOrder;
             var activeWorkOrder = await _gtt.GetActiveWorkOrderAsync(lineCode).ConfigureAwait(false);

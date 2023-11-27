@@ -225,7 +225,9 @@
             var picking_counter = await _traza.GetPickingCounterAsync((int)picking_config.Id, production.part_number.Trim(), revision.Number).ConfigureAwait(false);
             if (picking_counter == null)
             {
+#pragma warning disable IDE0017 // Simplify object initialization
                 picking_counter = new();
+#pragma warning restore IDE0017 // Simplify object initialization
                 picking_counter.Id = await _traza.CreatePickingCounterAsync((int)picking_config.Id, production.part_number.Trim(), revision.Number).ConfigureAwait(false);
                 picking_counter.REV = production.part_number.Trim();
                 picking_counter.is_active = false;

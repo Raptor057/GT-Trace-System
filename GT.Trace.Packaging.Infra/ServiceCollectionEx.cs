@@ -17,6 +17,7 @@ using GT.Trace.Packaging.App.UseCases.SetStationBlocked;
 using GT.Trace.Packaging.App.UseCases.JoinFramelessMotors;
 using GT.Trace.Packaging.App.UseCases.JoinEZMotors;
 using GT.Trace.Packaging.App.UseCases.JoinLinePallet;
+using GT.Trace.Packaging.App.UseCases.SaveEzMotors;
 
 namespace GT.Trace.Packaging.Infra
 {
@@ -36,6 +37,7 @@ namespace GT.Trace.Packaging.Infra
                 .AddSingleton<IJoinFramelessMotorsGateway, SqlJoinFramelessMotorsGateway>()//Se agrega esto para hacer Join de los motores en LP  RA: 06/22/2023
                 .AddSingleton<IJoinEZMotorsGateway,SqlJoinEZMotorsGateway>()//Se agrega esto para hacer Join de los motores en LP  RA: 06/27/2023
                 .AddSingleton<IJoinLinePalletGateway,SqlJoinPalletGateway>()// Se agrego esto para hacer Join entre las transmisiones y los pallet RA: 09/12/2023
+                .AddSingleton<ISaveEzMotorsGateway,SqlSaveEzMotorsGateway>()//Se agrego esto para registrar los motores de EZ en la linea E1 RA: 11/22/2023
                 .AddSingleton<IHourlyProductionGateway, SqlHourlyProductionGateway>()
                 .AddSingleton<IMasterLabelsGateway, SqlMasterLabelsGateway>()
                 .AddSingleton<IPrintingService, PrintingService>()

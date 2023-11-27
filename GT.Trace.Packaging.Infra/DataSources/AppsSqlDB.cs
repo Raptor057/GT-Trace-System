@@ -4,6 +4,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
 {
     public class AppsSqlDB
     {
+
         private readonly DapperSqlDbConnection _con;
 
         public AppsSqlDB(ConfigurationSqlDbConnection<AppsSqlDB> con)
@@ -46,6 +47,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task IncreaseWorkOrderQuantityByOne(string workOrderCode, int lineID) =>
             await _con.ExecuteAsync("UPDATE dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@workOrderCode AND id_line = @lineID;", new { lineID, workOrderCode }).ConfigureAwait(false);
 
+#pragma warning disable IDE0037 // Use inferred member name
         public async Task<long> AddUnitAsync(int position, DateTime creationTime, string partNo, string revision, string ratio, string type, int workOrderID, string lineCode, string serialCode) =>
             await _con.ExecuteScalarAsync<long>(@"INSERT INTO [dbo].[pro_tms]
            ([is_ok]

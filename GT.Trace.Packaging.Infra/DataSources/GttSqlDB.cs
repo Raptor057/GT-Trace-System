@@ -107,7 +107,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
         #region EZ
         //Agregado para insertar Motor, en la linea Frameless. aun no utilizado pero se va a usar.
         public async Task<string> InsertInfoMotorsData(string SerialNumber, string Volt, string RPM, DateTime DateTimeMotor, string LineCode) =>
-            await _con.ExecuteScalarAsync<string>("INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);", 
+            await _con.ExecuteScalarAsync<string>("INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[LineCode])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);", 
                 new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode }).ConfigureAwait(false);
 
        
@@ -158,6 +158,19 @@ namespace GT.Trace.Packaging.Infra.DataSources
             return await _con.ExecuteScalarAsync<int>("SELECT COUNT(ComponentID) FROM ComponentJoining WHERE ComponentID = @componentID AND isEnable = 1"
                  , new { componentID }).ConfigureAwait(false);
         }
+        #endregion
+
+        #region Piñones Motores EZ
+
+        public async Task AddEZMotorsData(string model, string serialNumber, string lineCode)
+        {
+            await _con.ExecuteAsync("INSERT INTO MotorsData (Modelo,SerialNumber,LineCode) VALUES (@model,@serialNumber,@lineCode)", new {model,serialNumber, lineCode }).ConfigureAwait(false);
+        }
+        public async Task<int> GetEzMotorsData(string model, string serialNumber, string lineCode)
+        {
+            return await _con.QuerySingleAsync<int>("SELECT COUNT([ID]) FROM [gtt].[dbo].[MotorsData] WHERE Modelo = @model AND SerialNumber = @serialNumber AND LineCode = @lineCode", new { model, serialNumber,lineCode});
+        }
+
         #endregion
     }
 }
