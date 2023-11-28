@@ -20,7 +20,7 @@ namespace GT.Trace.Packaging.Infra.Services
 
         private const string EZMotorsLabelFormatRegExPatternName = "EZ2000MotorsQR";
 
-        private const string PalletLabelFormatRegExPatternName = "PalletQR";
+        //private const string PalletLabelFormatRegExPatternName = "PalletQR";
 
         public const string InformationSeparatorThree = "\u001d";
 
@@ -30,7 +30,7 @@ namespace GT.Trace.Packaging.Infra.Services
         private static string WalkBehindLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{WalkBehindLabelFormatRegExPatternName}";
         private static string FramelessLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{FramelessLabelFormatRegExPatternName}";
         private static string EZMotorsLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{EZMotorsLabelFormatRegExPatternName}";
-        private static string PalletLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{PalletLabelFormatRegExPatternName}";
+        //private static string PalletLabelFormatRegExPattern => $"{LabelFormatRegExPatternsSectionName}:{PalletLabelFormatRegExPatternName}";
 
 
         /// <summary>

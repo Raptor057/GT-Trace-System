@@ -17,7 +17,7 @@ namespace GT.Trace.EtiMovements.App.UseCases.ReturnEti
             _lines = lines;
             _etis = etis;
         }
-
+        //NOTE: COMPRENDER ESTE MODULO A DETALLE PARA HACER EL RETORNO MANUAL DE ETIQUETAS.
         public override async Task<Result<ReturnEtiResponse>> Handle(ReturnEtiRequest request, CancellationToken cancellationToken)
         {
             var getEtiResult = await _etis.TryGetAsync(request.EtiInput).ConfigureAwait(false);
@@ -33,7 +33,7 @@ namespace GT.Trace.EtiMovements.App.UseCases.ReturnEti
                 return Fail(errors.ToString());
             }
 
-            var getLineResult = await _lines.GetAsync(request.LineCode).ConfigureAwait(false);
+            var getLineResult = await _lines.GetAsync(request.LineCode).ConfigureAwait(false); //esto se puede omitir en el nuevo modulo de retorno manual de etiquetas o se puede modificar para que entregue la linea de otra manera
             if (getLineResult is IFailure getLineFailure)
             {
                 return Fail(getLineFailure.Message);
