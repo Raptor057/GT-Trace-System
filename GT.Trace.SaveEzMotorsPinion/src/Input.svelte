@@ -5,10 +5,13 @@
   import { PackagingApi } from "./utils/HttpRequests";
 
   export let addMessage = null;
-  export let lineCode = null;
   let input = null;
   let qrMotor = null;
-  let partNo = null;
+  
+  
+  //let LineCode = null;
+  export let lineCode = null;
+  export let partNo = null;
 
  const handleSubmit = (event) => 
  {
@@ -18,9 +21,9 @@
       input.disabled = true;
       //qrMotor= prompt("Escanea el QR del motor:");        
           PackagingApi.SaveEZMotorPinion(
-              " ",
+              partNo,
               input.value,
-              " ")
+              lineCode)
               .then((data) => 
               {
                 Sfx.playSuccessSoundAsync();

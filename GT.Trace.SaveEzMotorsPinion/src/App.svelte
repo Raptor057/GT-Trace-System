@@ -10,11 +10,11 @@
   import Sfx from "./utils/Sfx";
   import { PackagingApi } from "./utils/HttpRequests";
 
-   export let lineCode = "";
-   export let partNo = "";
+  export let lineCode = "";
+  export let partNo = "";
 
    let motorQR = null;
-   let addMessage;
+   export let addMessage = "";
 
   //-------------------------------------------------------
   
@@ -58,10 +58,9 @@
   revision={state.activePart.revision}
   workOrderCode={state.activeWorkOrderCode}
 />
-<Input {addMessage}/>
+<Input lineCode={lineCode} partNo = {state.activePart.number} addMessage={addMessage}/>
 <MessageLog bind:addMessage />
 <AppFooter/>
-
 </div>
 
 
