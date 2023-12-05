@@ -4,6 +4,7 @@ using System.Text;
 
 namespace GT.Trace.Common.Infra.HttpApi
 {
+    //NOTE: ESTUDIAR ESTA PARTE, QUE SE VE COMPLEJA.
     public class HttpApiClient
     {
         private static readonly HttpClient _client = new();

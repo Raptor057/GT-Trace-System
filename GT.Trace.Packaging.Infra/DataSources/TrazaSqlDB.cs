@@ -169,5 +169,13 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
             //await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];" se comento esto para dejarlo de usar ya que la consulta de abajo es mejor RA: 07/05/2023
             await _con.ExecuteScalarAsync<bool>("SELECT dbo.UfnGetDifferenceCountDataBoom(@partNo, @linecode) AS [CountComponentsBom];"
                 , new { partNo, linecode }).ConfigureAwait(false);
+
+        #region PIGNON EZ
+        public async Task<string> GetPignon(string partNo)=>
+            await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [PIGNON] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND ARCTLIB01 LIKE ('%PIGNON%')--PIGNON", new { partNo}).ConfigureAwait(false);
+        
+        public async Task<string> GetMotor(string partNo)=>
+            await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [MOTOR] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND ARCTLIB01 LIKE ('%MOTOR%')--MOTOR", new {partNo}).ConfigureAwait(false);
+        #endregion
     }
 }

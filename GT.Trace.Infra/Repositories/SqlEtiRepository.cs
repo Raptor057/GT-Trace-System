@@ -35,7 +35,7 @@ namespace GT.Trace.Infra.Repositories
                 //var creationTime = eti.UtcCreationTime.ToLocalTime();
                 //var lotNo = $"{creationTime.Year}{creationTime.DayOfYear:000}";
                 //return Eti.Create(etiID, etiNo, Part.Create(eti.ComponentNo, new Revision(eti.Revision)), eti.WorkOrderCode, true/*!(eti.IsDisabled ?? false)*/, etiStatus);
-                return Eti.Create(etiID, etiNo, Part.Create(eti.ComponentNo, new Revision(eti.Revision), null, null), $"{eti.WorkOrderCode}", true, etiStatus);
+                return Eti.Create(etiID, etiNo, Part.Create(eti.ComponentNo ?? "", new Revision(eti.Revision ?? ""), null, null), $"{eti.WorkOrderCode}", true, etiStatus);
             }
             #endregion
             else

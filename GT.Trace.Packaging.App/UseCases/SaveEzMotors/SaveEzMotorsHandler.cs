@@ -32,17 +32,15 @@ namespace GT.Trace.Packaging.App.UseCases.SaveEzMotors
 
                     if (!GetEzMotors)
                     {
-                        //return new SaveEzMotorsFailure($"El motor {serialNumber} ya ha sido registrado");
-                        
-                        await _gateway.AddEZMotorsDataAsync(model, serialNumber, lineCode).ConfigureAwait(false);
+                        var pignon = await _gateway.GetPignonByPartNoAsync(model).ConfigureAwait(false);
+                        var motor = await _gateway.GetMotorByPartNoAsync(model).ConfigureAwait (false);
+                        await _gateway.AddEZMotorsDataAsync(model, serialNumber, lineCode,pignon,motor).ConfigureAwait(false);
                         return new SaveEzMotorsSuccess($"Datos del motor {serialNumber} registrados con exito del modelo {model} para la linea {lineCode}.");
                     }
                     else
                     {
                         return new SaveEzMotorsFailure($"Error el motor {serialNumber} ya ha sido registrado anteriormente en esta linea");
                         
-                        //await _gateway.AddEZMotorsDataAsync(model, serialNumber, lineCode).ConfigureAwait(false);
-                        //return new SaveEzMotorsSuccess($"Datos del motor {serialNumber} registrados con exito del modelo {model} para la linea {lineCode}.");
                     }
                 }
                 else
