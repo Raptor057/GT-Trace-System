@@ -229,49 +229,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GT.Trace.ComponentJoining",
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WagonLoad", "WagonLoad", "{33246BC8-24AD-4BFE-8FC9-089565ECE4C3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.WagonLoad.App", "GT.Trace.WagonLoad.APP\GT.Trace.WagonLoad.App.csproj", "{7798EB88-D6FE-4C75-8823-8EBB8A9F259B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{22A1EF54-020C-459A-A899-3BEF49A76442} = {22A1EF54-020C-459A-A899-3BEF49A76442}
-		{818F970F-9516-476A-87FA-2288A33B1AAC} = {818F970F-9516-476A-87FA-2288A33B1AAC}
-		{DF780829-B4FF-41A2-8159-E03B0030BC2D} = {DF780829-B4FF-41A2-8159-E03B0030BC2D}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.WagonLoad.Domain", "GT.Trace.WagonLoad.Domain\GT.Trace.WagonLoad.Domain.csproj", "{22A1EF54-020C-459A-A899-3BEF49A76442}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DF780829-B4FF-41A2-8159-E03B0030BC2D} = {DF780829-B4FF-41A2-8159-E03B0030BC2D}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.WagonLoad.Infra", "GT.Trace.WagonLoad.Infra\GT.Trace.WagonLoad.Infra.csproj", "{F5781B6D-BC05-46D3-9298-A8AF33AC4D40}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7798EB88-D6FE-4C75-8823-8EBB8A9F259B} = {7798EB88-D6FE-4C75-8823-8EBB8A9F259B}
-		{DF780829-B4FF-41A2-8159-E03B0030BC2D} = {DF780829-B4FF-41A2-8159-E03B0030BC2D}
-	EndProjectSection
-EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GT.Trace.WagonLoad.UI.WagonLoadSpaClient", "GT.Trace.WagonLoad.UI.WagonLoadSpaClient\", "{1691EA27-6959-42BE-AA06-6ED029343E5A}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.7.2"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_59081"
-		Debug.AspNetCompiler.PhysicalPath = "GT.Trace.WagonLoad.UI.WagonLoadSpaClient\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_59081\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_59081"
-		Release.AspNetCompiler.PhysicalPath = "GT.Trace.WagonLoad.UI.WagonLoadSpaClient\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_59081\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "59081"
-		DefaultWebSiteLanguage = "Visual C#"
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.WagonLoad.WagonLoadWebApi", "GT.Trace.WagonLoad.WagonLoadWebApi\GT.Trace.WagonLoad.WagonLoadWebApi.csproj", "{C65D02D8-D2BF-49D4-BE9C-F3B44872B808}"
-EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GT.Trace.SaveEzMotorsPinion", "GT.Trace.SaveEzMotorsPinion\", "{4B816191-A4E5-4289-BD83-9407DC82887D}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.7.2"
@@ -437,26 +394,6 @@ Global
 		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{7798EB88-D6FE-4C75-8823-8EBB8A9F259B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7798EB88-D6FE-4C75-8823-8EBB8A9F259B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7798EB88-D6FE-4C75-8823-8EBB8A9F259B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7798EB88-D6FE-4C75-8823-8EBB8A9F259B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22A1EF54-020C-459A-A899-3BEF49A76442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22A1EF54-020C-459A-A899-3BEF49A76442}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22A1EF54-020C-459A-A899-3BEF49A76442}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22A1EF54-020C-459A-A899-3BEF49A76442}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5781B6D-BC05-46D3-9298-A8AF33AC4D40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5781B6D-BC05-46D3-9298-A8AF33AC4D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5781B6D-BC05-46D3-9298-A8AF33AC4D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5781B6D-BC05-46D3-9298-A8AF33AC4D40}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1691EA27-6959-42BE-AA06-6ED029343E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1691EA27-6959-42BE-AA06-6ED029343E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1691EA27-6959-42BE-AA06-6ED029343E5A}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{1691EA27-6959-42BE-AA06-6ED029343E5A}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{C65D02D8-D2BF-49D4-BE9C-F3B44872B808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C65D02D8-D2BF-49D4-BE9C-F3B44872B808}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C65D02D8-D2BF-49D4-BE9C-F3B44872B808}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C65D02D8-D2BF-49D4-BE9C-F3B44872B808}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4B816191-A4E5-4289-BD83-9407DC82887D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4B816191-A4E5-4289-BD83-9407DC82887D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B816191-A4E5-4289-BD83-9407DC82887D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
@@ -499,11 +436,6 @@ Global
 		{8EA4C3C7-26F3-431D-82CD-0A5C4F278840} = {0C003E87-1ADA-401A-8B04-175AA9E7B907}
 		{2EC34C47-7E9D-4487-BD47-5E794947BEF1} = {0C003E87-1ADA-401A-8B04-175AA9E7B907}
 		{E0CE35AE-94E6-44CE-A8A5-A1A140D436D4} = {2EC34C47-7E9D-4487-BD47-5E794947BEF1}
-		{7798EB88-D6FE-4C75-8823-8EBB8A9F259B} = {33246BC8-24AD-4BFE-8FC9-089565ECE4C3}
-		{22A1EF54-020C-459A-A899-3BEF49A76442} = {33246BC8-24AD-4BFE-8FC9-089565ECE4C3}
-		{F5781B6D-BC05-46D3-9298-A8AF33AC4D40} = {33246BC8-24AD-4BFE-8FC9-089565ECE4C3}
-		{1691EA27-6959-42BE-AA06-6ED029343E5A} = {33246BC8-24AD-4BFE-8FC9-089565ECE4C3}
-		{C65D02D8-D2BF-49D4-BE9C-F3B44872B808} = {33246BC8-24AD-4BFE-8FC9-089565ECE4C3}
 		{4B816191-A4E5-4289-BD83-9407DC82887D} = {8EA4C3C7-26F3-431D-82CD-0A5C4F278840}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
