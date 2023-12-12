@@ -34,7 +34,6 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             long unitID;
 
             const string pattern = @"^.+\|.+\|(?<datetime>.+)\|(?<serial>.{1,})$";
-            //const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
             const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\w+)\s+(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)\s*$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
             //
             var match = Regex.Match(request.ScannerInput ?? "", pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
@@ -97,6 +96,20 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 }
 
                 unitID = label.UnitID;
+
+                #region
+                /*Agregado nuevo para LE para modelos EZ
+                 12/04/2023
+                */
+                string[] EZPartNo = { "87245", "87244", "87248" };
+                var PartNo = await _stations.GetPartNoAsync(station.Line.Code).ConfigureAwait(false);
+                bool IsEZPartNo = EZPartNo.Contains(PartNo);
+
+                if (!(IsEZPartNo && await _stations.GetProcessHistoryAsync(unitID).ConfigureAwait(false) && await _stations.GetFuncionalTestResultAsync(unitID).ConfigureAwait(false)))
+                {
+                    return new UnitNotFoundResponse(unitID);
+                }
+                #endregion
             }
 
             Unit? unit = await _units.GetUnitByIDAsync(unitID).ConfigureAwait(false);

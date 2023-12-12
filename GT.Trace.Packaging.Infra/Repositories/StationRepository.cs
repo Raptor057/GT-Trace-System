@@ -60,7 +60,6 @@
             //CegidBisPartNumber
             //var bisPartNumbers = _cegidBisPartNumbers; //Aqui se agrego el _configuration RA: 5/31/2023
 
-
             var pcmx = await _traza.TryGetStationByHostnameAsync(hostname).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Estación \"{hostname}\" no encontrada.");
 
@@ -180,7 +179,7 @@
 
             var revision = Revision.New(production.rev);
 
-            var CegidBis = await _cegid.IsSpackBis(production.part_number.Trim(), revision.Number).ConfigureAwait(false); //Aqui se agrego el _configuration RA: 6/01/2023
+            var CegidBis = await _cegid.IsSpackBis(production.part_number.Trim(), revision.Number).ConfigureAwait(false); //INFO: Aqui se agrego el _configuration RA: 6/01/2023
 
             var refext = await _cegid.GetRefExtAsync(production.part_number.Trim(), revision.Number, production.client_code ?? 0).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No hay información de empaque para {production.part_number.Trim()} Rev {revision.Number}, cliente: {production.client_code}");
@@ -289,7 +288,7 @@
                 production.ref_ext.Trim(),
                 purchaseOrder,
                 new Client(client.Code, client.Name, client.Description),
-                uarticle.MasterTypeCode == "1" ? Domain.Enums.MasterTypes.Master : Domain.Enums.MasterTypes.ATEQ);
+                uarticle.MasterTypeCode == "1" ? Domain.Enums.MasterTypes.Master : Domain.Enums.MasterTypes.ATEQ); //INFO: Aqui se define el tipo de master que sera (MASTER/ATEQ)
 
             Approval? approval = null;
 
@@ -433,5 +432,22 @@
 
         public async Task <string?> GetOrigenByCegid(string partNum, string partRev) =>
             await _traza.GetOrigenByCegid(partNum, partRev).ConfigureAwait(false);
+
+
+        #region EZ
+        /*Nuevo para EZ 
+         Candados que falta en el Sistema de Traza
+        Correo de Fabien Gurrier Lun 2023-12-04 7:53 AM
+        */
+        public async Task<string?> GetPartNoAsync(string lineCode) =>
+        await _apps.GetPartNoByLine(lineCode).ConfigureAwait(false);
+
+        public async Task<bool> GetFuncionalTestResultAsync(long unitID) =>
+            await _apps.GetFuncionalTestResult(unitID).ConfigureAwait(false) > 0;
+
+        public async Task<bool> GetProcessHistoryAsync(long unitID) =>
+            await _gtt.GetProcessHistory(unitID).ConfigureAwait(false) > 0;
+
+        #endregion
     }
 }

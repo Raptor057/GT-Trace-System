@@ -89,6 +89,7 @@
         public string ARKTINTAUT { get; set; } = "";
 
         public decimal? ARKTIMETO { get; set; }
+
         public int? APKNPCECO2 { get; set; }//Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre cantidades en EZ RA: 5/31/2023
 
         public int PalletSize => APKNPCECON ?? 0;
@@ -97,7 +98,7 @@
 
         public int ContainerSize => APKSTDPACK ?? 0;
 
-        public string MasterTypeCode => ARKTMASTER;
+        public string MasterTypeCode => ARKTMASTER; //INFO: Aqui se declara MasterTypeCode como ARKTMASTER de cegid en la tabla UARTICLE.
 
         public string Suffix => APKFTID;
     }

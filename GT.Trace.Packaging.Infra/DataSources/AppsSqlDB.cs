@@ -106,7 +106,19 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task<long?> GetUnitIDBySerialCodeAsync(string serialCode) =>
             await _con.ExecuteScalarAsync<long?>("SELECT id FROM dbo.pro_tms WHERE serial_code = @serialCode;", new { serialCode }).ConfigureAwait(false);
 
-    public async Task<int?> GetActiveWorkOrderByLine(int id_line) =>
+        public async Task<int?> GetActiveWorkOrderByLine(int id_line) =>
             await _con.ExecuteScalarAsync<int?>("SELECT COUNT(codew) as [Orden Activa] FROM dbo.pro_production WHERE id_line=@id_line AND is_running=1 AND is_stoped=0 AND is_finished=0", new { id_line }).ConfigureAwait(false);
+
+        #region EZ
+        /*Nuevo para EZ 
+         Candados que falta en el Sistema de Traza
+        Correo de Fabien Gurrier Lun 2023-12-04 7:53 AM
+        */
+        public async Task<string?> GetPartNoByLine(string lineCode)=>
+            await _con.QuerySingleAsync<string?>("SELECT TOP (1) /*ppu.letter,pp.codew,*/RTRIM(pp.part_number) AS [part_number] /*,pp.*/ FROM [APPS].[dbo].[pro_production] pp LEFT JOIN [APPS].[dbo].[pro_prod_units] ppu ON pp.id_line = ppu.id WHERE  pp.is_running=1 AND pp.is_stoped=0 AND pp.is_finished=0 AND ppu.letter = @lineCode", new { lineCode}).ConfigureAwait(false);
+        
+        public async Task <int> GetFuncionalTestResult(long unitID)=>
+            await _con.QuerySingleAsync<int>("SELECT COUNT([WB]) AS [test_results] FROM [APPS].[dbo].[pro_tms_functional_test_results] WHERE WB = @unitID AND RESULTAT = 1 ", new {unitID}).ConfigureAwait(false);
+        #endregion
     }
 }

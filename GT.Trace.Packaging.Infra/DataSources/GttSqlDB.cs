@@ -162,9 +162,10 @@ namespace GT.Trace.Packaging.Infra.DataSources
 
         #region Piñones Motores EZ
 
-        public async Task AddEZMotorsData(string model, string serialNumber, string lineCode)
+        public async Task AddEZMotorsData(string model, string serialNumber, string lineCode, string pinionPartNum,string motorPartNum)
         {
-            await _con.ExecuteAsync("INSERT INTO MotorsData (Modelo,SerialNumber,LineCode) VALUES (@model,@serialNumber,@lineCode)", new {model,serialNumber, lineCode }).ConfigureAwait(false);
+            await _con.ExecuteAsync("INSERT INTO MotorsData (Modelo,SerialNumber,LineCode,PinionPartNum,MotorPartNum) VALUES (@model,@serialNumber,@lineCode,@pinionPartNum,@motorPartNum)", new {model,serialNumber, lineCode,pinionPartNum,motorPartNum}).ConfigureAwait(false);
+            //INSERT INTO MotorsData (Modelo,SerialNumber,LineCode) VALUES (@model,@serialNumber,@lineCode)
         }
         public async Task<int> GetEzMotorsData(string model, string serialNumber, string lineCode)
         {
@@ -172,5 +173,15 @@ namespace GT.Trace.Packaging.Infra.DataSources
         }
 
         #endregion
+
+        #region EZ
+        /*Nuevo para EZ 
+         Candados que falta en el Sistema de Traza
+        Correo de Fabien Gurrier Lun 2023-12-04 7:53 AM
+        */
+        public async Task<int> GetProcessHistory(long unitID) =>
+            await _con.QueryFirstAsync<int>("SELECT COUNT([UnitID]) FROM [gtt].[dbo].[ProcessHistory] WHERE LineCode = 'LE' AND ProcessID = 0 AND UnitID = @unitID", new { unitID }).ConfigureAwait(false);
+        #endregion
+
     }
 }
