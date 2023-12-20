@@ -60,7 +60,7 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
                 return new ChangeoverNotRequiredResponse(line.Code);
             }
 
-            if(line.Code != "LN")
+            if(line.Code != "LN" || line.Code != "LI")
             {
                 //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
                 //RA: 07/05/2023.
