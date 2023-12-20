@@ -105,9 +105,19 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 var PartNo = await _stations.GetPartNoAsync(station.Line.Code).ConfigureAwait(false);
                 bool IsEZPartNo = EZPartNo.Contains(PartNo);
 
-                if (!(IsEZPartNo && await _stations.GetProcessHistoryAsync(unitID).ConfigureAwait(false) && await _stations.GetFuncionalTestResultAsync(unitID).ConfigureAwait(false)))
+                if (IsEZPartNo)
                 {
-                    return new UnitNotFoundResponse(unitID);
+                    //bool hisroty = await _stations.GetProcessHistoryAsync(unitID).ConfigureAwait(false);
+                    //bool testResult = await _stations.GetFuncionalTestResultAsync(unitID).ConfigureAwait(false);
+                    //if (!(testResult || hisroty))
+                    //{
+                    //    return new UnitNotFoundResponse(unitID);
+                    //}
+
+                    if (!(await _stations.GetProcessHistoryAsync(unitID).ConfigureAwait(false) || await _stations.GetFuncionalTestResultAsync(unitID).ConfigureAwait(false)))
+                    {
+                        return new UnitNotFoundResponse(unitID);
+                    }
                 }
                 #endregion
             }

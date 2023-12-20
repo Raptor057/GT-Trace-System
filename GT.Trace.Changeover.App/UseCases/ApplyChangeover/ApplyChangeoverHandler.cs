@@ -60,11 +60,12 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
                 return new ChangeoverNotRequiredResponse(line.Code);
             }
 
-            if(line.Code != "LN" || line.Code != "LI")
+            if(line.Code != "LN")
             {
                 //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
                 //RA: 07/05/2023.
                 var gammaData = await _gamma.GammaDataAsync(workOrder.PartNo, line.Code).ConfigureAwait(false);
+
                 if (!gammaData)
                 {
                     await _gamma.UpdateGamaTrazabAsync(workOrder.PartNo, line.Code).ConfigureAwait(false);
