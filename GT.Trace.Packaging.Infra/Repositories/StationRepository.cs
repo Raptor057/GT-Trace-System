@@ -84,10 +84,32 @@
 
             DataSources.Entities.pro_production? production = null;
             var activeWorkOrder = await _gtt.GetActiveWorkOrderAsync(selectedLineCode).ConfigureAwait(false);
+
+
+            //#region Correccion de Bug de trazabilidad en la tabla LineProductionSchedule
+            var ProductionscheduleActiveWorkOrderAsync = _gtt.LineProductionScheduleAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo);
+            ////if (ProductionscheduleActiveWorkOrderAsync == null || ProductionscheduleActiveWorkOrderAsync != prod_unit.codew)
+            ////{
+            ////    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
+            ////}
+
+            //if (prod_unit.codew != ProductionscheduleActiveWorkOrderAsync)
+            //{
+            //    await _gtt.UpdateUtcExpirationTimeAsync(prod_unit.letter.Trim()).ConfigureAwait(false);
+            //    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
+            //}
+
+            //if (ProductionscheduleActiveWorkOrderAsync== null)
+            //{
+            //    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
+            //}
+            //#endregion
+
+
             if (string.IsNullOrWhiteSpace(activeWorkOrder))
             {
                 production = await _apps.GetWorkOrderByLineIDAsync(prod_unit.id).ConfigureAwait(false)
-                    ?? throw new InvalidOperationException($"No hay orden de fabricación activa asociada a la línea #{prod_unit.id} ({prod_unit.comments}).");
+                    ?? throw new InvalidOperationException($"No hay orden de fabricación activa asociada a la línea #{prod_unit.id} ({prod_unit.comments}), Actualiza la pantalla para continuar");
             }
             else
             {
@@ -149,18 +171,6 @@
             }
             #endregion
 
-            #region Correccion de Bug de trazabilidad en la tabla LineProductionSchedule
-            var Productionschedulerecordedinlinetable = _gtt.LineProductionScheduleAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo);
-            //if (Productionschedulerecordedinlinetable.Result == null || Productionschedulerecordedinlinetable.Result.WorkOrderCode != prod_unit.codew)
-            //{
-            //    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
-            //}
-
-            if (Productionschedulerecordedinlinetable.Result == null)
-            {
-                await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
-            }
-            #endregion
 
             #region Correccion de Bug sin orden activa en GT-APPS
             /*Esta region se creo para informar cuando una linea no imprime etiquetas individuales !!solamente en 1 linea!!
@@ -224,9 +234,9 @@
             var picking_counter = await _traza.GetPickingCounterAsync((int)picking_config.Id, production.part_number.Trim(), revision.Number).ConfigureAwait(false);
             if (picking_counter == null)
             {
-#pragma warning disable IDE0017 // Simplify object initialization
+                #pragma warning disable IDE0017 // Simplify object initialization
                 picking_counter = new();
-#pragma warning restore IDE0017 // Simplify object initialization
+                #pragma warning restore IDE0017 // Simplify object initialization
                 picking_counter.Id = await _traza.CreatePickingCounterAsync((int)picking_config.Id, production.part_number.Trim(), revision.Number).ConfigureAwait(false);
                 picking_counter.REV = production.part_number.Trim();
                 picking_counter.is_active = false;
@@ -238,7 +248,7 @@
 
             #region Original
             //if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;            
-            if ((containerSize ?? 0) == 0) containerSize = uarticle.ContainerSize;
+            //if ((containerSize ?? 0) == 0) containerSize = uarticle.ContainerSize;
             #endregion
 
 
@@ -253,27 +263,32 @@
                 if (QuantityFromLastMasterID >= 0 && QuantityFromLastMasterID < uarticle.PalletSize)
                 {
                     if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+                    if ((containerSize ?? 0) == 0) containerSize = uarticle.PalletSize;
                 }
                 else if (QuantityFromLastMasterID == uarticle.PalletSize)
                 {
                     if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize2;
+                    if ((containerSize ?? 0) == 0) containerSize = uarticle.PalletSize2;
                 }
                 else if (QuantityFromLastMasterID == uarticle.PalletSize2)
                 {
                     if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+                    if ((containerSize ?? 0) == 0) containerSize = uarticle.PalletSize;
                 }
                 else
                 {
                     if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+                    if ((containerSize ?? 0) == 0) containerSize = uarticle.PalletSize;
                 }
             }
             else
             {
                 if ((palletSize ?? 0) == 0) palletSize = uarticle.PalletSize;
+                if ((containerSize ?? 0) == 0) containerSize = uarticle.ContainerSize;
             }
 
-            #endregion
-            var containerPlaceholders = Enumerable.Range(0, scannedUnits.Count() / (containerSize ?? 0) + 1);
+    #endregion
+    var containerPlaceholders = Enumerable.Range(0, scannedUnits.Count() / (containerSize ?? 0) + 1);
 
             var purchaseOrder = new PurchaseOrder(poNumber ?? refext.PO.Trim());
             var workOrder = new WorkOrder(

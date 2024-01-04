@@ -55,9 +55,13 @@ namespace GT.Trace.Packaging.Infra.DataSources
         /*Esto se agrego debido a que por algun extraño Bug no se guardaba la informacion en esta tabla, la cual es de alta importancia para obtener la trazabilidad, sin la informacion en esta tabla la trazabilidad
          no apareceria, lo cual es medianamente critico, ya que si se agrega el dato en el rango de tiempo correcto, la trazabilidad volveria a aparecer, esto afectaba a todas las lineas de manera aleatoria en modelos aleatorios
         con esta correccion ya no deberia de suceder eso.*/
-        public async Task<LineProductionSchedule> LineProductionScheduleAsync(string lineCode, string workOrderCode, string partNo) =>
-            await _con.QuerySingleAsync<LineProductionSchedule>("SELECT TOP (1) * FROM [gtt].[dbo].[LineProductionSchedule] where LineCode = @lineCode AND WorkOrderCode = @workOrderCode AND PartNo = @partNo and UtcExpirationTime >= GETUTCDATE() order by UtcExpirationTime DESC",
+        public async Task<string> LineProductionScheduleAsync(string lineCode, string workOrderCode, string partNo) =>
+            await _con.QueryFirstAsync<string>("SELECT TOP (1) WorkOrderCode FROM [gtt].[dbo].[LineProductionSchedule] where LineCode = @lineCode AND WorkOrderCode = @workOrderCode AND PartNo = @partNo AND UtcEffectiveTime <= UtcEffectiveTime and UtcExpirationTime >= GETUTCDATE()",
                 new { lineCode, workOrderCode, partNo }).ConfigureAwait(false);
+
+        public async Task UpdateUtcExpirationTimeAsync(string linecode) =>
+            await _con.ExecuteAsync("UPDATE [gtt].[dbo].[LineProductionSchedule] SET UtcExpirationTime = GETUTCDATE() WHERE LineCode = @linecode and UtcExpirationTime > GETUTCDATE()", new { linecode }).ConfigureAwait(false);
+ 
         public async Task RecordProductionNewAsync(string lineCode, string workOrderCode, string partNo, string revision) =>
             await _con.ExecuteAsync("INSERT INTO LineProductionSchedule (LineCode,WorkOrderCode,PartNo,HourlyRate,UtcEffectiveTime,Revision) values (@lineCode,@workOrderCode,@partNo,ISNULL((SELECT TOP 1 HourlyRate FROM LineProductionSchedule WHERE LineCode = @lineCode AND PartNo = @partNo ORDER BY UtcExpirationTime DESC),0),GETUTCDATE(),@revision)",
                 new { lineCode, workOrderCode, partNo, revision }).ConfigureAwait(false);

@@ -7,7 +7,7 @@ namespace GT.Trace.Packaging.Infra.Gateways
     {
         private readonly GttSqlDB _gtt;
 
-        public SqlJoinFramelessMotorsGateway(DataSources.GttSqlDB gtt)
+        public SqlJoinFramelessMotorsGateway(GttSqlDB gtt)
         {
             _gtt = gtt;
         }
