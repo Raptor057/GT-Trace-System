@@ -179,3 +179,14 @@ Se modificó en la clase SqlGetLineWorkOrderGateway en el espacio de nombres GT.
 2) The enpoint put was added to the JoinMotors UI to register the Pallet and the transmission.
 
 - 27/11/2023: Se agrego Endpoint de Save EZ Motors
+
+- 20/12/2023: Se agrego el proyecto de Traceability Legacy Integration el cual lo conforman:
+1. TraceabilityLegacyIntegration.App
+2. TraceabilityLegacyIntegration.Domain
+3. TraceabilityLegacyIntegration.Infra
+4. LegacyIntegrationWebApi
+Faltando el: LegacyIntegrationWebUI
+
+- 1/04/2024: Se actualizo el valor de containerSize =  uarticle.ContainerSize en la clase StationRepository
+  de Packaging, esto debido a que solo cambiaba el valor de la tarima y no el de el contenedor, este cambio originalmente fue realizado para iterar entre 8 y 12 el tipo de empaque para EZ en la linea E en ciertos modelos
+pero ya esta adaptado para cualquier modelo que se quiera correr siempre y cuando se encuentre un valor en el tipo de standart pack 001bis en cegid.
