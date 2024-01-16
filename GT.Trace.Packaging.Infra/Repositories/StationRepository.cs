@@ -36,30 +36,19 @@
         private readonly AppsSqlDB _apps;
         private readonly CegidSqlDB _cegid;
         private readonly GttSqlDB _gtt;
-        //private readonly IConfiguration _configuration; //Aqui se agrego el Iconfiguration RA: 5/31/2023
-        //private readonly string[] _cegidBisPartNumbers;
 
-        //private readonly ILogger<StationRepository> _logger;
-
-        //Aqui se agrego el Iconfiguration RA: 5/31/2023
-        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt/*, IConfiguration configuration, ILogger<StationRepository> logger*/)
+        public StationRepository(TrazaSqlDB traza, CegidSqlDB cegid, AppsSqlDB apps, GttSqlDB gtt)
         {
             _traza = traza;
             _apps = apps;
             _cegid = cegid;
-            //_logger = logger;
             _gtt = gtt;
-            //_configuration = configuration; //Aqui se agrego el _configuration RA: 5/31/2023
-            //_cegidBisPartNumbers = _configuration.GetSection("CegidBisPartNumber").Get<string[]>();
         }
 
         private Station? _station;
 
         public async Task<Station> GetStationByHostnameAsync(string hostname, string? lineCode, int? palletSize, int? containerSize, string? poNumber)
         {
-            //CegidBisPartNumber
-            //var bisPartNumbers = _cegidBisPartNumbers; //Aqui se agrego el _configuration RA: 5/31/2023
-
             var pcmx = await _traza.TryGetStationByHostnameAsync(hostname).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Estación \"{hostname}\" no encontrada.");
 
@@ -86,58 +75,25 @@
             var activeWorkOrder = await _gtt.GetActiveWorkOrderAsync(selectedLineCode).ConfigureAwait(false);
 
 
-            //#region Correccion de Bug de trazabilidad en la tabla LineProductionSchedule
-            var ProductionscheduleActiveWorkOrderAsync = _gtt.LineProductionScheduleAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo);
-            ////if (ProductionscheduleActiveWorkOrderAsync == null || ProductionscheduleActiveWorkOrderAsync != prod_unit.codew)
-            ////{
-            ////    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
-            ////}
-
-            //if (prod_unit.codew != ProductionscheduleActiveWorkOrderAsync)
-            //{
-            //    await _gtt.UpdateUtcExpirationTimeAsync(prod_unit.letter.Trim()).ConfigureAwait(false);
-            //    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
-            //}
-
-            //if (ProductionscheduleActiveWorkOrderAsync== null)
-            //{
-            //    await _gtt.RecordProductionNewAsync(prod_unit.letter, prod_unit.codew, prod_unit.modelo, prod_unit.active_revision);
-            //}
-            //#endregion
-
-
             if (string.IsNullOrWhiteSpace(activeWorkOrder))
             {
-                production = await _apps.GetWorkOrderByLineIDAsync(prod_unit.id).ConfigureAwait(false)
-                    ?? throw new InvalidOperationException($"No hay orden de fabricación activa asociada a la línea #{prod_unit.id} ({prod_unit.comments}), Actualiza la pantalla para continuar");
+                production = await _apps.GetWorkOrderByLineIDAsync(prod_unit.id,prod_unit.codew.Trim()).ConfigureAwait(false)
+                    ?? throw new InvalidOperationException($"No hay orden de fabricación activa en GT-Apps asociada a la línea #{prod_unit.id} ({prod_unit.comments})");
+
+                //Nuevas 3 lineas agregadas para corregir el Bug de el Hora x Hora que no aparece a veces, ya que eso afecta a la trazabilidad por la tabla LineProductionSchedule
+                await _gtt.UpdateUtcExpirationTimeAsync(prod_unit.letter.Trim());
+                await _gtt.RecordProductionNewAsync(prod_unit.letter.Trim(), production.codew.Trim(), production.part_number.Trim(), production.rev.Trim() ?? "");
+                throw new InvalidOperationException($"!!!ERROR CRITICO PARA LA TRAZABILIDAD!!!, No hay orden de fabricación asociada a la línea #{prod_unit.id} ({prod_unit.comments}) en la tabla [LineProductionSchedule], Favor de actualizar empaque.");
             }
             else
             {
                 production = await _apps.GetWorkOrderByCodeAsync(activeWorkOrder).ConfigureAwait(false)
                     ?? throw new InvalidOperationException($"No hay orden de fabricación activa asociada a la línea #{prod_unit.id} ({prod_unit.comments}).");
+
                 prod_unit.modelo = production.part_number.Trim(); //Aqui se obtiene el modelo que se esta corriendo.
                 prod_unit.active_revision = production.rev.Trim();
                 prod_unit.codew = production.codew.Trim();
             }
-
-            #region Parte del codigo comentada por mala optimizacion.
-            /*Se hizo un endpoint para remplazar esto, ya que hacia que el escaneo fuera mas lento de lo usual*/
-
-            ////Esto se agrego para que la gama se actualice cuando en cegid cambie
-            // //RA: 06/16/2023
-            //if (prod_unit.letter != "LE" || prod_unit.letter != "LN")
-            //{
-            //    var countcomponentsbom = await _traza.CountComponentsBomAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
-            //    if (countcomponentsbom)
-            //    {
-            //        await _traza.UpdateGamaTRAZABAsync(production.part_number.Trim(), prod_unit.letter).ConfigureAwait(false);
-            //        throw new InvalidOperationException($"El bom actual no coincide con CEGID para el numero de parte \"{production.part_number.Trim()}\" para la linea \"{prod_unit.letter}\" " +
-            //            $"intenta actualizar la pantalla de Empaque y GT Trace y comuníquese con el supervisor");
-            //    }
-            //}
-            //Comentado el dia 8/15/2023 para descartar un problema de rendimiento se comento, para validar o descartar esto.
-            #endregion
-
 
             #region Torquimetros para LE
             if (prod_unit.letter == "LE")

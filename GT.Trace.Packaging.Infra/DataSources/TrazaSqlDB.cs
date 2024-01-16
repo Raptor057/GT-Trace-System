@@ -2,8 +2,8 @@
 
 namespace GT.Trace.Packaging.Infra.DataSources
 {
-    public class TrazaSqlDB //Se declaro como publica para futuras pruebas unitarias.
-    //internal class TrazaSqlDB
+    //public class TrazaSqlDB //Se declaro como publica para futuras pruebas unitarias.
+    internal class TrazaSqlDB
     {
         private readonly DapperSqlDbConnection _con;
 
@@ -40,25 +40,16 @@ namespace GT.Trace.Packaging.Infra.DataSources
         //Validacion agregada para saber si empaque esta bloqueado o no 2/5/2023.
         public async Task<pcmx> TryGetStationIsBlockedAsync(string hostname) =>
             await _con.QuerySingleAsync<pcmx>("SELECT is_blocked FROM dbo.pcmx WHERE PCNAME = @hostname;", new { hostname }).ConfigureAwait(false);
-
-        ////Metodo agregado para bloquear empaque 2/8/2023
-        //public async Task<pcmx> SetStationBlocked(string is_blocked, string lineName) =>
-        //    await _con.ExecuteScalarAsync<pcmx>("UPDATE pcmx SET is_blocked = @is_blocked WHERE LINE LIKE('%'+@lineName);", new { is_blocked, lineName }).ConfigureAwait(false);
-        ////Esto solo fue una prueba para validar la execucion de la linea
-        ////public async Task<pcmx> SetStationBlocked(string hostname) =>
-        ////    await _con.ExecuteScalarAsync<pcmx>("UPDATE pcmx SET is_blocked = 1 WHERE PCNAME = @hostname;", new { hostname}).ConfigureAwait(false);
-
-
         #endregion
         public async Task<IEnumerable<Temp_pack_WB>> GetScannedUnitsByLineAsync(string lineName, string partNo) =>
                     await _con.QueryAsync<Temp_pack_WB>("SELECT * FROM dbo.Temp_pack_WB WHERE num_p = @partNo AND linea = @lineName;", new { partNo, lineName }).ConfigureAwait(false);
 
         public async Task<IEnumerable<Master_lbl_TMid>> GetPackedUnitsByWorkOrderAsync(string workOrderCode) =>
                     await _con.QueryAsync<Master_lbl_TMid>(@"SELECT x.*
-FROM dbo.Master_labels_WB m
-JOIN dbo.Master_lbl_TMid x
-    ON x.Master_id = m.Id
-WHERE m.codew = @workOrderCode;", new { workOrderCode }).ConfigureAwait(false);
+                    FROM dbo.Master_labels_WB m
+                    JOIN dbo.Master_lbl_TMid x
+                    ON x.Master_id = m.Id
+                    WHERE m.codew = @workOrderCode;", new { workOrderCode }).ConfigureAwait(false);
 
         public async Task<TZ_tblWBTest_Freq> GetPickingConfigAsync(string family) =>
             await _con.QuerySingleAsync<TZ_tblWBTest_Freq>("SELECT * FROM TZ_TBLWBTEST_FREQ WHERE cegidSF=@family;", new { family }).ConfigureAwait(false);
@@ -161,14 +152,14 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
                 new { partNo, partRev });
             return origen;
         }
-        public async Task UpdateGamaTRAZABAsync(string partNo, string lineCode)=>
-            await _con.ExecuteAsync("EXECUTE [MXSRVTRACA].[TRAZAB].[dbo].[usp_update_bom_info] @partNo,@lineCode", new {partNo, lineCode}).ConfigureAwait(false);
+        //public async Task UpdateGamaTRAZABAsync(string partNo, string lineCode)=>
+        //    await _con.ExecuteAsync("EXECUTE [MXSRVTRACA].[TRAZAB].[dbo].[usp_update_bom_info] @partNo,@lineCode", new {partNo, lineCode}).ConfigureAwait(false);
 
-        //Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
-        public async Task<bool> CountComponentsBomAsync(string partNo, string linecode) =>
-            //await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];" se comento esto para dejarlo de usar ya que la consulta de abajo es mejor RA: 07/05/2023
-            await _con.ExecuteScalarAsync<bool>("SELECT dbo.UfnGetDifferenceCountDataBoom(@partNo, @linecode) AS [CountComponentsBom];"
-                , new { partNo, linecode }).ConfigureAwait(false);
+        ////Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
+        //public async Task<bool> CountComponentsBomAsync(string partNo, string linecode) =>
+        //    //await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];" se comento esto para dejarlo de usar ya que la consulta de abajo es mejor RA: 07/05/2023
+        //    await _con.ExecuteScalarAsync<bool>("SELECT dbo.UfnGetDifferenceCountDataBoom(@partNo, @linecode) AS [CountComponentsBom];"
+        //        , new { partNo, linecode }).ConfigureAwait(false);
 
         #region PIGNON EZ
         public async Task<string> GetPignon(string partNo)=>

@@ -50,6 +50,7 @@ namespace GT.Trace.Packaging.Infra.DataSources
                 "SELECT WorkOrderCode FROM dbo.LineProductionSchedule WHERE LineCode = @lineCode AND UtcEffectiveTime <= GETUTCDATE() AND UtcExpirationTime > GETUTCDATE();",
                 new { lineCode }).ConfigureAwait(false);
 
+        
         //Agregado para validar que el dato de la orden este en la tabla LineProductionSchedule ya que si el dato no esta ahi, se pierde la trazabilidad RA: 09/20/2023
         #region Agregado para correguir Bug de trazabilidad
         /*Esto se agrego debido a que por algun extraño Bug no se guardaba la informacion en esta tabla, la cual es de alta importancia para obtener la trazabilidad, sin la informacion en esta tabla la trazabilidad
@@ -63,9 +64,12 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.ExecuteAsync("UPDATE [gtt].[dbo].[LineProductionSchedule] SET UtcExpirationTime = GETUTCDATE() WHERE LineCode = @linecode and UtcExpirationTime > GETUTCDATE()", new { linecode }).ConfigureAwait(false);
  
         public async Task RecordProductionNewAsync(string lineCode, string workOrderCode, string partNo, string revision) =>
-            await _con.ExecuteAsync("INSERT INTO LineProductionSchedule (LineCode,WorkOrderCode,PartNo,HourlyRate,UtcEffectiveTime,Revision) values (@lineCode,@workOrderCode,@partNo,ISNULL((SELECT TOP 1 HourlyRate FROM LineProductionSchedule WHERE LineCode = @lineCode AND PartNo = @partNo ORDER BY UtcExpirationTime DESC),0),GETUTCDATE(),@revision)",
+            await _con.ExecuteAsync(
+                "INSERT INTO LineProductionSchedule (LineCode,WorkOrderCode,PartNo,HourlyRate,UtcEffectiveTime,Revision) VALUES (@lineCode,@workOrderCode,@partNo,1,GETUTCDATE(),@revision)",
+                //"INSERT INTO LineProductionSchedule (LineCode,WorkOrderCode,PartNo,HourlyRate,UtcEffectiveTime,Revision) values (@lineCode,@workOrderCode,@partNo,ISNULL((SELECT TOP 1 HourlyRate FROM LineProductionSchedule WHERE LineCode = @lineCode AND PartNo = @partNo ORDER BY UtcExpirationTime DESC),0),GETUTCDATE(),@revision)",
                 new { lineCode, workOrderCode, partNo, revision }).ConfigureAwait(false);
         #endregion
+
 
         public async Task<IEnumerable<PointOfUseEtis>> GetActiveSetByLineAsync(string lineCode) =>
             await _con.QueryAsync<PointOfUseEtis>(@"SELECT e.* FROM dbo.LinePointsOfUse p
