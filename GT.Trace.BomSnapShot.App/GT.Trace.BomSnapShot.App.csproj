@@ -7,24 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
-    <Folder Include="Gateways\" />
-    <Folder Include="Services\" />
-    <Folder Include="UseCases\Assembly\MasterLabels\PrintIndividualLabel\" />
-    <Folder Include="UseCases\Assembly\MasterLabels\PrintMasterLabel\" />
-    <Folder Include="UseCases\Assembly\Repackaging\" />
-    <Folder Include="UseCases\Assembly\Utilities\ChangeMasterType\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GT.Trace.BomSnapShot.Domain\GT.Trace.BomSnapShot.Domain.csproj" />
     <ProjectReference Include="..\GT.Trace.Common\GT.Trace.Common.csproj" />
+    <ProjectReference Include="..\GT.Trace.Infra\GT.Trace.Infra.csproj" />
   </ItemGroup>
 
 </Project>

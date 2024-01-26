@@ -41,18 +41,18 @@ namespace GT.Trace.Infra.Gateways
             else
             {
                 production = await WorkOrders.GetWorkOrderByCodeAsync(workOrderCode).ConfigureAwait(false);
-                prod_unit.modelo = production?.part_number?.Trim();
-                prod_unit.active_revision = production?.rev?.Trim();
-                prod_unit.codew = production?.codew?.Trim();
+                prod_unit.modelo = production?.part_number?.Trim() ?? "";
+                prod_unit.active_revision = production?.rev?.Trim() ?? "";
+                prod_unit.codew = production?.codew?.Trim() ?? "";
             }
 
             if (production != null)
             {
-                production.part_number = production.part_number?.Trim();
-                production.client_name = production.client_name?.Trim();
-                production.ratio = production.ratio?.Trim();
-                production.rev = production.rev?.Trim();
-                production.ref_ext = production.ref_ext?.Trim();
+                production.part_number = production.part_number?.Trim() ?? "";
+                production.client_name = production.client_name?.Trim() ?? "";
+                production.ratio = production.ratio?.Trim() ?? "";
+                production.rev = production.rev?.Trim() ?? "";
+                production.ref_ext = production.ref_ext?.Trim() ?? "";
 
                 return Result.OK(new WorkOrderDto(production.codew, production.part_number, production.rev, production.target_qty ?? 0, production.current_qty ?? 0));
             }
