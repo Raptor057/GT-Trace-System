@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using GT.Trace.Common.CleanArch;
 using GT.Trace.BomSnapShot.App.UseCases.SaveSnapshot;
+using System.ComponentModel;
 
 namespace GT.Trace.BomSnapShotWebApi.Endpoints.SaveSnapshot
 {
@@ -21,10 +22,10 @@ namespace GT.Trace.BomSnapShotWebApi.Endpoints.SaveSnapshot
         }
         
         [HttpPost]
-        [Route("/api/SaveSnapshot/{pointOfUseCode}")]
-        public async Task<IActionResult> Execute([FromRoute] string pointOfUseCode)
+        [Route("/api/SaveSnapshot/{pointOfUseCode}/{componentNo}")]
+        public async Task<IActionResult> Execute([FromRoute] string pointOfUseCode, [FromRoute] string componentNo)
         {
-            var request = SaveSnapshotRequest.Create(pointOfUseCode ?? "");
+            var request = SaveSnapshotRequest.Create(pointOfUseCode ?? "", componentNo ?? "");
             try
             {
                 _ = await _mediator.Send(request).ConfigureAwait(false);
