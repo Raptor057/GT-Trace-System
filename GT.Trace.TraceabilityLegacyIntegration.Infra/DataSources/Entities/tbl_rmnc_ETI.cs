@@ -11,11 +11,11 @@ namespace GT.Trace.TraceabilityLegacyIntegration.Infra.DataSources.Entities
         //En la UI de Trazability esta tabla es la que se usa en el apartado de Disposicion
         public long Id { get; set; }
 
-        public string RMNC_ID { get; set; }
+        public string? RMNC_ID { get; set; }
 
-        public string ETI_NO { get; set; }
+        public string? ETI_NO { get; set; }
 
-        public string LOT { get; set; }
+        public string? LOT { get; set; }
 
         public bool? IS_ETI { get; set; }
 
@@ -27,11 +27,11 @@ namespace GT.Trace.TraceabilityLegacyIntegration.Infra.DataSources.Entities
 
         public int SCRAP_QTY { get; set; }
 
-        public string SCRAP_TICKET { get; set; }
+        public string? SCRAP_TICKET { get; set; }
 
-        public string TRANSFER_TICKET { get; set; }
+        public string? TRANSFER_TICKET { get; set; }
 
-        public string COMMENTS { get; set; }
+        public string? COMMENTS { get; set; }
 
         public bool IS_RELEASED { get; set; }
 
