@@ -7,8 +7,8 @@ namespace GT.Trace.Common.CleanArch
         where TResponse : MediatR.INotification
     {
         private readonly Type _requestType = typeof(TRequest);
-
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, MediatR.RequestHandlerDelegate<TResponse> next)
+        //public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, MediatR.RequestHandlerDelegate<TResponse> next) //Old
+        public async Task<TResponse> Handle(TRequest request, MediatR.RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             TResponse response;
             Logger.LogInformation("{@Request}", request);
