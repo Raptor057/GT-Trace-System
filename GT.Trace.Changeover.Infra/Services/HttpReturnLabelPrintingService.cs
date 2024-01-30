@@ -22,7 +22,7 @@ namespace GT.Trace.Changeover.Infra.Services
         {
             var errors = new List<string>();
 
-            var uri = new Uri(string.Format(_configuration["HttpReturnLabelPrintingServiceUri"], lineCode));
+            var uri = new Uri(string.Format(_configuration["HttpReturnLabelPrintingServiceUri"] ?? "", lineCode));
             _httpClient.Value.BaseAddress = uri;
             foreach (var eti in etis)
             {

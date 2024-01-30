@@ -62,7 +62,7 @@ namespace GT.Trace.Packaging.Infra.Services
         {
             var match = Regex.Match(
                 ClearInputFromSpecialCharacters(value),
-                Configuration.GetSection(WalkBehindLabelFormatRegExPattern).Value,
+                Configuration.GetSection(WalkBehindLabelFormatRegExPattern).Value ?? "",
                 RegexOptions.IgnoreCase | RegexOptions.Singleline);
             if (match.Success)
             {
@@ -92,7 +92,7 @@ namespace GT.Trace.Packaging.Infra.Services
         {
             var match = Regex.Match(
                 ClearInputFromSpecialCharacters(value),
-                Configuration.GetSection(FramelessLabelFormatRegExPattern).Value,
+                Configuration.GetSection(FramelessLabelFormatRegExPattern).Value ?? "",
                 RegexOptions.IgnoreCase | RegexOptions.Singleline);
             if (match.Success)
             {
@@ -118,7 +118,7 @@ namespace GT.Trace.Packaging.Infra.Services
         {
             var match = Regex.Match(
                 ClearInputFromSpecialCharacters(value),
-                Configuration.GetSection(EZMotorsLabelFormatRegExPattern).Value,
+                Configuration.GetSection(EZMotorsLabelFormatRegExPattern).Value ?? "",
                 RegexOptions.IgnoreCase | RegexOptions.Singleline);
             if (match.Success)
             {

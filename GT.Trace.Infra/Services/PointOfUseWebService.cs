@@ -10,7 +10,7 @@ namespace GT.Trace.Infra.Services
 
         public PointOfUseWebService(IConfigurationRoot configuration)
         {
-            _client = new(() => new(configuration.GetSection("HttpApi:PointOfUseWebService").Value), true);
+            _client = new(() => new(configuration.GetSection("HttpApi:PointOfUseWebService").Value ?? ""), true);
         }
 
         public async Task<bool> LoadMaterialAsync(string lineCode, string etiInput, string pointOfUseCode)

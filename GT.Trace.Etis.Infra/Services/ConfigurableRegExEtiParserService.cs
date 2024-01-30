@@ -29,7 +29,7 @@ namespace GT.Trace.Etis.Infra.Services
             var pattern = Configuration.GetSection(EtiLabelFormatRegExPattern).Value;
             const RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
 
-            var match = Regex.Match(input, pattern, options);
+            var match = Regex.Match(input, pattern ?? "", options);
             if (match.Success)
             {
                 id = long.Parse(match.Groups["id"].Value);

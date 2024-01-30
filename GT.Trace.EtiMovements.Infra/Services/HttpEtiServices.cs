@@ -12,7 +12,7 @@ namespace GT.Trace.EtiMovements.Infra.Services
 
         public HttpEtiServices(IConfigurationRoot configuration)
         {
-            _client = new(() => new(configuration.GetSection("HttpApi:HttpEtiServices").Value), true);
+            _client = new(() => new(configuration.GetSection("HttpApi:HttpEtiServices").Value ?? ""), true);
         }
 
         public async Task<Result<EtiInfoDto>> GetEtiAsync(string etiInput)

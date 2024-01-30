@@ -53,7 +53,7 @@ namespace GT.Trace.Infra.Services
         {
             var match = Regex.Match(
                 ClearInputFromSpecialCharacters(value),
-                Configuration.GetSection(WalkBehindLabelFormatRegExPattern).Value,
+                Configuration.GetSection(WalkBehindLabelFormatRegExPattern).Value ?? "",
                 RegexOptions.IgnoreCase | RegexOptions.Singleline);
             if (match.Success)
             {
@@ -79,7 +79,7 @@ namespace GT.Trace.Infra.Services
             var pattern = Configuration.GetSection(EtiLabelFormatRegExPattern).Value;
             var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
 
-            var match = Regex.Match(input, pattern, options);
+            var match = Regex.Match(input, pattern ?? "", options);
             if (match.Success)
             {
                 id = long.Parse(match.Groups["id"].Value);

@@ -12,7 +12,7 @@ namespace GT.Trace.EtiMovements.Infra.Services
 
         public HttpLineServices(IConfigurationRoot configuration)
         {
-            _client = new(() => new(configuration.GetSection("HttpApi:HttpLineServices").Value), true);
+            _client = new(() => new(configuration.GetSection("HttpApi:HttpLineServices").Value ?? ""), true);
         }
 
         public async Task<Result<IEnumerable<BomComponentDto>>> GetBomAsync(string partNo, string lineCode)

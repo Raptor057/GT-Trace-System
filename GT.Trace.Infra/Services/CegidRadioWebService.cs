@@ -10,7 +10,7 @@ namespace GT.Trace.Infra.Services
 
         public CegidRadioWebService(IConfigurationRoot configuration)
         {
-            _client = new(() => new(configuration.GetSection("HttpApi:CegidRadioService").Value), true);
+            _client = new(() => new(configuration.GetSection("HttpApi:CegidRadioService").Value ?? ""), true);
         }
 
         public async Task<string> GenerateFabricationControlFileAsync(string? partNo, string? revision, string workOrderCode, int? quantity, long? etiID)
