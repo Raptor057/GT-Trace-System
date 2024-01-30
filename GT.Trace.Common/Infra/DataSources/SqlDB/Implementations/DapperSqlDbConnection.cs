@@ -14,12 +14,14 @@ namespace GT.Trace.Common.Infra.DataSources.SqlDB.Implementations
         {
             _connection = connection;
         }
-
+#pragma warning disable CS8603 // Possible null reference return.
         public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object? args = null) =>
             await _connection.QueryAsync<T>(sql, args).ConfigureAwait(false);
 
+
         public async Task<T> QuerySingleAsync<T>(string sql, object? args = null) =>
             await _connection.QuerySingleOrDefaultAsync<T>(sql, args).ConfigureAwait(false);
+
 
         public async Task<T> QueryFirstAsync<T>(string sql, object? args = null) =>
             await _connection.QueryFirstOrDefaultAsync<T>(sql, args).ConfigureAwait(false);
@@ -44,7 +46,7 @@ namespace GT.Trace.Common.Infra.DataSources.SqlDB.Implementations
 
         public int Execute(string sql, object? args = null) =>
             ExecuteAsync(sql, args).GetAwaiter().GetResult();
-
+#pragma warning restore CS8603 // Possible null reference return.
         public void Dispose()
         {
             _connection.Dispose();

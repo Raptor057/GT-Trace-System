@@ -11,7 +11,7 @@ namespace GT.Trace.TraceabilityLegacyIntegration.Infra.DataSources
         {
             _connections = connections;
         }
-
+#pragma warning disable CS8603 // Possible null reference return.
         public async Task<int> ExecuteAsync(string sql, object? param = null)
         {
             using var con = await _connections.GetOpenConnectionAsync().ConfigureAwait(false);

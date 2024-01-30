@@ -12,7 +12,7 @@ namespace GT.Trace.Common.Infra
         {
             _connections = connections;
         }
-
+#pragma warning disable CS8603 // Possible null reference return.
         public async Task<IEnumerable<T>> QueryAsync<T>(string sqlCommand, object? @params = null)
         {
             using var con = await _connections.GetOpenConnectionAsync().ConfigureAwait(false);
@@ -23,8 +23,10 @@ namespace GT.Trace.Common.Infra
         public async Task<T> QuerySingleAsync<T>(string sqlCommand, object? @params = null)
         {
             using var con = await _connections.GetOpenConnectionAsync().ConfigureAwait(false);
+
             return await con.QuerySingleOrDefaultAsync<T>(sqlCommand, @params)
                 .ConfigureAwait(false);
+
         }
 
         public async Task<T> QueryFirstAsync<T>(string sqlCommand, object? @params = null)

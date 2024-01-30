@@ -55,7 +55,7 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
     //    }
     //}
     #endregion
-
+#pragma warning disable CS8603 // Possible null reference return.
     [ApiController]
     public class RecordProcessEndPoint : ControllerBase
     {
