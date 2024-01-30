@@ -19,7 +19,9 @@ namespace GT.Trace.Packaging.UI.PackagingWebApi
                 .AddSingleton(typeof(ResultViewModel<>))
                 .AddSingleton(typeof(GenericViewModel<>))
                 .AddAppServices()
-                .AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                //.AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                .AddMediatR(cfg =>{cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionEx).Assembly);});
+
         }
     }
 }

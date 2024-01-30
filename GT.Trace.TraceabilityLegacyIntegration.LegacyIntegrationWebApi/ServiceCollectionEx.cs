@@ -19,7 +19,8 @@ namespace GT.Trace.TraceabilityLegacyIntegration.LegacyIntegrationWebApi
                 .AddSingleton(typeof(ResultViewModel<>))
                 .AddSingleton(typeof(GenericViewModel<>))
                 .AddAppServices()
-                .AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                //.AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                .AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionEx).Assembly); });
         }
     }
 }

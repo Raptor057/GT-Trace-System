@@ -22,7 +22,8 @@ builder.Services.AddControllers();
 builder.Services.AddAppServices();
 builder.Services.AddInfraServices(configuration);
 builder.Services.AddSingleton(typeof(ResultViewModel<>));
-builder.Services.AddMediatR(typeof(Program).Assembly);
+//builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(Program).Assembly); });
 builder.Services.AddSingleton<IConfigurationRoot>(configuration);
 
 var app = builder.Build();

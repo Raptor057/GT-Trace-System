@@ -10,7 +10,8 @@ namespace GT.Trace.BomSnapShot.App
         {
             return services
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(InteractorPipeline<,>))
-                .AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                //.AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                .AddMediatR(cfg =>{cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionEx).Assembly);});
         }
     }
 }

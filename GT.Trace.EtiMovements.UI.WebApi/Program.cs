@@ -26,12 +26,9 @@ builder.Services.AddInfraServices(configuration);
 builder.Services.AddSingleton(typeof(ResultViewModel<>));
 builder.Services.AddSingleton(configuration);
 builder.Services.AddSignalR();
-builder.Services.AddMediatR(typeof(Program).Assembly);
-builder.Services
-    .AddMvc(o =>
-    {
-        o.Filters.Add(new Microsoft.AspNetCore.Mvc.ResponseCacheAttribute { NoStore = true, Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.None });
-    });
+//builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(Program).Assembly); });
+builder.Services.AddMvc(o =>{o.Filters.Add(new Microsoft.AspNetCore.Mvc.ResponseCacheAttribute { NoStore = true, Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.None });});
 
 var app = builder.Build();
 

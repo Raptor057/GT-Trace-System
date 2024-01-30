@@ -19,7 +19,8 @@ namespace GT.Trace.BomSnapShotWebApi
                 .AddSingleton(typeof(ResultViewModel<>))
                 .AddSingleton(typeof(GenericViewModel<>))
                 .AddSnapshotAppServices()
-                .AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                //.AddMediatR(typeof(ServiceCollectionEx).Assembly);
+                .AddMediatR(cfg =>{cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionEx).Assembly);});
         }
     }
 }

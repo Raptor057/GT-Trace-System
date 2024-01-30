@@ -10,7 +10,8 @@ namespace GT.Trace.Changeover.App
         {
             return services
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(InteractorPipeline<,>))
-                .AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
+                //.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
+                .AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly); });
         }
     }
 }

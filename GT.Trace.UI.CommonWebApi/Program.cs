@@ -25,8 +25,8 @@ builder.Services.AddSingleton(typeof(ResultViewModel<>));
 builder.Services.AddSingleton(typeof(GenericViewModel<>));
 builder.Services.AddSingleton(configuration);
 builder.Services.AddSignalR();
-builder.Services.AddMediatR(typeof(Program).Assembly);
-
+//builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(Program).Assembly); });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

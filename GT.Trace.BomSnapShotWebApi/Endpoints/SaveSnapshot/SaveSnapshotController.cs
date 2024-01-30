@@ -20,8 +20,9 @@ namespace GT.Trace.BomSnapShotWebApi.Endpoints.SaveSnapshot
             _mediator=mediator;
             _viewModel=viewModel;
         }
-        
-        [HttpPost]
+
+        //[HttpPost]
+        [HttpPut]
         [Route("/api/SaveSnapshot/{pointOfUseCode}/{componentNo}")]
         public async Task<IActionResult> Execute([FromRoute] string pointOfUseCode, [FromRoute] string componentNo)
         {
