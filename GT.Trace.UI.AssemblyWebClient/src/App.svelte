@@ -21,6 +21,7 @@ here it view the composition of the gamma or also named boom.
     ProcessHistoryApi,
     PackagingApi,
     EventsHistory,
+    BomSnapShot,
   } from "./utils/HttpRequests";
   import { intros } from "svelte/internal";
   export let lineCode = "";
@@ -216,6 +217,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
       }
     } else {
       EtiMovementsApi.useEti(lineCode, e.detail.input).catch(handleError);
+      BomSnapShot.SnapShot(lineCode, e.detail.input).catch(handleError); //Agregado para la nueva trazabilidad
     }
   };
 

@@ -130,3 +130,12 @@ export const EventsHistory = (function (apiUrl) {
             HttpRequest.post(`${apiUrl}/api/message/${clientmessage}/lines/${lineCode}`),
     };
 })("http://mxsrvapps/gtt/services/eventshistory");
+
+export const BomSnapShot = (function (apiUrl){
+    //apiUrl = 'http://localhost:5184'
+
+return{ 
+    SnapShot: (lineCode, etiNo) =>
+    HttpRequest.put(`${apiUrl}/api/SaveSnapshot/${etiNo}/${lineCode}`)
+};
+})("http://mxsrvapps.gt.local/gtt/services/bomsnapshot")

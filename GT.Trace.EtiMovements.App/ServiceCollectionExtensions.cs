@@ -11,7 +11,7 @@ namespace GT.Trace.EtiMovements.App
             return services
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(InteractorPipeline<,>))
                 //.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
-                .AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(ServiceProviderServiceExtensions).Assembly); });
+                .AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly); });
         }
     }
 }
