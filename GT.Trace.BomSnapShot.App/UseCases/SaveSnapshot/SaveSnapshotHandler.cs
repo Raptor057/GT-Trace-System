@@ -17,7 +17,7 @@ namespace GT.Trace.BomSnapShot.App.UseCases.SaveSnapshot
         {
             try
             {
-                var SaveSnapshotMessage =  await _gateway.SaveSnapshotAsync(request.PointOfUseCode,request.PomponentNo).ConfigureAwait(false);
+                var SaveSnapshotMessage =  await _gateway.SaveSnapshotAsync(request.EtiNo, request.LineCode).ConfigureAwait(false);
                 return new SaveSnapshotSuccess(SaveSnapshotMessage);
             }
             catch (Exception ex)

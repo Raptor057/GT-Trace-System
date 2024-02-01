@@ -11,28 +11,29 @@ namespace GT.Trace.BomSnapShot.Infra.DataSources
             _con = con;
         }
 
-        #region TEST SNAPSHOT
-        public async Task<int> CheckStatusActivecomponentsAsync(string pointOfUseCode) =>
-    await _con.QueryFirstAsync<int>("SELECT [dbo].[UfnCheckStatusActiveComponents] (@pointOfUseCode) AS [StatusActiveComponents]", new { pointOfUseCode }).ConfigureAwait(false);
+        //cuenta la cantidad de componentes activos en la linea relacionando su gama para asi no tomar componentres activos de mas que pudieran estar en linea
+        public async Task<int> ActiveBomComponentCountByLineCodeAsync(string lineCode) =>
+        await _con.QueryFirstAsync<int>("SELECT COUNT(PUE.ComponentNo) AS [CountComponentActive]" +
+            "FROM [gtt].[dbo].[PointOfUseEtis] PUE " +
+            "INNER JOIN LinePointsOfUse LPU ON PUE.PointOfUseCode = LPU.PointOfUseCode " +
+            "INNER JOIN LineProductionSchedule LPS ON LPS.LineCode = LPU.LineCode AND LPS.UtcExpirationTime > GETUTCDATE() " +
+            "RIGHT JOIN [MXSRVTRACA].[TRAZAB].[cegid].[bom] CB ON RTRIM(CB.NOKTCODPF) COLLATE SQL_Latin1_General_CP1_CI_AS = LPS.PartNo " +
+            "AND RTRIM(NOKTCOMPF) COLLATE SQL_Latin1_General_CP1_CI_AS = LPS.LineCode " +
+            "AND RTRIM(CB.NOCTCODECP) COLLATE SQL_Latin1_General_CP1_CI_AS = PUE.ComponentNo " +
+            "AND TRIM(CB.NOCTCODOPE) COLLATE SQL_Latin1_General_CP1_CI_AS = LPU.PointOfUseCode " +
+            "WHERE LPU.LineCode = @lineCode AND PUE.UtcExpirationTime IS NULL AND PUE.UtcUsageTime IS NOT NULL AND PUE.UtcUsageTime < GETUTCDATE()", new { lineCode }).ConfigureAwait(false);
 
-        public async Task<pro_production> LineProductionActiveByPointOfUseCodeAsync(string pointOfUseCode) =>
-            await _con.QuerySingleAsync<pro_production>("SELECT TOP (1) PP.* FROM [gtt].[dbo].LineProcessPointsOfUse LPPOU " +
-                "INNER JOIN [MXSRVTRACA].[APPS].[dbo].[pro_prod_units] PPU ON PPU.letter collate SQL_Latin1_General_CP1_CI_AS = LPPOU.LineCode " +
-                "INNER JOIN [MXSRVTRACA].[APPS].[dbo].[pro_production] PP ON  PPU.id = PP.id_line AND PP.is_stoped = 0 AND PP.is_running = 1 AND PP.is_finished = 0 " +
-                "WHERE LPPOU.PointOfUseCode = @pointOfUseCode", new { pointOfUseCode }).ConfigureAwait(false);
+        //Ejecuta el metodo de guardado de snapshot
         public async Task SaveSnapShotAsync(string pointOfUseCode) =>
-            await _con.ExecuteAsync("EXECUTE [dbo].[InsertComponentsSnapshot] @pointOfUseCode", new { pointOfUseCode }).ConfigureAwait(false);
-
-        public async Task<IEnumerable<string>> LinesCodesSharingPointOfUseAsync(string pointOfUseCode, string componentNo) =>
-            await _con.QueryAsync<string>("SELECT DISTINCT(s.LineCode) " +
-                "FROM dbo.LineProductionSchedule s " +
-                "JOIN dbo.LineGamma g ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo " +
-                "WHERE s.UtcExpirationTime >= GETUTCDATE() AND s.UtcEffectiveTime < GETUTCDATE()", new { pointOfUseCode, componentNo }).ConfigureAwait(false);
-
-        public async Task<string> GetPointofusecodebyLineCode(string lineCode)=>
-            await _con.QuerySingleAsync<string>("select top 1 PointOfUseCode from LinePointsOfUse WHERE LineCode = @lineCode AND PointOfUseCode NOT LIKE ('%BM%')", new { lineCode }).ConfigureAwait(false);
-
-
-        #endregion
+        await _con.ExecuteAsync("EXECUTE [dbo].[InsertComponentsSnapshot] @pointOfUseCode", new { pointOfUseCode }).ConfigureAwait(false);
+        
+        //Obtiene un punto de uso ingresando el codigo de linea este metodo se usa en caso de que un tunel y componente sea compartido por varias lineas, ejemplo grasa o silicon
+        public async Task<string> GetPointofusecodebyLineCodeAsync(string lineCode)=>
+        await _con.QuerySingleAsync<string>("select top 1 PointOfUseCode from LinePointsOfUse WHERE LineCode = @lineCode AND PointOfUseCode NOT LIKE ('%BM%')", new { lineCode }).ConfigureAwait(false);
+        
+        //Obtiene el ultimo movimiento de la etiqueta
+        public async Task<PointOfUseEtis?> GetEtiLastMovementAsync(string etiNo)=>
+            //await _con.QueryFirstAsync<PointOfUseEtis>("SELECT TOP 1 * FROM dbo.PointOfUseEtis WHERE EtiNo = @etiNo ORDER BY ID DESC;", new { etiNo }).ConfigureAwait(false);
+            await _con.QueryFirstAsync<PointOfUseEtis>("SELECT TOP 1 * FROM dbo.PointOfUseEtis WHERE EtiNo = @etiNo AND UtcUsageTime IS NULL AND UtcExpirationTime IS NULL AND IsDepleted = 0 ORDER BY ID DESC;", new { etiNo }).ConfigureAwait(false);
     }
 }

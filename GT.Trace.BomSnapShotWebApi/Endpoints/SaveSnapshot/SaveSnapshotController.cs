@@ -23,10 +23,10 @@ namespace GT.Trace.BomSnapShotWebApi.Endpoints.SaveSnapshot
 
         //[HttpPost]
         [HttpPut]
-        [Route("/api/SaveSnapshot/{pointOfUseCode}/{componentNo}")]
-        public async Task<IActionResult> Execute([FromRoute] string pointOfUseCode, [FromRoute] string componentNo)
+        [Route("/api/SaveSnapshot/{etiNo}/{lineCode}")]
+        public async Task<IActionResult> Execute([FromRoute] string etiNo, [FromRoute] string lineCode)
         {
-            var request = SaveSnapshotRequest.Create(pointOfUseCode ?? "", componentNo ?? "");
+            var request = SaveSnapshotRequest.Create(etiNo ?? "", lineCode ?? "");
             try
             {
                 _ = await _mediator.Send(request).ConfigureAwait(false);

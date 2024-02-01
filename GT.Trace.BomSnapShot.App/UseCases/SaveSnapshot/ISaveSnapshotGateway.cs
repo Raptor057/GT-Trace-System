@@ -2,6 +2,6 @@
 {
     public interface ISaveSnapshotGateway
     {
-        Task<string> SaveSnapshotAsync(string pointOfUseCode, string componentNo);
+        Task<string> SaveSnapshotAsync(string etiNo,string lineCode);
     }
 }

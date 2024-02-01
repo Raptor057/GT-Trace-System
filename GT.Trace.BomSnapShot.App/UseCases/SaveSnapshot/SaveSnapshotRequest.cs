@@ -8,30 +8,30 @@ namespace GT.Trace.BomSnapShot.App.UseCases.SaveSnapshot
 {
     public sealed class SaveSnapshotRequest:Common.CleanArch.IRequest<SaveSnapshotResponse>
     {
-        public static bool CanCreate(string pointOfUseCode,string componentNo, out ErrorList errors)
+        public static bool CanCreate(string etiNo,string lineCode, out ErrorList errors)
         {
             errors = new();
-            if (string.IsNullOrEmpty(pointOfUseCode))
+            if (string.IsNullOrEmpty(etiNo))
             {
-                errors.Add("pointOfUseCode Sin Declarar");
+                errors.Add("Etiqueta vacia");
             }
-            if (string.IsNullOrEmpty(componentNo))
+            if (string.IsNullOrEmpty(lineCode))
             {
-                errors.Add("componentNo Sin declarar");
+                errors.Add("Linea vacia");
             }
             return errors.IsEmpty;
         }
-        public static SaveSnapshotRequest Create(string pointOfUseCode,string componentNo)
+        public static SaveSnapshotRequest Create(string etiNo,string lineCode)
         {
-            if (!CanCreate(pointOfUseCode, componentNo, out var errors)) throw errors.AsException();
-            return new(pointOfUseCode, componentNo);
+            if (!CanCreate(etiNo,lineCode, out var errors)) throw errors.AsException();
+            return new(etiNo, lineCode);
         }
-        private SaveSnapshotRequest(string pointOfUseCode,string componentNo)
+        private SaveSnapshotRequest(string etiNo, string lineCode)
         {
-            PointOfUseCode = pointOfUseCode;
-            PomponentNo = componentNo;
+            EtiNo = etiNo;
+            LineCode=lineCode;
         }
-        public string PointOfUseCode { get; }
-        public string PomponentNo { get; }
+        public string LineCode {  get;}
+        public string EtiNo { get; }
     }
 }
