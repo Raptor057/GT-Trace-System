@@ -30,6 +30,10 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.ExecuteAsync("INSERT INTO dbo.ProcessHistory (UnitID, ProcessID, LineCode) VALUES(@unitID, '999', @lineCode);", new { unitID, lineCode })
             .ConfigureAwait(false);
 
+        public async Task RecordUnitIDShapshotHistoryAsync(long unitID, string lineCode) =>
+           await _con.ExecuteAsync("EXECUTE [dbo].[UpsInsertUnitIDShapshotHistory] @lineCode,@unitID;", new { unitID, lineCode })
+           .ConfigureAwait(false);
+
         /// <summary>
         /// Record production.
         /// </summary>

@@ -381,6 +381,7 @@
             await _traza.AddPackedUnitAsync(e.LineName, e.ClientName, e.UnitID, e.PartNo, e.JulianDay, e.IsPartial, e.MasterID, e.ApprovalID, e.WorkOrderCode, e.LineID).ConfigureAwait(false);
             await _gtt.RecordProductionAsync(e.LineCode, e.PartNo, e.Revision, e.WorkOrderCode, 1).ConfigureAwait(false);
             await _gtt.RecordPackagingProcessHistoryAsync(e.UnitID, e.LineCode).ConfigureAwait(false);
+            await _gtt.RecordUnitIDShapshotHistoryAsync(e.UnitID,e.LineCode).ConfigureAwait(false);//Agregado para enlazar el unitID con el snapshot RA: 02/06/2024
         }
 
         private async Task OnUnitPickedAsync(UnitPickedEvent e)
