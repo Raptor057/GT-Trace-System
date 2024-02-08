@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using GT.Trace.BomSnapShot.Infra.DataSources;
 using GT.Trace.BomSnapShot.App.UseCases.SaveSnapshot;
 using GT.Trace.BomSnapShot.Infra.Gateways;
+using GT.Trace.BomSnapShot.App.Gateways;
 
 namespace GT.Trace.BomSnapShot.Infra
 {
@@ -19,7 +20,8 @@ namespace GT.Trace.BomSnapShot.Infra
                 .AddSingleton<TrazaSqlDB>()
                 .AddSingleton<CegidSqlDB>()
                 .AddSingleton<GttSqlDB>()
-                .AddSingleton<ISaveSnapshotGateway,SqlSaveSnapshotGateway>();
+                .AddSingleton<ISaveSnapshotGateway,SqlSaveSnapshotGateway>()
+                .AddSingleton<IGetSeqSnapshotIDGateways,SqlSeqSnapshotIDGateway>();
         }
     }
 }

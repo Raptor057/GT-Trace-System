@@ -35,5 +35,9 @@ namespace GT.Trace.BomSnapShot.Infra.DataSources
         public async Task<PointOfUseEtis?> GetEtiLastMovementAsync(string etiNo)=>
             //await _con.QueryFirstAsync<PointOfUseEtis>("SELECT TOP 1 * FROM dbo.PointOfUseEtis WHERE EtiNo = @etiNo ORDER BY ID DESC;", new { etiNo }).ConfigureAwait(false);
             await _con.QueryFirstAsync<PointOfUseEtis>("SELECT TOP 1 * FROM dbo.PointOfUseEtis WHERE EtiNo = @etiNo AND UtcUsageTime IS NULL AND UtcExpirationTime IS NULL AND IsDepleted = 0 ORDER BY ID DESC;", new { etiNo }).ConfigureAwait(false);
+
+        //Obtiene la sequencia del SnapshotID segun la linea y modelo
+        public async Task<long> GetSeqSnapshotIDByLineCodeandPartNoAsync(string lineCode, string partNo) =>
+            await _con.QueryFirstAsync<long>("SELECT COUNT(DISTINCT SnapShotID) AS [SeqSnapshotID] FROM [gtt].[dbo].[UnitIDShapshotHistory] WHERE LineCode = @lineCode and PartNo = @partNo GROUP BY LineCode,PartNo", new { lineCode, partNo }).ConfigureAwait(false);
     }
 }
