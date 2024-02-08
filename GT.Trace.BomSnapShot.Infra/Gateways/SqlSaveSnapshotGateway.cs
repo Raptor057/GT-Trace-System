@@ -56,7 +56,7 @@ namespace GT.Trace.BomSnapShot.Infra.Gateways
                 pro_production? pro_Prod;
                 pro_Prod = await _apps.GetLineProductionActiveByPointOfUseCodeAsync(lineCode).ConfigureAwait(false);
                 if(pro_Prod == null) return $"Orden activa no encontrada";
-                var partNo = pro_Prod.part_number.Trim();
+                var partNo = pro_Prod.part_number ?? "".Trim();
 
                 int ActiveBomComponentCountByLineCode = await _gtt.ActiveBomComponentCountByLineCodeAsync(lineCode).ConfigureAwait(false); //Valor de los componentes activos
                 int BomComponentCountByLineCodeAndPartNo = await _traza.BomComponentCountByLineCodeAndPartNoAsync(lineCode,partNo).ConfigureAwait(false); //Valor de los componentes del boom
