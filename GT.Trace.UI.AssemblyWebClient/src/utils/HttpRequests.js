@@ -135,7 +135,10 @@ export const BomSnapShot = (function (apiUrl){
     //apiUrl = 'http://localhost:5184'
 
 return{ 
-    SnapShot: (lineCode, etiNo) =>
-    HttpRequest.put(`${apiUrl}/api/SaveSnapshot/${etiNo}/${lineCode}`)
+    SnapShot: async (lineCode, etiNo) =>
+    HttpRequest.put(`${apiUrl}/api/SaveSnapshot/${etiNo}/${lineCode}`),
+
+    GetSnapShotIDByLineCodeandPartNo: async (lineCode, partNo)=>
+    HttpRequest.get(`${apiUrl}/api/lines/getseqsnapshotid/${lineCode}/${partNo}`),
 };
 })("http://mxsrvapps.gt.local/gtt/services/bomsnapshot")

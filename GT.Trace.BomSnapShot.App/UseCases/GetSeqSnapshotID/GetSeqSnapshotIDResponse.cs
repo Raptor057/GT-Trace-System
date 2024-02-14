@@ -3,7 +3,7 @@ using GT.Trace.Common.CleanArch;
 
 namespace GT.Trace.BomSnapShot.App.UseCases.GetSeqSnapshotID
 {
-    public record GetSeqSnapshotIDResponse(long SeqSnapshots) : IResponse;
+    public record GetSeqSnapshotIDResponse(string SeqSnapshots) : IResponse;
     public sealed record GetSeqSnapshotIDRequest(string lineCode, string partNo): IRequest<GetSeqSnapshotIDResponse>;
     internal sealed class GetSeqSnapshotIDHandler : IInteractor<GetSeqSnapshotIDRequest, GetSeqSnapshotIDResponse>
     {

@@ -37,7 +37,11 @@ namespace GT.Trace.BomSnapShot.Infra.DataSources
             await _con.QueryFirstAsync<PointOfUseEtis>("SELECT TOP 1 * FROM dbo.PointOfUseEtis WHERE EtiNo = @etiNo AND UtcUsageTime IS NULL AND UtcExpirationTime IS NULL AND IsDepleted = 0 ORDER BY ID DESC;", new { etiNo }).ConfigureAwait(false);
 
         //Obtiene la sequencia del SnapshotID segun la linea y modelo
-        public async Task<long> GetSeqSnapshotIDByLineCodeandPartNoAsync(string lineCode, string partNo) =>
-            await _con.QueryFirstAsync<long>("SELECT COUNT(DISTINCT SnapShotID) AS [SeqSnapshotID] FROM [gtt].[dbo].[UnitIDShapshotHistory] WHERE LineCode = @lineCode and PartNo = @partNo GROUP BY LineCode,PartNo", new { lineCode, partNo }).ConfigureAwait(false);
+        //public async Task<long> GetSeqSnapshotIDByLineCodeandPartNoAsync(string lineCode, string partNo) =>
+        //    await _con.QueryFirstAsync<long>("SELECT COUNT(DISTINCT SnapShotID) AS [SeqSnapshotID] FROM [gtt].[dbo].[UnitIDShapshotHistory] WHERE LineCode = @lineCode and PartNo = @partNo GROUP BY LineCode,PartNo", new { lineCode, partNo }).ConfigureAwait(false);
+
+        public async Task<string> GetSeqSnapshotIDByLineCodeandPartNoAsync(string lineCode, string partNo) =>
+    await _con.QueryFirstAsync<string>("SELECT CONCAT('SnapShot #',(SELECT COUNT(DISTINCT SnapShotID) FROM [gtt].[dbo].[UnitIDShapshotHistory] WHERE LineCode = @lineCode AND PartNo = @partNo AND UtcTimeStamp BETWEEN DATEADD(HOUR, -12, GETUTCDATE()) AND GETUTCDATE() ),' - ','ID: ',(SELECT TOP (1) [SnapShotID] FROM [gtt].[dbo].[ComponentsSnapShot] WHERE LineCode = @lineCode ORDER BY UtcTimeStamp DESC)) AS [SeqSnapshotID]", new { lineCode, partNo }).ConfigureAwait(false);
+
     }
 }

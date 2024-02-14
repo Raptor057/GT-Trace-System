@@ -3,6 +3,10 @@
 
   export let materialReturnModeIsEnabled = false;
   export let curTime = new Date();
+  export let SnapShotID;
+
+  //  <span>SnapShot ID</span>
+//  <strong>{SnapShotID || "?"} </strong>
 
   onMount(async () => setInterval(async () => (curTime = new Date()), 500));
 </script>
@@ -12,6 +16,7 @@
     <input type="checkbox" bind:checked={materialReturnModeIsEnabled} />
     Retornar material.
   </label>
+  <span class="SnapShot">{SnapShotID || "?"} </span>
   <span class="cur-time">{curTime.toLocaleString()}</span>
 </div>
 
@@ -27,10 +32,14 @@
     padding: 0 0.25em;
     position: absolute;
     right: 0;
+    > span.SnapShot {
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 80em;
+    }
     > span.cur-time {
       float: right;
     }
-
     > label.material-return-checkbox {
       cursor: pointer;
       display: inline-block;

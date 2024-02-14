@@ -11,11 +11,19 @@ namespace GT.Trace.BomSnapShot.Infra.Gateways
         {
             _gtt=gtt;
         }
-        async Task<long> IGetSeqSnapshotIDGateways.GetSeqSnapshotIDByLineCodeandPartNo(string lineCode, string partNo)
+
+        public async Task<string> GetSeqSnapshotIDByLineCodeandPartNo(string lineCode, string partNo)
         {
             var GetSeqSnapshotID = await _gtt.GetSeqSnapshotIDByLineCodeandPartNoAsync(lineCode, partNo).ConfigureAwait(false);
 
             return GetSeqSnapshotID;
         }
+
+        //async Task<long> IGetSeqSnapshotIDGateways.GetSeqSnapshotIDByLineCodeandPartNo(string lineCode, string partNo)
+        //{
+        //    var GetSeqSnapshotID = await _gtt.GetSeqSnapshotIDByLineCodeandPartNoAsync(lineCode, partNo).ConfigureAwait(false);
+
+        //    return GetSeqSnapshotID;
+        //}
     }
 }

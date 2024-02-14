@@ -2,6 +2,6 @@
 {
     public interface IGetSeqSnapshotIDGateways
     {
-        Task<long> GetSeqSnapshotIDByLineCodeandPartNo(string lineCode, string partNo);
+        Task<string> GetSeqSnapshotIDByLineCodeandPartNo(string lineCode, string partNo);
     }
 }

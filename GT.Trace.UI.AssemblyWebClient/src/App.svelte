@@ -21,12 +21,12 @@ here it view the composition of the gamma or also named boom.
     ProcessHistoryApi,
     PackagingApi,
     EventsHistory,
-    BomSnapShot,
+    BomSnapShot
   } from "./utils/HttpRequests";
   import { intros } from "svelte/internal";
   export let lineCode = "";
   let production = {};
-
+  export let GetSnapShotID = null;
   //#region 
   //*Poka Yoke implemented to block the lines requested as a corrective action for 8D ACIN-2223-005.
 
@@ -79,6 +79,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
     .catch((error) => {
       pointsOfUse = [];
     });
+    
 };
 
 //#endregion
@@ -97,6 +98,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
           : item
       ),
     };
+    GetSnapShotIDByLine(lineCode, state.activePart.number); //Agregado para el ShapShotID
   };
 
   /*
@@ -239,8 +241,16 @@ In short, this function uses an API to look up the usage points of an ETI and ha
         .then((data) => (state = data))
         .catch(handleError);
       fetchCurrentHourProduction();
+      GetSnapShotIDByLine(lineCode, state.activePart.number); //Agregado para el ShapShotID
     }
   };
+
+  const GetSnapShotIDByLine = (lineCode, partNo) => {
+  BomSnapShot.GetSnapShotIDByLineCodeandPartNo(lineCode, partNo)
+    .then((data) => {
+    GetSnapShotID = data.seqSnapshots})
+    .catch(handleError);
+};
 
   /**
    * Prepare a timeout to update the line data after n seconds.
@@ -253,6 +263,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
       updateLineData(lineCode);
       timeoutHandle = null;
     }, seconds * 1000);
+    
   };
 
   /**
@@ -268,6 +279,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
     pointOfUse.load -= 1;
     window.setTimeout(() => updatePointOfUseInLineData(pointOfUse), 800);
     Animator.flipInX(pointOfUse);
+    GetSnapShotIDByLine(lineCode, state.activePart.number); //Agregado para el ShapShotID
   };
 
   /**
@@ -282,6 +294,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
     pointOfUse.load += 1;
     window.setTimeout(() => updatePointOfUseInLineData(pointOfUse), 150);
     Animator.bounceIn(pointOfUse);
+    GetSnapShotIDByLine(lineCode, state.activePart.number); //Agregado para el ShapShotID
   };
 
   /**
@@ -296,6 +309,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
     pointOfUse.load -= 1;
     window.setTimeout(() => updatePointOfUseInLineData(pointOfUse), 1000);
     Animator.bounceOutDown(pointOfUse);
+    GetSnapShotIDByLine(lineCode, state.activePart.number); //Agregado para el ShapShotID
   };
 
   /**
@@ -310,6 +324,7 @@ In short, this function uses an API to look up the usage points of an ETI and ha
     pointOfUse.activeEti.number = "";
     window.setTimeout(() => updatePointOfUseInLineData(pointOfUse), 1000);
     Animator.bounceOutDown(pointOfUse);
+    GetSnapShotIDByLine(lineCode, state.activePart.number); //Agregado para el ShapShotID
   };
 
   /**
@@ -319,8 +334,8 @@ In short, this function uses an API to look up the usage points of an ETI and ha
    */
   const handleUnitPacked = (e) => {
     console.debug("Unit Packed");
-
     fetchCurrentHourProduction();
+    GetSnapShotIDByLine(lineCode, state.activePart.number); //Agregado para el ShapShotID
   };
 
 /**
@@ -416,10 +431,14 @@ const handleAuthorization = (passwordResponse) => {
   btnUnlock={ButtonUnlockLine}
   btnPrintSubAssembly={PrintSubAssembly}
 />
+<!-- SnapShotID Nuevo -->
 
 <Gamma {lineCode} items={state.pointsOfUse} {materialReturnModeIsEnabled} />
 
-<AppFooter bind:materialReturnModeIsEnabled />
+<AppFooter 
+bind:materialReturnModeIsEnabled 
+SnapShotID={GetSnapShotID}
+/>
 
 <!-- $color: #ff3e00; -->
 <style lang="scss">

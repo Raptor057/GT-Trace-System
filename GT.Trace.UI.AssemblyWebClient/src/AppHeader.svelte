@@ -35,8 +35,7 @@
   <strong>
     {production.forecast} / {production.requirement}
     <i class={production.forecast < production.requirement ? "bad" : "good"} />
-  </strong>
-
+  </strong> 
   <!-- Aqui se habilita el boton de desbloqueo de linea -->
   <button id="btnUnlock" on:click={btnUnlock}>Desbloquear Linea Manualmente</button>
 
