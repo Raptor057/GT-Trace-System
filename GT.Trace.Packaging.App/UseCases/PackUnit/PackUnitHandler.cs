@@ -34,8 +34,9 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             long unitID;
 
             const string pattern = @"^.+\|.+\|(?<datetime>.+)\|(?<serial>.{1,})$";
-            const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\w+)\s+(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)\s*$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
+            //const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\w+)\s+(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)\s*$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
             //
+            const string pattern2 = @"^\s*(?<modelo>\d+)\s+(?<rev>\w)\s+(?<fecha>\d{4}-\d{2}-\d{2})\s+(?<hora>\d{2}:\d{2}:\d{2})\s+(?<volt>\d+\.\d+[A-Za-z])\s+(?<rpm>\d+)\s+(?<serial>\d+)\s*$"; // RA 02/22/2024: Esto se agrego para leer el QR de motores de las lineas MW Y MX Rev.2
             var match = Regex.Match(request.ScannerInput ?? "", pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
             var match2 = Regex.Match(request.ScannerInput ?? "", pattern2, RegexOptions.Singleline | RegexOptions.IgnoreCase); // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
             if (match.Success)
@@ -53,13 +54,22 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             #region RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
             else if (match2.Success)
             {
-                string volt = match2.Groups[1].Value;
-                string rpm = match2.Groups[2].Value;
-                string modelo = match2.Groups[3].Value;
-                string rev = match2.Groups[4].Value;
-                string fechaStr = match2.Groups[5].Value;
-                string horaStr = match2.Groups[6].Value;
-                string serialCode = match2.Groups[7].Value;
+                //string volt = match2.Groups[1].Value;
+                //string rpm = match2.Groups[2].Value;
+                //string modelo = match2.Groups[3].Value;
+                //string rev = match2.Groups[4].Value;
+                //string fechaStr = match2.Groups[5].Value;
+                //string horaStr = match2.Groups[6].Value;
+                //string serialCode = match2.Groups[7].Value;
+
+                string modelo = match.Groups["modelo"].Value;
+                string rev = match.Groups["rev"].Value;
+                string fechaStr = match.Groups["fecha"].Value;
+                string horaStr = match.Groups["hora"].Value;
+                string volt = match.Groups["amperes"].Value;
+                string rpm = match.Groups["rpm"].Value;
+                string serialCode = match.Groups["serial"].Value;
+
 
                 // Convertir fecha y hora a objetos DateTime
                 DateTime fecha = DateTime.ParseExact(fechaStr, "yyyy-MM-dd", null);
