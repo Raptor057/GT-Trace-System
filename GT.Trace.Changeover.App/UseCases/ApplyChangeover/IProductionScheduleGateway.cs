@@ -7,5 +7,8 @@
         El método no devuelve nada, ya que su función es simplemente actualizar la programación de producción. Si se produce algún error durante la actualización, la implementación de la clase que implemente esta interfaz deberá manejarlo adecuadamente.
         Es importante destacar que esta interfaz es utilizada en la clase ApplyChangeoverHandler para actualizar la programación de producción después de que se haya aplicado un cambio de modelo en una línea de producción específica.*/
         Task UpdateProductionSchedule(string lineCode, string partNo, string revision, string workOrderCode);
+
+        //Agregado para corregir el BUG que no se actualiza la tabla LineProductionSchedule al aplicar cambio de modelo en cualquier linea
+        Task<bool> FindLineModelCapabilitiesAsync(string lineCode, string partNo);
     }
 }

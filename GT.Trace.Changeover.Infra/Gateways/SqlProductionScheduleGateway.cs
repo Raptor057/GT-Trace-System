@@ -12,6 +12,13 @@ namespace GT.Trace.Changeover.Infra.Gateways
             _productionSchedule = productionSchedule;
         }
 
+        //Agregado para corregir el BUG que no se actualiza la tabla LineProductionSchedule al aplicar cambio de modelo en cualquier linea
+        public async Task<bool> FindLineModelCapabilitiesAsync(string lineCode, string partNo)
+        {
+         var LineModelCapabilities = await _productionSchedule.FindLineModelCapabilities(lineCode, partNo) > 0;
+         return LineModelCapabilities;
+        }
+
         public async Task UpdateProductionSchedule(string lineCode, string partNo, string revision, string workOrderCode)
         {
             await _productionSchedule.ExpireProductionSchedule(lineCode).ConfigureAwait(false);

@@ -25,8 +25,8 @@ namespace GT.Trace.Changeover.Infra.Daos
 
         public async Task<IEnumerable<Entities.bom>> GetComponentDifferences(string ogPartNo, string ogRevision, string icPartNo, string icRevision) =>
             await Connection.QueryAsync<Entities.bom>(@"SELECT CompNo, CompRev2, PointOfUse FROM cegid.ufn_bom(@ogPartNo, @ogRevision)
-EXCEPT
-SELECT CompNo, CompRev2, PointOfUse FROM cegid.ufn_bom(@icPartNo, @icRevision)", new { ogPartNo, icPartNo, ogRevision, icRevision }).ConfigureAwait(false);
+            EXCEPT
+            SELECT CompNo, CompRev2, PointOfUse FROM cegid.ufn_bom(@icPartNo, @icRevision)", new { ogPartNo, icPartNo, ogRevision, icRevision }).ConfigureAwait(false);
     }
 
 

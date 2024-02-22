@@ -60,7 +60,14 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
                 return new ChangeoverNotRequiredResponse(line.Code);
             }
 
-            if(line.Code != "LN")
+            //Agregado para corregir el BUG que no se actualiza la tabla LineProductionSchedule al aplicar cambio de modelo en cualquier linea
+            var CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
+            if (!CountFindLineModelCapabilitiesAsync)
+            {
+                return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! no se encontro compatibilidad en la tabla [LineModelCapabilities] en GTT para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} comunicate con el supervisor de linea / ingeniero de mejora continua / ingeniero programador");
+            }
+
+            if (line.Code != "LN")
             {
                 //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
                 //RA: 07/05/2023.

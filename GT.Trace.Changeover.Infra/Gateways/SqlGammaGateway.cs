@@ -17,7 +17,7 @@ namespace GT.Trace.Changeover.Infra.Gateways
         //RA: 07/05/2023.
         public async Task<bool> GammaDataAsync(string partNo, string lineCode)
         {
-            var BoomCountResultGammaData = await _gamma.GammaDataAsync(partNo, lineCode).ConfigureAwait(false) >0;
+            var BoomCountResultGammaData = await _gamma.GammaDataAsync(partNo, lineCode).ConfigureAwait(false) > 0;
             return BoomCountResultGammaData;
         }
 
