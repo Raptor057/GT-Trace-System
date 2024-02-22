@@ -9,11 +9,24 @@ namespace GT.Trace.EtiMovements.Infra.Daos
             : base(connection)
         { }
 
+        /// <summary>
+        /// Original
+        /// </summary>
+        /// <param name="pointOfUseCode"></param>
+        /// <param name="componentNo"></param>
+        /// <returns></returns>
+//        public async Task<int> CountLinesSharingPointOfUseAsync(string pointOfUseCode, string componentNo) =>
+//            await Connection.ExecuteScalarAsync<int>(@"SELECT COUNT(*) FROM dbo.LineProductionSchedule s
+//JOIN dbo.LineGamma g
+//    ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo
+//WHERE s.UtcExpirationTime >= '2099-12-31 23:59:59.997';", new { pointOfUseCode, componentNo }).ConfigureAwait(false);
+
+        
         public async Task<int> CountLinesSharingPointOfUseAsync(string pointOfUseCode, string componentNo) =>
-            await Connection.ExecuteScalarAsync<int>(@"SELECT COUNT(*) FROM dbo.LineProductionSchedule s
+    await Connection.ExecuteScalarAsync<int>(@"SELECT COUNT(*) FROM dbo.LineProductionSchedule s
 JOIN dbo.LineGamma g
     ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo
-WHERE s.UtcExpirationTime >= '2099-12-31 23:59:59.997';", new { pointOfUseCode, componentNo }).ConfigureAwait(false);
+WHERE s.UtcExpirationTime > GETUTCDATE();", new { pointOfUseCode, componentNo }).ConfigureAwait(false);
 
         public async Task<int> AddAsync(PointOfUseEtis movement)
         {

@@ -101,7 +101,8 @@ namespace GT.Trace.Packaging.Infra.DataSources
         //agregado para "Corregir" problema de 2 ordenes activas en una misma linea RA: 06/15/2023
         //Se corrigio este bug con el metodo Updateproductionscheduling, cuando hay 2 ordenes activas en automatico quita la orden repetida y deja la que deberia de estar activa en GT-APP
         public async Task<int> CountProductionScheduleAsync(string lineCode) =>
-                        await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @lineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
+                                    await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @lineCode AND UtcExpirationTime >= GETUTCDATE()",
+            //await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @lineCode AND UtcExpirationTime >= '2099-12-31 23:59:00.000'",
             //await _con.ExecuteScalarAsync<int>("SELECT COUNT(WorkOrderCode) AS [CountWorkOrderCode] FROM LineProductionSchedule WHERE LineCode = @LineCode AND UtcExpirationTime >= GETUTCDATE();" +
             //    "UPDATE LineProductionSchedule SET UtcExpirationTime = GETUTCDATE() WHERE LineCode = @LineCode AND UtcExpirationTime >= GETUTCDATE() AND WorkOrderCode != @workOrderCode;",
             new { lineCode }).ConfigureAwait(false);
