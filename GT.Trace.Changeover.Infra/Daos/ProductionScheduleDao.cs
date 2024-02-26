@@ -21,6 +21,11 @@ namespace GT.Trace.Changeover.Infra.Daos
             await Connection.QueryFirstAsync<int>("SELECT COUNT([PartNo]) AS [COUNT] FROM [gtt].[dbo].[LineModelCapabilities] WHERE LineCode = @lineCode AND PartNo = @partNo;", 
                 new { lineCode, partNo }).ConfigureAwait(false);
 
+        //Agregado para completar la info de la tabla LineModelCapabilities
+        public async Task InsertModelCapabilities(string lineCode, string partNo) =>
+            await Connection.ExecuteAsync("INSERT INTO LineModelCapabilities (PartNo,HourlyRate,LineCode)" +
+                "SELECT TOP 1 [PartNo],[HourlyRate],@lineCode FROM [gtt].[dbo].[LineModelCapabilities] WHERE PartNo = @partNo ORDER BY LineCode ASC", new { lineCode, partNo });
+
         //TODO: Aqui hay que ver como solucionar esto, ya que no siempre se guardan en la tabla las ordenes, y eso hace que se pierda la trazabilidad
         //BUG: En este metodo hay un Bug explicado en el TODO
         public async Task<int> ActivateProductionSchedule(string lineCode, string partNo, string workOrderCode, string revision) =>

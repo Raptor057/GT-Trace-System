@@ -10,5 +10,7 @@
 
         //Agregado para corregir el BUG que no se actualiza la tabla LineProductionSchedule al aplicar cambio de modelo en cualquier linea
         Task<bool> FindLineModelCapabilitiesAsync(string lineCode, string partNo);
+
+        Task InsertModelCapabilitiesAsync(string lineCode, string partNo);
     }
 }

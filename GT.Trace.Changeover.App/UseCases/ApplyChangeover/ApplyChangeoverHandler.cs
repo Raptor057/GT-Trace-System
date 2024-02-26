@@ -64,7 +64,8 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
             var CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
             if (!CountFindLineModelCapabilitiesAsync)
             {
-                return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! no se encontro compatibilidad en la tabla [LineModelCapabilities] en GTT para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} comunicate con el supervisor de linea / ingeniero de mejora continua / ingeniero programador");
+                await _productionSchedule.InsertModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait (false);
+                return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! no se encontro compatibilidad en la tabla [LineModelCapabilities] en GTT para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} !!!REINICIA ESTA PANTALLA PARA INTENTAR SOLUCIONAR ESTE PROBLEMA!!!, si no se soluciona comunicate con el supervisor de linea / ingeniero de mejora continua / ingeniero programador");
             }
 
             if (line.Code != "LN")

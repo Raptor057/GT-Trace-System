@@ -19,6 +19,12 @@ namespace GT.Trace.Changeover.Infra.Gateways
          return LineModelCapabilities;
         }
 
+        public async Task InsertModelCapabilitiesAsync(string lineCode, string partNo)
+        {
+
+            await _productionSchedule.InsertModelCapabilities(lineCode, partNo).ConfigureAwait(false);
+        }
+
         public async Task UpdateProductionSchedule(string lineCode, string partNo, string revision, string workOrderCode)
         {
             await _productionSchedule.ExpireProductionSchedule(lineCode).ConfigureAwait(false);
