@@ -1,6 +1,8 @@
 ﻿using GT.Trace.Common.CleanArch;
 using GT.Trace.Packaging.App.Services;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
+using System.Runtime.Intrinsics.Arm;
 
 namespace GT.Trace.Packaging.App.UseCases.SaveEzMotors
 {
@@ -28,19 +30,21 @@ namespace GT.Trace.Packaging.App.UseCases.SaveEzMotors
                     string model = request.Model;
                     string serialNumber = label.Motor_number;
                     string lineCode = request.LineCode;
-                    bool GetEzMotors = await _gateway.GetEzMotorsDataAsync(model,serialNumber, lineCode).ConfigureAwait(false);
+                    DateTime MotorDateTime = DateTime.ParseExact($"{label.Date} {label.Time}", "yyyy-M-d HH:mm", CultureInfo.InvariantCulture);
+                    bool GetEzMotors = await _gateway.GetEzMotorsDataAsync(model,serialNumber, lineCode, MotorDateTime).ConfigureAwait(false);
 
                     if (!GetEzMotors)
                     {
-                        var pignon = await _gateway.GetPignonByPartNoAsync(model).ConfigureAwait(false);
-                        var motor = await _gateway.GetMotorByPartNoAsync(model).ConfigureAwait (false);
-                        await _gateway.AddEZMotorsDataAsync(model, serialNumber, lineCode,pignon,motor).ConfigureAwait(false);
+                        var pignon = await _gateway.GetPignonByPartNoAsync(model, lineCode).ConfigureAwait(false);
+                        var motor = await _gateway.GetMotorByPartNoAsync(model, lineCode).ConfigureAwait (false);
+                        await _gateway.AddEZMotorsDataAsync(model, serialNumber, label.No_Load_Current, label.No_Load_Speed, MotorDateTime, label.Rev, lineCode, pignon, motor).ConfigureAwait(false);
+                        //await _gateway.AddEZMotorsDataAsync(model, serialNumber, lineCode,pignon,motor).ConfigureAwait(false);
+                        // model, serialNumber, Volt, RPM, DateTimeMotor, Rev, lineCode, pinionPartNum, motorPartNum
                         return new SaveEzMotorsSuccess($"Datos del motor {serialNumber} registrados con exito del modelo {model} para la linea {lineCode}.");
                     }
                     else
                     {
                         return new SaveEzMotorsFailure($"Error el motor {serialNumber} ya ha sido registrado anteriormente en esta linea");
-                        
                     }
                 }
                 else

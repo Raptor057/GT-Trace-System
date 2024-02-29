@@ -17,18 +17,18 @@ namespace GT.Trace.Packaging.Infra.Gateways
         }
 
 
-        public async Task AddEZMotorsDataAsync(string model, string serialNumber, string lineCode, string pinionPartNum, string motorPartNum) =>
-            await _gtt.AddEZMotorsData(model, serialNumber, lineCode,pinionPartNum,motorPartNum);
+        public async Task AddEZMotorsDataAsync(string model, string serialNumber, string Volt, string RPM, DateTime DateTimeMotor, string Rev, string lineCode, string pinionPartNum, string motorPartNum) =>
+            await _gtt.AddEZMotorsData(model, serialNumber, Volt, RPM, DateTimeMotor, Rev, lineCode, pinionPartNum, motorPartNum);
 
-        public async Task<bool> GetEzMotorsDataAsync(string model, string serialNumber, string lineCode)
+        public async Task<bool> GetEzMotorsDataAsync(string model, string serialNumber, string lineCode, DateTime DateTimeMotor)
         {
-            return await _gtt.GetEzMotorsData(model, serialNumber, lineCode) > 0;
+            return await _gtt.GetEzMotorsData(model, serialNumber, lineCode, DateTimeMotor) > 0;
         }
 
-        public async Task<string> GetMotorByPartNoAsync(string partno)=>
-            await _traza.GetMotor(partno);
+        public async Task<string> GetMotorByPartNoAsync(string partno,string lineCode) =>
+            await _traza.GetMotor(partno, lineCode);
 
-        public async Task<string> GetPignonByPartNoAsync(string partno) =>
-            await _traza.GetPignon(partno);
+        public async Task<string> GetPignonByPartNoAsync(string partno, string lineCode) =>
+            await _traza.GetPignon(partno,lineCode);
     }
 }

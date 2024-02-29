@@ -1,4 +1,5 @@
 ﻿using GT.Trace.Packaging.Infra.DataSources.Entities;
+using MediatR.NotificationPublishers;
 
 namespace GT.Trace.Packaging.Infra.DataSources
 {
@@ -84,18 +85,10 @@ namespace GT.Trace.Packaging.Infra.DataSources
         internal async Task<IEnumerable<LineRouting>> GetLineRoutingByLineCode(string lineCode) =>
             await _con.QueryAsync<LineRouting>("SELECT * FROM LineRouting WHERE LineCode=@lineCode;", new { lineCode }).ConfigureAwait(false);
 
-        //Esto es nuevo para la trazabilidad
-        //Actualmente esto nunca se uso pero lo dejare por si acaso. RA: 5/22/2023
-        //public async Task AddTracedUnitAsync(long unitID, string partNo, string lineCode, string workOrderCode) =>
-        //    await _con.ExecuteAsync("EXEC UpsInsertProductionTraceability @unitID, @partNo, @lineCode, @workOrderCode;", new { unitID, partNo , lineCode, workOrderCode }).ConfigureAwait(false);
-
-
         //Se agrego para obtener el ultimo mensaje de la linea, se piensa usar para el bloqueo de linea, que de la info y se imprima en la pantalla
         public async Task<string> GetMessageFromAssembly(string linecode) =>
             await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where " +
                 "ClientMessage like ('%corresponde con ningún punto de uso para la gama%') and LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
-        //public async Task<string> GetMessageFromAssembly(string linecode) =>
-        //    await _con.ExecuteScalarAsync<string>("SELECT top 1 ClientMessage FROM [gtt].[dbo].[EventsHistory] where LineCode = @linecode order BY UtcTimeStamp desc", new { linecode }).ConfigureAwait(false);
 
         #region Correccion de BUG
         //agregado para "Corregir" problema de 2 ordenes activas en una misma linea RA: 06/15/2023
@@ -123,30 +116,39 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.ExecuteScalarAsync<string>("INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[LineCode])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);", 
                 new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode }).ConfigureAwait(false);
 
-       
-
-        ////Agregado para evitar que las lineas inicien si el numero de componentes de las gamas en cegid y en trazab no coinciden
-        //public async Task<bool> CountComponentsBomAsync(string partNo, string linecode)=>
-        //    //await _con.ExecuteScalarAsync<bool>("SELECT dbo.CountComponentsBom(@partNo, @linecode) AS [CountComponentsBom];" se comento esto para dejarlo de usar ya que la consulta de abajo es mejor RA: 07/05/2023
-        //    await _con.ExecuteScalarAsync<bool>("SELECT dbo.UfnGetDifferenceCountDataBoom(@partNo, @linecode) AS [CountComponentsBom];"
-        //        , new { partNo, linecode}).ConfigureAwait(false);
-
         //Agregado para EZ Join RA: 6/28/2023
         
         public async Task<int> EZRegisteredInformation(long unitID, string Date1, string Time1, string Motor_Number1, string Date2, string Time2, string Motor_Number2)=>
-            await _con.ExecuteScalarAsync<int>("SELECT CASE WHEN (SELECT COUNT(UnitID) FROM EZ2000Motors WHERE UnitID = @UnitID AND isEnable = 1 OR [Date] = @Date1 AND [Time] = @Time1 AND Motor_number = @Motor_Number1 AND isEnable = 1 OR [Date] = @Date2 AND [Time] = @Time2 AND Motor_number = @Motor_Number2 AND isEnable = 1) > 0 THEN 1 ELSE 0 END AS Result"
+            await _con.QuerySingleAsync<int>("SELECT CASE WHEN (SELECT COUNT(UnitID) FROM EZ2000Motors WHERE UnitID = @UnitID AND isEnable = 1 OR [Date] = @Date1 AND [Time] = @Time1 AND Motor_number = @Motor_Number1 AND isEnable = 1 OR [Date] = @Date2 AND [Time] = @Time2 AND Motor_number = @Motor_Number2 AND isEnable = 1) > 0 THEN 1 ELSE 0 END AS Result"
                 , new { unitID,Date1,Time1,Motor_Number1, Date2, Time2, Motor_Number2 }).ConfigureAwait(false);
+
+        public async Task<int> EZMotorDataRegisteredInformation(string Motor_Number, DateTime DateTimeMotor) =>
+            await _con.QuerySingleAsync<int>("SELECT Result FROM dbo.UfnEnginePinionSubassemblyRatioCompatibility(@Motor_Number, @DateTimeMotor);",
+                new { Motor_Number,DateTimeMotor}).ConfigureAwait(false);
+
+        public async Task<int> EZRegisteredInformation(string Motor_Number, DateTime DateTimeMotor)=> //Pokayoke agregado el 2/28/2024
+            await _con.QuerySingleAsync<int>("SELECT COUNT(ID) AS [Motor] FROM [gtt].[dbo].[MotorsData] WHERE DateTimeMotor is not null AND DateTimeMotor = @DateTimeMotor AND SerialNumber = @Motor_Number;", 
+                new { Motor_Number, DateTimeMotor }).ConfigureAwait(false);
+        
         public async Task AddEZJoinMotors(long unitID, string Web1, string Current1, string Speed1, string Date1, string Time1, string Motor_Number1, string PN1, string AEM1, string Rev1, string Web2, string Current2, string Speed2, string Date2, string Time2, string Motor_Number2, string PN2, string AEM2, string Rev2) =>
            await _con.ExecuteAsync("INSERT INTO [dbo].[EZ2000Motors]([UnitID],[Website],[No_Load_Current],[No_Load_Speed],[Date],[Time],[Motor_number],[PN],[AEM],[Rev])VALUES(@unitID,@Web1,@Current1,@Speed1,@Date1,@Time1,@Motor_Number1,@PN1,@AEM1,@Rev1),(@unitID,@Web2,@Current2,@Speed2,@Date2,@Time2,@Motor_Number2,@PN2,@AEM2,@Rev2)",
                new { unitID, Web1, Current1, Speed1, Date1, Time1, Motor_Number1,PN1,AEM1,Rev1, Web2, Current2, Speed2, Date2,Time2,Motor_Number2,PN2,AEM2,Rev2}).ConfigureAwait(false);
 
+        public async Task AddEZJoinMotors(long unitID, string Web, string Current, string Speed, string Date, string Time, string Motor_Number, string PN, string AEM, string Rev) =>
+            await _con.ExecuteAsync("INSERT INTO [dbo].[EZ2000Motors]([UnitID],[Website],[No_Load_Current],[No_Load_Speed],[Date],[Time],[Motor_number],[PN],[AEM],[Rev])VALUES(@unitID,@Web,@Current,@Speed,@Date,@Time,@Motor_Number,@PN,@AEM,@Rev)",
+                new { unitID, Web, Current, Speed, Date, Time, Motor_Number, PN, AEM, Rev }).ConfigureAwait(false);
+
         public async Task DelJoinEZMotors(long unitID)=>
-            await _con.ExecuteAsync("UPDATE EZ2000Motors SET isEnable = 0 WHERE UnitID = @unitID", new { unitID }).ConfigureAwait(false);
+            await _con.ExecuteAsync("UPDATE EZ2000Motors SET isEnable = 0 WHERE UnitID = @unitID", 
+                new { unitID }).ConfigureAwait(false);
 
         public async Task AddPalletQR(long UnitID, string PalletID, string LineCode)
-            => await _con.ExecuteAsync("INSERT INTO [dbo].[LinePallet]([UnitID],[PalletID],[LineCode])VALUES(@UnitID,@PalletID,@LineCode)",new {UnitID,PalletID,LineCode}).ConfigureAwait(false);
+            => await _con.ExecuteAsync("INSERT INTO [dbo].[LinePallet]([UnitID],[PalletID],[LineCode])VALUES(@UnitID,@PalletID,@LineCode)",
+                new {UnitID,PalletID,LineCode}).ConfigureAwait(false);
+
         public async Task<int> PalletRegisteredInformation(long UnitID)=>
-            await _con.ExecuteScalarAsync<int>("SELECT COUNT([UnitID]) FROM [gtt].[dbo].[LinePallet] WHERE UnitID = @UnitID", new {UnitID}).ConfigureAwait(false);
+            await _con.ExecuteScalarAsync<int>("SELECT COUNT([UnitID]) FROM [gtt].[dbo].[LinePallet] WHERE UnitID = @UnitID",
+                new {UnitID}).ConfigureAwait(false);
         #endregion
 
         //Agregado para LP + Frameless Join RA: 6/23/2023
@@ -175,14 +177,17 @@ namespace GT.Trace.Packaging.Infra.DataSources
 
         #region Piñones Motores EZ
 
-        public async Task AddEZMotorsData(string model, string serialNumber, string lineCode, string pinionPartNum,string motorPartNum)
+        public async Task AddEZMotorsData(string model, string serialNumber, string Volt, string RPM, DateTime DateTimeMotor, string Rev, string lineCode, string pinionPartNum,string motorPartNum)
         {
-            await _con.ExecuteAsync("INSERT INTO MotorsData (Modelo,SerialNumber,LineCode,PinionPartNum,MotorPartNum) VALUES (@model,@serialNumber,@lineCode,@pinionPartNum,@motorPartNum)", new {model,serialNumber, lineCode,pinionPartNum,motorPartNum}).ConfigureAwait(false);
+            //await _con.ExecuteAsync("INSERT INTO MotorsData (Modelo,SerialNumber,LineCode,PinionPartNum,MotorPartNum) VALUES (@model,@serialNumber,@lineCode,@pinionPartNum,@motorPartNum)", new {model,serialNumber, lineCode,pinionPartNum,motorPartNum}).ConfigureAwait(false);
+            await _con.ExecuteAsync("INSERT INTO [gtt].[dbo].[MotorsData] ([Modelo],[SerialNumber],[Volt],[RPM],[DateTimeMotor],[Rev],[LineCode],[PinionPartNum],[MotorPartNum]) " +
+                "VALUES (@model,@serialNumber,@Volt,@RPM,@DateTimeMotor,@Rev,@lineCode,@pinionPartNum,@motorPartNum);", 
+                new { model, serialNumber, Volt, RPM, DateTimeMotor, Rev, lineCode, pinionPartNum, motorPartNum }).ConfigureAwait(false);
             //INSERT INTO MotorsData (Modelo,SerialNumber,LineCode) VALUES (@model,@serialNumber,@lineCode)
         }
-        public async Task<int> GetEzMotorsData(string model, string serialNumber, string lineCode)
+        public async Task<int> GetEzMotorsData(string model, string serialNumber, string lineCode, DateTime DateTimeMotor)
         {
-            return await _con.QuerySingleAsync<int>("SELECT COUNT([ID]) FROM [gtt].[dbo].[MotorsData] WHERE Modelo = @model AND SerialNumber = @serialNumber AND LineCode = @lineCode", new { model, serialNumber,lineCode});
+            return await _con.QuerySingleAsync<int>("SELECT COUNT([ID]) FROM [gtt].[dbo].[MotorsData] WHERE Modelo = @model AND SerialNumber = @serialNumber AND LineCode = @lineCode AND DateTimeMotor = @DateTimeMotor", new { model, serialNumber,lineCode, DateTimeMotor });
         }
 
         #endregion

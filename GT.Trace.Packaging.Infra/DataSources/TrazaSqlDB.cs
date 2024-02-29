@@ -162,11 +162,11 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
         //        , new { partNo, linecode }).ConfigureAwait(false);
 
         #region PIGNON EZ
-        public async Task<string> GetPignon(string partNo)=>
-            await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [PIGNON] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND ARCTLIB01 LIKE ('%PIGNON%')--PIGNON", new { partNo}).ConfigureAwait(false);
-        
-        public async Task<string> GetMotor(string partNo)=>
-            await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [MOTOR] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND ARCTLIB01 LIKE ('%MOTOR%')--MOTOR", new {partNo}).ConfigureAwait(false);
+        public async Task<string> GetPignon(string partNo , string lineCode) =>
+            //await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [PIGNON] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND ARCTLIB01 LIKE ('%PIGNON%')--PIGNON", new { partNo}).ConfigureAwait(false);
+            await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [PIGNON] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND RTRIM(NOKTCOMPF) = @lineCode AND RTRIM(ARCTLIB01) LIKE ('%Z15%') --PIGNON", new { partNo, lineCode }).ConfigureAwait(false);
+        public async Task<string> GetMotor(string partNo, string lineCode) =>
+            await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [MOTOR] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND RTRIM(NOKTCOMPF) = @lineCode AND RTRIM(ARCTLIB01) LIKE ('%BL%') --MOTOR", new {partNo, lineCode }).ConfigureAwait(false);
         #endregion
     }
 }
