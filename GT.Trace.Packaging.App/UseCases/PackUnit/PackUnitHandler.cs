@@ -2,9 +2,12 @@
 using GT.Trace.Packaging.App.Dtos;
 using GT.Trace.Packaging.App.Services;
 using GT.Trace.Packaging.App.UseCases.PackUnit.Responses;
+using GT.Trace.Packaging.App.UseCases.SaveEzMotors;
 using GT.Trace.Packaging.Domain.Entities;
 using GT.Trace.Packaging.Domain.Repositories;
 using System.Globalization;
+using System.Reflection;
+using System.Runtime.Intrinsics.Arm;
 using System.Text.RegularExpressions;
 
 namespace GT.Trace.Packaging.App.UseCases.PackUnit
@@ -17,11 +20,14 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
 
         private readonly IUnitRepository _units;
 
-        public PackUnitHandler(ILabelParserService labelParser, IStationRepository stations, IUnitRepository units)
+        private readonly ISaveEzMotorsGateway _SaveEzMotors;
+
+        public PackUnitHandler(ILabelParserService labelParser, IStationRepository stations, IUnitRepository units, ISaveEzMotorsGateway SaveEzMotors)
         {
             _labelParser = labelParser;
             _stations = stations;
             _units = units;
+            _SaveEzMotors = SaveEzMotors;
         }
 
         public async Task<PackUnitResponse> Handle(PackUnitRequest request, CancellationToken cancellationToken)
@@ -35,6 +41,8 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             long unitID;
 
             const string pattern = @"^.+\|.+\|(?<datetime>.+)\|(?<serial>.{1,})$";
+            
+
             //const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\w+)\s+(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)\s*$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
             const string pattern2 = @"^\s*(\d+)\s+(\w)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+\.\d+[A-Za-z])\s+(\d+)\s+(\d+)\s*$"; // RA 02/22/2024: Esto se agrego para leer el QR de motores de las lineas MW Y MX Rev.2
             //const string pattern2 = @"^\s*(?<modelo>\d+)\s+(?<rev>\w)\s+(?<fecha>\d{4}-\d{2}-\d{2})\s+(?<hora>\d{2}:\d{2}:\d{2})\s+(?<volt>\d+\.\d+[A-Za-z])\s+(?<rpm>\d+)\s+(?<serial>\d+)\s*$"; // RA 02/22/2024: Esto se agrego para leer el QR de motores de las lineas MW Y MX Rev.2
@@ -84,6 +92,32 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 }
                 else unitID = id.Value;
 
+            }
+            else if (_labelParser.TryParseEZMotorsFormat(request.ScannerInput ?? "", out var labeldata) && labeldata != null)
+            {
+                // Convertir fecha y hora a objetos DateTime
+                DateTime fecha = DateTime.ParseExact(labeldata.Date, "yyyy-MM-dd", null);
+                DateTime hora = DateTime.ParseExact(labeldata.Time, "HH:mm", null);
+                DateTime MotorDateTime = DateTime.ParseExact($"{labeldata.Date} {labeldata.Time}", "yyyy-M-d HH:mm", CultureInfo.InvariantCulture);
+                // Combinar fecha y hora en un solo objeto DateTime
+                DateTime creationTime = fecha.Add(hora.TimeOfDay);
+                //convina fecha y hora con serial para sacar un valor unico.
+                var serialCode = $"{labeldata.Motor_number} {labeldata.Date} {labeldata.Time}";
+
+                var id = await _units.GetUnitIDBySerialCodeAsync(serialCode).ConfigureAwait(false);
+                if (!id.HasValue)
+                {
+                    unitID = await _units.AddUnitAsync(station.Line.Code, 0, serialCode, creationTime).ConfigureAwait(false);
+                }
+                else 
+                {
+                    unitID = id.Value;
+                    ProTmsLineSerial? LineSerial = await _units.GetLineAndSerialByIDAsync(id.Value).ConfigureAwait(false);
+                    var pignon = await _SaveEzMotors.GetPignonByPartNoAsync(LineSerial.Serial.Trim(), LineSerial.Line.Trim()).ConfigureAwait(false);
+                    var motor = await _SaveEzMotors.GetMotorByPartNoAsync(LineSerial.Serial.Trim(), LineSerial.Line.Trim()).ConfigureAwait(false);
+                    await _SaveEzMotors.AddEZMotorsDataAsync(LineSerial.Serial.Trim(), labeldata.Motor_number, labeldata.No_Load_Current, labeldata.No_Load_Speed, MotorDateTime, labeldata.Rev, LineSerial.Line.Trim(), pignon, motor).ConfigureAwait(false);
+                }
+                
             }
             #endregion
             else

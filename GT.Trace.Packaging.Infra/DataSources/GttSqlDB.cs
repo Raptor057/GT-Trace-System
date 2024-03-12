@@ -130,6 +130,11 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.QuerySingleAsync<int>("SELECT COUNT(ID) AS [Motor] FROM [gtt].[dbo].[MotorsData] WHERE DateTimeMotor is not null AND DateTimeMotor = @DateTimeMotor AND SerialNumber = @Motor_Number;", 
                 new { Motor_Number, DateTimeMotor }).ConfigureAwait(false);
         
+        //NOTE: CAMBIAR ESTO DE AQUI A LA DB APPS PARA OPTIMIZAR ESTE PEDO 03/04/2024
+        public async Task<string> GetEZModel()=>
+            await _con.QuerySingleAsync<string>("SELECT TOP (1) RTRIM([part_number]) FROM [MXSRVTRACA].[APPS].[dbo].[pro_production] WHERE is_stoped = 0 AND is_running = 1 and is_finished = 0 AND id_line = 5").ConfigureAwait(false);
+
+
         public async Task AddEZJoinMotors(long unitID, string Web1, string Current1, string Speed1, string Date1, string Time1, string Motor_Number1, string PN1, string AEM1, string Rev1, string Web2, string Current2, string Speed2, string Date2, string Time2, string Motor_Number2, string PN2, string AEM2, string Rev2) =>
            await _con.ExecuteAsync("INSERT INTO [dbo].[EZ2000Motors]([UnitID],[Website],[No_Load_Current],[No_Load_Speed],[Date],[Time],[Motor_number],[PN],[AEM],[Rev])VALUES(@unitID,@Web1,@Current1,@Speed1,@Date1,@Time1,@Motor_Number1,@PN1,@AEM1,@Rev1),(@unitID,@Web2,@Current2,@Speed2,@Date2,@Time2,@Motor_Number2,@PN2,@AEM2,@Rev2)",
                new { unitID, Web1, Current1, Speed1, Date1, Time1, Motor_Number1,PN1,AEM1,Rev1, Web2, Current2, Speed2, Date2,Time2,Motor_Number2,PN2,AEM2,Rev2}).ConfigureAwait(false);

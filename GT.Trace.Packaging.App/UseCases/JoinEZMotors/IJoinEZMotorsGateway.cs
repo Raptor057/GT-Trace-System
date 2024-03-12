@@ -12,5 +12,6 @@
         Task<int> EZRegisteredInformationAsync(long unitID, string Date1, string Time1, string Motor_Number1, string Date2, string Time2, string Motor_Number2);
         Task<int> EZRegisteredInformationAsync(string Motor_Number, DateTime DateTimeMotor);
         Task<int> EZMotorDataRegisteredInformationAsync(string Motor_Number, DateTime DateTimeMotor);
+        Task<string> GetEZModelAsync();
     }
 }

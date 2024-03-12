@@ -30,6 +30,7 @@ namespace GT.Trace.Packaging.Infra.Gateways
         public async Task<int> EZRegisteredInformationAsync(string Motor_Number, DateTime DateTimeMotor) => 
             await _gtt.EZRegisteredInformation(Motor_Number, DateTimeMotor);
 
-
+        public async Task<string> GetEZModelAsync()=>
+            await _gtt.GetEZModel().ConfigureAwait(false);
     }
 }

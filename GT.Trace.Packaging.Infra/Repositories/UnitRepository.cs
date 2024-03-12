@@ -80,5 +80,10 @@
         {
             await _gtt.AddMotorsData(serialCode,modelo,volt,rpm,dateTimeSerialCode,rev).ConfigureAwait(false);
         }
+
+        public async Task<ProTmsLineSerial?> GetLineAndSerialByIDAsync(long id)
+        {
+           return await _apps.GetLineAndSerialByID(id).ConfigureAwait(false);
+        }
     }
 }

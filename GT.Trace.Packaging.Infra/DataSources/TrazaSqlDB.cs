@@ -168,5 +168,9 @@ UPDATE APPS.dbo.pro_production SET current_qty = current_qty + 1 WHERE codew=@wo
         public async Task<string> GetMotor(string partNo, string lineCode) =>
             await _con.QueryFirstAsync<string>("SELECT TOP (1) RTRIM([NOCTCODECP]) AS [MOTOR] FROM [TRAZAB].[cegid].[bom] WHERE RTRIM(NOKTCODPF) = @partNo AND RTRIM(NOKTCOMPF) = @lineCode AND RTRIM(ARCTLIB01) LIKE ('%BL%') --MOTOR", new {partNo, lineCode }).ConfigureAwait(false);
         #endregion
+
+        //Se agrego para liberacion automatica de contenedor al momento de cambio de Orden del mismo modelo de X numero de parte
+        public async Task AutoQCAprovedAsync(string lineCode) =>
+        await _con.ExecuteAsync("EXECUTE [dbo].[usp_automatic_traceability_liberation_system] @lineCode", new { lineCode }).ConfigureAwait(false);
     }
 }

@@ -6,6 +6,8 @@
     {
         Task<Unit?> GetUnitByIDAsync(long id);
 
+        Task<ProTmsLineSerial?> GetLineAndSerialByIDAsync(long id);
+
         Task<long> AddUnitAsync(string lineCode, int position, string serialCode, DateTime creationTime);//NOTE: IMPORTANTE para motores lineas MW,MX
 
         Task AddMotorsDataAsync(string serialCode, string modelo, string volt, string rpm, DateTime dateTimeSerialCode, string rev);

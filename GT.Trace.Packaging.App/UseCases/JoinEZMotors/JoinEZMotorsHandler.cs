@@ -123,6 +123,15 @@ namespace GT.Trace.Packaging.App.UseCases.JoinEZMotors
                 DateTime MotorDateTime1 = DateTime.ParseExact($"{labeldata.Date} {labeldata.Time}", "yyyy-M-d HH:mm", CultureInfo.InvariantCulture);
                 DateTime MotorDateTime2 = DateTime.ParseExact($"{labeldata2.Date} {labeldata2.Time}", "yyyy-M-d HH:mm", CultureInfo.InvariantCulture);
                 var RegisteredInformation = await _gateway.EZRegisteredInformationAsync(label.UnitID, labeldata.Date, labeldata.Time, labeldata.Motor_number, labeldata2.Date, labeldata2.Time, labeldata2.Motor_number) > 0;
+                var ActiveEZModel = await _gateway.GetEZModelAsync().ConfigureAwait(false);
+
+                if (RegisteredInformation)
+                {
+                    return new JoinEZMotorsFailure($"Las Unidades {label.UnitID},{labeldata.Motor_number},{labeldata2.Motor_number} ya cuenta con un registro en esta estacion");
+                }
+
+                if (ActiveEZModel != "87254") //Esto fue agregado para el EZ22000
+                {
                 var MotorsData1 = await _gateway.EZRegisteredInformationAsync(labeldata.Motor_number, MotorDateTime1).ConfigureAwait(false) > 0;
                 var MotorsData2 = await _gateway.EZRegisteredInformationAsync(labeldata2.Motor_number, MotorDateTime2).ConfigureAwait(false) > 0;
 
@@ -135,24 +144,17 @@ namespace GT.Trace.Packaging.App.UseCases.JoinEZMotors
                 {
                     return new JoinEZMotorsFailure($"La Unidad {labeldata2.Motor_number} no cuenta con un registro de proceso previo en la tabla [gtt].[dbo].[MotorsData]");
                 }
-
-                if (RegisteredInformation)
-                {
-                    return new JoinEZMotorsFailure($"Las Unidades {label.UnitID},{labeldata.Motor_number},{labeldata2.Motor_number} ya cuenta con un registro en esta estacion");
+                    var Motors1Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata.Motor_number, MotorDateTime1).ConfigureAwait(false) > 0;
+                    var Motors2Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata2.Motor_number, MotorDateTime2).ConfigureAwait(false) > 0;
+                    if (!Motors1Pinions)
+                    {
+                        return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
+                    }
+                    if (!Motors2Pinions)
+                    {
+                        return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
+                    }
                 }
-
-                var Motors1Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata.Motor_number,MotorDateTime1).ConfigureAwait(false) > 0;
-                var Motors2Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata2.Motor_number, MotorDateTime2).ConfigureAwait(false) > 0;
-
-                if (!Motors1Pinions)
-                {
-                    return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
-                }
-                if (!Motors2Pinions)
-                {
-                    return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
-                }
-
                 await _gateway.AddJoinEZMotorsAsync(unitID, labeldata.Website, labeldata.No_Load_Current, labeldata.No_Load_Speed, labeldata.Date, labeldata.Time, labeldata.Motor_number, labeldata.PN, labeldata.AEM, labeldata.Rev);
                 await _gateway.AddJoinEZMotorsAsync(unitID,labeldata2.Website, labeldata2.No_Load_Current, labeldata2.No_Load_Speed, labeldata2.Date, labeldata2.Time, labeldata2.Motor_number, labeldata2.PN, labeldata2.AEM, labeldata2.Rev);
                 return new JoinEZMotorsSuccess($"Transmision {label.UnitID} enlazada con {labeldata.Motor_number} & {labeldata2.Motor_number}");

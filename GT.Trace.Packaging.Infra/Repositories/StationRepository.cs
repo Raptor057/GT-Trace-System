@@ -179,6 +179,14 @@
 
             var qc_approval = await _traza.TryGetApprovalByWorkOrderAsync(production.codew.Trim()).ConfigureAwait(false);
 
+            #region Parte agregada para corregir un BUG
+            //BUG
+            if (qc_approval == null)
+            {
+                await _traza.AutoQCAprovedAsync(prod_unit.letter.Trim().ToUpper()).ConfigureAwait(false);
+                qc_approval = await _traza.TryGetApprovalByWorkOrderAsync(production.codew.Trim()).ConfigureAwait(false);
+            }
+            #endregion
             var intervalProduction = Enumerable.Empty<DataSources.Entities.ProductionTimeInterval>();
 
             //En esta linea se valida el proceso
@@ -263,7 +271,7 @@
 
             Approval? approval = null;
 
-            if (qc_approval != null)
+            if (qc_approval != null) 
             {
                 DateTime? approvalDate = null;
                 if (!string.IsNullOrWhiteSpace(qc_approval.fecha_app))
