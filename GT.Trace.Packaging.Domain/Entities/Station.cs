@@ -121,7 +121,7 @@
             {
                 errors.AddRange(canPackUnitErrors);
             }
-            if (Line.QcContainerApprovalIsRequired)
+            if (Line.QcContainerApprovalIsRequired && Line.Code != "E1") //Se actualizo para que no pida liberacion de calidad en estacion de motores E1
             {
                 errors.Add("Se Requiere Liberacion de Auditor de Calidad Para Seguir Empacando!!");
             }

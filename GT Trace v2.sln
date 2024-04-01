@@ -268,6 +268,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.BomSnapShot.Infra"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.BomSnapShotWebApi", "GT.Trace.BomSnapShotWebApi\GT.Trace.BomSnapShotWebApi.csproj", "{8FC98AAE-C8BB-48EC-AB8A-E9CB1BE6E07C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegration.App", "GT.Trace.TraceabilityLegacyIntegration.App\GT.Trace.TraceabilityLegacyIntegration.App.csproj", "{50C42E4B-306E-4BF3-A22E-4D57CF70DF07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegration.Domain", "GT.Trace.TraceabilityLegacyIntegration.Domain\GT.Trace.TraceabilityLegacyIntegration.Domain.csproj", "{F83F00C1-CFFB-4528-864D-BD114920C2A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegration.Infra", "GT.Trace.TraceabilityLegacyIntegration.Infra\GT.Trace.TraceabilityLegacyIntegration.Infra.csproj", "{C34740C5-39CA-4E7A-AF2D-85B24C0F6657}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegrationWebApi", "GT.Trace.TraceabilityLegacyIntegrationWebApi\GT.Trace.TraceabilityLegacyIntegrationWebApi.csproj", "{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -426,6 +434,22 @@ Global
 		{8FC98AAE-C8BB-48EC-AB8A-E9CB1BE6E07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FC98AAE-C8BB-48EC-AB8A-E9CB1BE6E07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FC98AAE-C8BB-48EC-AB8A-E9CB1BE6E07C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50C42E4B-306E-4BF3-A22E-4D57CF70DF07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C42E4B-306E-4BF3-A22E-4D57CF70DF07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C42E4B-306E-4BF3-A22E-4D57CF70DF07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C42E4B-306E-4BF3-A22E-4D57CF70DF07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F83F00C1-CFFB-4528-864D-BD114920C2A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83F00C1-CFFB-4528-864D-BD114920C2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83F00C1-CFFB-4528-864D-BD114920C2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83F00C1-CFFB-4528-864D-BD114920C2A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C34740C5-39CA-4E7A-AF2D-85B24C0F6657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C34740C5-39CA-4E7A-AF2D-85B24C0F6657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C34740C5-39CA-4E7A-AF2D-85B24C0F6657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C34740C5-39CA-4E7A-AF2D-85B24C0F6657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -469,6 +493,10 @@ Global
 		{116D4AC1-5523-4ACA-AE26-7CAB2ECDE0B9} = {31E653AD-FEB7-4040-A9A0-60CD34E1C5B7}
 		{60888B8C-E2BA-44F0-9707-6E97EDAD85FF} = {31E653AD-FEB7-4040-A9A0-60CD34E1C5B7}
 		{8FC98AAE-C8BB-48EC-AB8A-E9CB1BE6E07C} = {31E653AD-FEB7-4040-A9A0-60CD34E1C5B7}
+		{50C42E4B-306E-4BF3-A22E-4D57CF70DF07} = {36F73865-A099-4375-8FEB-58A4E743259C}
+		{F83F00C1-CFFB-4528-864D-BD114920C2A1} = {36F73865-A099-4375-8FEB-58A4E743259C}
+		{C34740C5-39CA-4E7A-AF2D-85B24C0F6657} = {36F73865-A099-4375-8FEB-58A4E743259C}
+		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98} = {36F73865-A099-4375-8FEB-58A4E743259C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {039C2DDD-2AF1-4968-B2EF-A133A505BCD9}

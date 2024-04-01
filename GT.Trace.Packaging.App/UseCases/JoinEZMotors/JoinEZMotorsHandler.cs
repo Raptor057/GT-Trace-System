@@ -135,25 +135,26 @@ namespace GT.Trace.Packaging.App.UseCases.JoinEZMotors
                 var MotorsData1 = await _gateway.EZRegisteredInformationAsync(labeldata.Motor_number, MotorDateTime1).ConfigureAwait(false) > 0;
                 var MotorsData2 = await _gateway.EZRegisteredInformationAsync(labeldata2.Motor_number, MotorDateTime2).ConfigureAwait(false) > 0;
 
-                if (!MotorsData1)
-                {
-                    return new JoinEZMotorsFailure($"La Unidad {labeldata.Motor_number} no cuenta con un registro de proceso previo en la tabla [gtt].[dbo].[MotorsData]");
-                }
+                //if (!MotorsData1) //comentado para usar sin este pokayoke
+                //{
+                //    return new JoinEZMotorsFailure($"La Unidad {labeldata.Motor_number} no cuenta con un registro de proceso previo en la tabla [gtt].[dbo].[MotorsData]");
+                //}
 
-                if (!MotorsData2)
-                {
-                    return new JoinEZMotorsFailure($"La Unidad {labeldata2.Motor_number} no cuenta con un registro de proceso previo en la tabla [gtt].[dbo].[MotorsData]");
-                }
-                    var Motors1Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata.Motor_number, MotorDateTime1).ConfigureAwait(false) > 0;
-                    var Motors2Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata2.Motor_number, MotorDateTime2).ConfigureAwait(false) > 0;
-                    if (!Motors1Pinions)
-                    {
-                        return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
-                    }
-                    if (!Motors2Pinions)
-                    {
-                        return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
-                    }
+                //if (!MotorsData2)
+                //{
+                //    return new JoinEZMotorsFailure($"La Unidad {labeldata2.Motor_number} no cuenta con un registro de proceso previo en la tabla [gtt].[dbo].[MotorsData]");
+                //}
+
+                    //var Motors1Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata.Motor_number, MotorDateTime1).ConfigureAwait(false) > 0;
+                    //var Motors2Pinions = await _gateway.EZMotorDataRegisteredInformationAsync(labeldata2.Motor_number, MotorDateTime2).ConfigureAwait(false) > 0;
+                    //if (!Motors1Pinions)
+                    //{
+                    //    return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
+                    //}
+                    //if (!Motors2Pinions)
+                    //{
+                    //    return new JoinEZMotorsFailure($"El Subensamble escaneado no es compatible con el modelo que se esta corriendo en esta linea");
+                    //}
                 }
                 await _gateway.AddJoinEZMotorsAsync(unitID, labeldata.Website, labeldata.No_Load_Current, labeldata.No_Load_Speed, labeldata.Date, labeldata.Time, labeldata.Motor_number, labeldata.PN, labeldata.AEM, labeldata.Rev);
                 await _gateway.AddJoinEZMotorsAsync(unitID,labeldata2.Website, labeldata2.No_Load_Current, labeldata2.No_Load_Speed, labeldata2.Date, labeldata2.Time, labeldata2.Motor_number, labeldata2.PN, labeldata2.AEM, labeldata2.Rev);

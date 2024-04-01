@@ -10,6 +10,8 @@
 
         public string? PointOfUseCode { get; set; }
 
+        public long EtiNoID { get; set; }
+
         public string? EtiNo { get; set; }
 
         public string? MasterEtiNo { get; set; }
