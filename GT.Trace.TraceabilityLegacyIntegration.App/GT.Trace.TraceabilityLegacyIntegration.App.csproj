@@ -6,4 +6,24 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjectionFixed" Version="5.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GT.Trace.Common\GT.Trace.Common.csproj" />
+    <ProjectReference Include="..\GT.Trace.Infra\GT.Trace.Infra.csproj" />
+    <ProjectReference Include="..\GT.Trace.TraceabilityLegacyIntegration.Domain\GT.Trace.TraceabilityLegacyIntegration.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dtos\" />
+    <Folder Include="Gateways\" />
+    <Folder Include="UseCases\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

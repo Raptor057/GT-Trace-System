@@ -6,4 +6,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjectionFixed" Version="5.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GT.Trace.TraceabilityLegacyIntegration.App\GT.Trace.TraceabilityLegacyIntegration.App.csproj" />
+    <ProjectReference Include="..\GT.Trace.TraceabilityLegacyIntegration.Infra\GT.Trace.TraceabilityLegacyIntegration.Infra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Endpoints\" />
+    <Folder Include="Hubs\" />
+  </ItemGroup>
+
 </Project>
