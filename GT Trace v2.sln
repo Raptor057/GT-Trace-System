@@ -268,13 +268,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.BomSnapShot.Infra"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.BomSnapShotWebApi", "GT.Trace.BomSnapShotWebApi\GT.Trace.BomSnapShotWebApi.csproj", "{8FC98AAE-C8BB-48EC-AB8A-E9CB1BE6E07C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegration.App", "GT.Trace.TraceabilityLegacyIntegration.App\GT.Trace.TraceabilityLegacyIntegration.App.csproj", "{50C42E4B-306E-4BF3-A22E-4D57CF70DF07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.TraceabilityLegacyIntegration.App", "GT.Trace.TraceabilityLegacyIntegration.App\GT.Trace.TraceabilityLegacyIntegration.App.csproj", "{50C42E4B-306E-4BF3-A22E-4D57CF70DF07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegration.Domain", "GT.Trace.TraceabilityLegacyIntegration.Domain\GT.Trace.TraceabilityLegacyIntegration.Domain.csproj", "{F83F00C1-CFFB-4528-864D-BD114920C2A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.TraceabilityLegacyIntegration.Domain", "GT.Trace.TraceabilityLegacyIntegration.Domain\GT.Trace.TraceabilityLegacyIntegration.Domain.csproj", "{F83F00C1-CFFB-4528-864D-BD114920C2A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegration.Infra", "GT.Trace.TraceabilityLegacyIntegration.Infra\GT.Trace.TraceabilityLegacyIntegration.Infra.csproj", "{C34740C5-39CA-4E7A-AF2D-85B24C0F6657}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.TraceabilityLegacyIntegration.Infra", "GT.Trace.TraceabilityLegacyIntegration.Infra\GT.Trace.TraceabilityLegacyIntegration.Infra.csproj", "{C34740C5-39CA-4E7A-AF2D-85B24C0F6657}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.TraceabilityLegacyIntegrationWebApi", "GT.Trace.TraceabilityLegacyIntegrationWebApi\GT.Trace.TraceabilityLegacyIntegrationWebApi.csproj", "{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.TraceabilityLegacyIntegrationWebApi", "GT.Trace.TraceabilityLegacyIntegrationWebApi\GT.Trace.TraceabilityLegacyIntegrationWebApi.csproj", "{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GTTraceV2ConfigurationPanel", "GTTraceV2ConfigurationPanel", "{3CAE0FA5-5CF0-4413-B378-DEA573C5B055}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.App", "GT.Trace.ConfigurationPanel.App\GT.Trace.ConfigurationPanel.App.csproj", "{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.Domain", "GT.Trace.ConfigurationPanel.Domain\GT.Trace.ConfigurationPanel.Domain.csproj", "{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.Infra", "GT.Trace.ConfigurationPanel.Infra\GT.Trace.ConfigurationPanel.Infra.csproj", "{D42488C3-1B16-4025-BA45-C256F750048B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.WebApi", "GT.Trace.ConfigurationPanel.WebApi\GT.Trace.ConfigurationPanel.WebApi.csproj", "{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -450,6 +460,22 @@ Global
 		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D42488C3-1B16-4025-BA45-C256F750048B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D42488C3-1B16-4025-BA45-C256F750048B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D42488C3-1B16-4025-BA45-C256F750048B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D42488C3-1B16-4025-BA45-C256F750048B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -497,6 +523,10 @@ Global
 		{F83F00C1-CFFB-4528-864D-BD114920C2A1} = {36F73865-A099-4375-8FEB-58A4E743259C}
 		{C34740C5-39CA-4E7A-AF2D-85B24C0F6657} = {36F73865-A099-4375-8FEB-58A4E743259C}
 		{BFED4345-E50B-420C-9F1C-BCD4D84F0C98} = {36F73865-A099-4375-8FEB-58A4E743259C}
+		{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536} = {3CAE0FA5-5CF0-4413-B378-DEA573C5B055}
+		{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED} = {3CAE0FA5-5CF0-4413-B378-DEA573C5B055}
+		{D42488C3-1B16-4025-BA45-C256F750048B} = {3CAE0FA5-5CF0-4413-B378-DEA573C5B055}
+		{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC} = {3CAE0FA5-5CF0-4413-B378-DEA573C5B055}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {039C2DDD-2AF1-4968-B2EF-A133A505BCD9}
