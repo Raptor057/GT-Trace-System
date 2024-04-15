@@ -166,6 +166,7 @@
             var picking_config = await _traza.GetPickingConfigAsync(article.Family.Trim()).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No se encontró configuración de picking para la sub familia \"{article.Family.Trim()}\",");
 
+            //BUG: Aqui hay un bug debido a que pueden haber 2 valores iguales y sale two secuence contains, corregir eso luego.
             var qc_params = await _traza.GetContainerApprovalParamsAsync(picking_config.tipo, refext.PackType.Trim()).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No se encontraron parametros de aprobación de calidad para tipo \"{picking_config.tipo}\" con empaque \"{refext.PackType.Trim()}\".");
 
