@@ -11,7 +11,7 @@ namespace GT.Trace.Common.Infra
         public ConfigurableSqlDatabaseConnectionFactory(IConfigurationRoot configuration, string? connectionStringName)
         {
             connectionStringName ??= GetType().Name;
-            _connectionString = configuration.GetConnectionString(connectionStringName);
+            _connectionString = configuration.GetConnectionString(connectionStringName) ?? "";
             if (string.IsNullOrWhiteSpace(_connectionString))
             {
                 throw new NullReferenceException($"La cadena de conexión \"{connectionStringName}\" no se encuentra en el archivo configuración o se encuentra en blanco.");

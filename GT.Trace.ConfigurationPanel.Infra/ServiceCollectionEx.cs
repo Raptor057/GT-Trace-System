@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GT.Trace.ConfigurationPanel.Infra.DataSources;
+using GT.Trace.ConfigurationPanel.Infra.Repositories;
+using GT.Trace.ConfigurationPanel.Domain.Repositories;
 
 namespace GT.Trace.ConfigurationPanel.Infra
 {
@@ -16,7 +18,12 @@ namespace GT.Trace.ConfigurationPanel.Infra
                 .AddSingleton<AppsSqlDB>()
                 .AddSingleton<TrazaSqlDB>()
                 .AddSingleton<CegidSqlDB>()
-                .AddSingleton<GttSqlDB>();
+                .AddSingleton<GttSqlDB>()
+                .AddSingleton<IBomRepository,BomRepository>()
+                .AddSingleton<ILineRepository,LineRepository>()
+                .AddSingleton<IMasterRepository,MasterRepository>()
+                .AddSingleton<IPatentRepository,PatentRepository>()
+                .AddSingleton<IPointOfUseEtisRepository,PointOfUseEtisRepository>();
         }
     }
 }

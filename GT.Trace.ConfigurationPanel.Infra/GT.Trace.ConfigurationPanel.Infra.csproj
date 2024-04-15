@@ -13,10 +13,8 @@
 
   <ItemGroup>
     <Folder Include="Daos\" />
-    <Folder Include="DataSources\Entities\" />
     <Folder Include="Gateways\" />
     <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

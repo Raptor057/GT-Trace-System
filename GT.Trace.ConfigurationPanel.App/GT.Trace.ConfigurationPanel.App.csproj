@@ -14,9 +14,7 @@
 
   <ItemGroup>
     <Folder Include="Gateways\" />
-    <Folder Include="Dtos\" />
-    <Folder Include="UseCases\" />
-    <Folder Include="Services\" />
+    <Folder Include="UseCases\GetActiveLines\" />
   </ItemGroup>
 
   <ItemGroup>
