@@ -7,7 +7,7 @@
 
         public bool IsChangeOverRequired => string.Compare(LoadedPart.Number, WorkOrder.Part.Number, true) != 0;
 
-        public bool QcContainerApprovalIsRequired => Pallet.Quantity >= QcUnapprovedPalletStopLimit && !(Pallet.Approval?.IsApproved ?? false);
+        public bool QcContainerApprovalIsRequired => Pallet.Quantity >= QcUnapprovedPalletStopLimit && !(Pallet.Approval?.IsApproved ?? false); //aqui se define cuanto pide liberacion
 
         public bool POIsRequired => Pallet.ContainerTypeIsBox && !WorkOrder.PO.IsValid;
     }

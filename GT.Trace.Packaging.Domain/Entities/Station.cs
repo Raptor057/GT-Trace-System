@@ -121,6 +121,8 @@
             {
                 errors.AddRange(canPackUnitErrors);
             }
+            //BUG: Arreglar este bug que afecta a la MW y a los -10
+            //BUG: aqui se tiene que validar el valor de empaque de std pack con el de limite de liberacion
             if (Line.QcContainerApprovalIsRequired && Line.Code != "E1") //Se actualizo para que no pida liberacion de calidad en estacion de motores E1
             {
                 errors.Add("Se Requiere Liberacion de Auditor de Calidad Para Seguir Empacando!!");

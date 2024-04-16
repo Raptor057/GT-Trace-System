@@ -167,6 +167,7 @@
                 ?? throw new InvalidOperationException($"No se encontró configuración de picking para la sub familia \"{article.Family.Trim()}\",");
 
             //BUG: Aqui hay un bug debido a que pueden haber 2 valores iguales y sale two secuence contains, corregir eso luego.
+            //BUG: Algunos puntos de liberacion no coinciden con el std pack
             var qc_params = await _traza.GetContainerApprovalParamsAsync(picking_config.tipo, refext.PackType.Trim()).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No se encontraron parametros de aprobación de calidad para tipo \"{picking_config.tipo}\" con empaque \"{refext.PackType.Trim()}\".");
 
@@ -331,7 +332,7 @@
                 ).ToList()),
                 new Part(prod_unit.modelo.Trim(), Revision.New(prod_unit.active_revision), "", ""),
                 qc_params.PARAM_INI ?? int.MaxValue,
-                qc_params.PARAM_FIN ?? int.MaxValue,
+                qc_params.PARAM_FIN ?? int.MaxValue,//Aqui se define cuando pide liberacion
                 intervalProduction.Select(prod => new HourlyLineProcution(prod.Name, prod.IsPastDue, prod.IsCurrent, prod.PartNo, prod.EffectiveHourlyRequirement, prod.Quantity, prod.LastUpdateTime)),
                 validSourceProcessesForPackagingProcess));
 
