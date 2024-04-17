@@ -155,7 +155,6 @@
 
             var uarticle = await _cegid.GetUarticleAsync(production.part_number.Trim(), revision.Number).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No se encontró información de contenedores para {production.part_number.Trim()} Rev {revision.Number}.");
-
             var article = await _cegid.GetArticleAsync(production.part_number.Trim(), revision.Number).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"No se encontró información de parte para {production.part_number.Trim()} Rev {revision.Number}.");
 
@@ -415,6 +414,9 @@
         public async Task <string?> GetOrigenByCegid(string partNum, string partRev) =>
             await _traza.GetOrigenByCegid(partNum, partRev).ConfigureAwait(false);
 
+        public async Task<string?> GetWwwByCegid(string partNo, string revision) =>
+               await _cegid.GetWwwByCegid(partNo, revision).ConfigureAwait(false);
+
 
         #region EZ
         /*Nuevo para EZ 
@@ -429,6 +431,10 @@
 
         public async Task<bool> GetProcessHistoryAsync(long unitID) =>
             await _gtt.GetProcessHistory(unitID).ConfigureAwait(false) > 0;
+
+
+
+
 
         #endregion
     }

@@ -88,6 +88,9 @@
 
         public string ARKTINTAUT { get; set; } = "";
 
+        //Agregado para obtener la pagina web 04/16/2024
+        public string? ARKTSAVWWW { get; set; } = "";
+
         public decimal? ARKTIMETO { get; set; }
 
         public int? APKNPCECO2 { get; set; }//Se agrego como nuevo para el uso de intercambio de cantidad de empaque entre cantidades en EZ RA: 5/31/2023

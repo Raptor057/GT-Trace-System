@@ -34,5 +34,8 @@
         
         //Se Agrega campo Origen 3/27/2023
         public string? Origen { get; set; }
+
+        //Se Agrega campo Www 4/16/2024
+        public string? Www { get; set; }
     }
 }
