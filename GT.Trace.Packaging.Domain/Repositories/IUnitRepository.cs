@@ -13,5 +13,16 @@
         Task AddMotorsDataAsync(string serialCode, string modelo, string volt, string rpm, DateTime dateTimeSerialCode, string rev);
 
         Task<long?> GetUnitIDBySerialCodeAsync(string serialCode);
+
+        /// <summary>
+        /// Agregado el 4/19/2024
+        /// Obtiene la pagina Web directo de CEGID segun el nomero de parte y revision.
+        /// </summary>
+        /// <param name="partNo"></param>
+        /// <param name="revision"></param>
+        /// <returns>
+        /// string con URL del manual para partes de servicio.
+        /// </returns>
+        Task <string?> GetWwwByCegid(string partNo, string revision);
     }
 }

@@ -89,7 +89,7 @@
         public string ARKTINTAUT { get; set; } = "";
 
         //Agregado para obtener la pagina web 04/16/2024
-        public string? ARKTSAVWWW { get; set; } = "";
+        public string? ARKTSAVWWW { get; set; }
 
         public decimal? ARKTIMETO { get; set; }
 

@@ -39,6 +39,6 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.ExecuteScalarAsync<bool>("SELECT count(APKNPCECO2) from UARTICLE WHERE ARKTSOC = 300 and ARKTCODART = @partNo and ARKTCOMART = @revision and rtrim(APKNPCECO2) != '' and rtrim(APKNPCECO2) != 0",
                 new {partNo,revision}).ConfigureAwait(false);
         public async Task<string?> GetWwwByCegid(string partNo, string revision) =>
-            await _con.QueryFirstAsync<string?>("SELECT TOP (1) [ARKTSAVWWW] FROM [PMI].[dbo].[UARTICLE] WHERE ARKTCODART = @partNo AND ARKTCOMART = @revision", new { partNo, revision }).ConfigureAwait(false);
+            await _con.QueryFirstAsync<string?>("SELECT TOP (1) RTRIM([ARKTSAVWWW]) FROM [PMI].[dbo].[UARTICLE] WHERE ARKTCODART = @partNo AND ARKTCOMART = @revision", new { partNo, revision }).ConfigureAwait(false);
     }
 }

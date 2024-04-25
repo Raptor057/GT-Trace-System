@@ -12,12 +12,14 @@
         private readonly TrazaSqlDB _traza;
         private readonly AppsSqlDB _apps;
         private readonly GttSqlDB _gtt;
+        private readonly CegidSqlDB _cegid;
 
-        public UnitRepository(TrazaSqlDB traza, AppsSqlDB apps, GttSqlDB gtt)
+        public UnitRepository(TrazaSqlDB traza, AppsSqlDB apps, GttSqlDB gtt, CegidSqlDB cegid)
         {
             _traza = traza;
             _apps = apps;
             _gtt = gtt;
+            _cegid=cegid;
         }
 
         public async Task<Unit?> GetUnitByIDAsync(long id)
@@ -84,6 +86,11 @@
         public async Task<ProTmsLineSerial?> GetLineAndSerialByIDAsync(long id)
         {
            return await _apps.GetLineAndSerialByID(id).ConfigureAwait(false);
+        }
+
+        public Task<string?> GetWwwByCegid(string partNo, string revision)
+        {
+            throw new NotImplementedException();
         }
     }
 }
