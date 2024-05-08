@@ -2,5 +2,5 @@
 
 namespace GT.Trace.Packaging.App.UseCases.UnpackUnit
 {
-    public sealed record UnpackUnitRequest(string LineCode, string ScanInput) : IRequest<UnpackUnitResponse>;
+    public sealed record UnpackUnitRequest(string LineName, string ScanInput, string WorkOrderCode, string LineCode) : IRequest<UnpackUnitResponse>;
 }

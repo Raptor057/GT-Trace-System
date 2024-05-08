@@ -23,10 +23,10 @@ namespace GT.Trace.Packaging.UI.PackagingWebApi.Endpoints.UnpackUnit
         }
 
         [HttpDelete]
-        [Route("/api/lines/{lineCode}/container")]
-        public async Task<IActionResult> Execute([FromRoute] string lineCode, [FromBody] string scanInput)
+        [Route("/api/lines/{lineName}/container")]
+        public async Task<IActionResult> Execute([FromRoute] string lineName, [FromBody] UnpackUnitRequestBody requestBody)
         {
-            var request = new UnpackUnitRequest(lineCode, scanInput);
+            var request = new UnpackUnitRequest(lineName, requestBody.ScannerInput ?? "", requestBody.WorkOrderCode ?? "", requestBody.LineCode ?? "");
             try
             {
                 _ = await _mediator.Send(request).ConfigureAwait(false);

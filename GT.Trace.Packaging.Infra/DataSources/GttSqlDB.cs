@@ -206,5 +206,24 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.QueryFirstAsync<int>("SELECT COUNT([UnitID]) FROM [gtt].[dbo].[ProcessHistory] WHERE LineCode = 'LE' AND ProcessID = 0 AND UnitID = @unitID", new { unitID }).ConfigureAwait(false);
         #endregion
 
+        /// <summary>
+        /// Delete UnitID from GT-System in Database:
+        /// GTT - ProcessHistory
+        /// TRAZAB - Temp_pack_WB
+        /// Update current_qty -1 in Database: 
+        /// APPS - pro_production
+        /// </summary>
+        /// <param name="lineName"> Example "WB LO"</param>
+        /// <param name="unitID"> This is obtained through a method that parses a regular expression and returns the scanInput data
+        /// Example from scan Input: " [)>06SWB10725151PAUC15714ZGT1TGT871402TB23T12824 " expected value of the method for this variable 10725151 </param>
+        /// <param name="workOrderCode">Example "W08411211"  </param>
+        /// <param name="lineID"> Example: 5 </param>
+        /// <param name="lineCode">Example: LO </param>
+        /// <returns></returns>
+        public async Task UnpackedUnitAsync(string lineName, long unitID, string workOrderCode, string lineCode) =>
+            await _con.ExecuteAsync(@"  DELETE FROM [gtt].[dbo].[ProcessHistory] WHERE LineCode = @lineCode AND UnitID = @unitID;
+                                        DELETE FROM [mxsrvtraca].[TRAZAB].[dbo].[Temp_pack_WB] WHERE linea = @lineName AND telesis = @unitID;
+                                        UPDATE mxsrvtraca.APPS.dbo.pro_production SET current_qty = current_qty - 1 WHERE codew=@workOrderCode AND id_line = (SELECT id FROM mxsrvtraca.[APPS].[dbo].[pro_prod_units] WHERE comments = @lineName);",
+                new { lineName, unitID, workOrderCode, lineCode }).ConfigureAwait(false);
     }
 }

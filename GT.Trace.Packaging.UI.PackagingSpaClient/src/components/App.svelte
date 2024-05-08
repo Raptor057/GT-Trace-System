@@ -139,6 +139,8 @@
 <div id="app">
   <Header
     lineName={lineState.name}
+    lineCode={lineState.lineCode}
+    workOrderCode={lineState.workOrder.code}
     partNo={lineState.loadedPart.number}
     revision={lineState.loadedPart.revision}
     masterType={lineState.workOrder.masterType.isAteq ? "ATEQ" : "MASTER"}

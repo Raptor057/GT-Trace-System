@@ -1,4 +1,5 @@
 ﻿using GT.Trace.Common.CleanArch;
+using GT.Trace.Common.Infra;
 using GT.Trace.Packaging.App.Services;
 using GT.Trace.Packaging.Domain.Repositories;
 using System.Text.RegularExpressions;
@@ -13,11 +14,14 @@ namespace GT.Trace.Packaging.App.UseCases.UnpackUnit
 
         private readonly IUnitRepository _units;
 
-        public UnpackUnitHandler(ILabelParserService labelParser, IStationRepository stations, IUnitRepository units)
+        private readonly IUnpackUnitGateway _unpackUnit;
+
+        public UnpackUnitHandler(ILabelParserService labelParser, IStationRepository stations, IUnitRepository units, IUnpackUnitGateway unpackUnit)
         {
             _labelParser = labelParser;
             _stations = stations;
             _units = units;
+            _unpackUnit=unpackUnit;
         }
 
         public async Task<UnpackUnitResponse> Handle(UnpackUnitRequest request, CancellationToken cancellationToken)
@@ -46,9 +50,10 @@ namespace GT.Trace.Packaging.App.UseCases.UnpackUnit
                 }
 
                 unitID = label.UnitID;
+                _ = _unpackUnit.UnpackedUnitAsync(request.LineName, unitID, request.WorkOrderCode, request.LineCode).ConfigureAwait(false);
             }
 
-            return new SuccessUnpackUnitResponse(request.LineCode, unitID);
+            return new SuccessUnpackUnitResponse(request.LineCode, unitID, request.LineName, request.WorkOrderCode);
         }
     }
 }

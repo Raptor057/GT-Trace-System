@@ -68,8 +68,8 @@ export const PackagingApi = (function (apiUrl) {
         printPartialLabel: (hostname) =>
             HttpRequest.post(`${apiUrl}/api/lines/${hostname}/container/partial`, null),
 
-        unpackUnit: (lineCode, scannerInput) =>
-            HttpRequest.delete(`${apiUrl}/api/lines/${lineCode}/container`, scannerInput),
+        unpackUnit: (lineName, scannerInput,workOrderCode,lineCode) =>
+            HttpRequest.delete(`${apiUrl}/api/lines/${lineName}/container`, {ScannerInput: scannerInput, WorkOrderCode: workOrderCode, LineCode: lineCode}),
 
         setHeadcount: (lineCode, workOrderCode, value) =>
             HttpRequest.put(`${apiUrl}/api/lines/${lineCode}/workorders/${workOrderCode}/headcount/${value}`),

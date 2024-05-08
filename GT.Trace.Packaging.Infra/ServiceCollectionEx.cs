@@ -18,6 +18,7 @@ using GT.Trace.Packaging.App.UseCases.JoinFramelessMotors;
 using GT.Trace.Packaging.App.UseCases.JoinEZMotors;
 using GT.Trace.Packaging.App.UseCases.JoinLinePallet;
 using GT.Trace.Packaging.App.UseCases.SaveEzMotors;
+using GT.Trace.Packaging.App.UseCases.UnpackUnit;
 
 namespace GT.Trace.Packaging.Infra
 {
@@ -48,7 +49,8 @@ namespace GT.Trace.Packaging.Infra
                 //.AddSingleton<IStationsDao, StationsSqlDao>()
                 .AddSingleton<ISetStationBlockedGateway,SqlSetStationBlockedRepository>()
                 .AddSingleton<ILinesDao, LinesSqlDao>()
-                .AddSingleton<IUsersDao, UsersSqlDao>();
+                .AddSingleton<IUsersDao, UsersSqlDao>()
+                .AddSingleton< IUnpackUnitGateway,SqlUnpackUnitGateway>();
         }
     }
 }

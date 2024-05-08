@@ -3,6 +3,10 @@
 
   export let hostname = null;
   export let lineName = null;
+//New from Unpack
+  export let workOrderCode = null;
+  export let lineCode = null;
+  //----
   export let partNo = null;
   export let revision = null;
   export let masterType = null;
@@ -36,7 +40,23 @@
       );
     }
   };
-  const handleUnpackClick = (e) => {};
+
+//  const handleUnpackClick = (e) => {};
+const handleUnpackClick = (e) => {  
+    var UnpackUnit = window.prompt(`Escanea La etiqueta a desempacar en ${lineName}`);
+    //alert(`${lineName}, ${UnpackUnit}, ${workOrderCode}, ${lineCode}`);
+    if (UnpackUnit != null && UnpackUnit != "") {
+      PackagingApi.unpackUnit(lineName, UnpackUnit, workOrderCode, lineCode) //lineCode, scannerInput
+        .then((data) =>
+          addMessage(`Desempacada Correctamente`)
+        )
+        .catch(addMessage);
+    } else {
+      addMessage(`Ocurrio un problema al intentar desempacar la pieza, intenta nuevamente.`);
+    }
+};
+
+
 </script>
 
 <header class="app-child">
