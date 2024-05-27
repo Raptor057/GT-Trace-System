@@ -39,7 +39,6 @@ namespace GT.Trace.Changeover.Infra.Services
                     var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(responseContent);
                     errors.Add(jsonResponse!.Message);
                 }
-
             }
             return errors;
         }
