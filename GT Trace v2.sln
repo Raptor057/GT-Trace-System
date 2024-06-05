@@ -66,6 +66,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MaterialLoading", "MaterialLoading", "{BAEB41C6-0DE6-468F-876F-BDAE68406CF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assembly", "Assembly", "{50A623B7-8245-4570-A168-D167671770E2}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.Packaging.App", "GT.Trace.Packaging.App\GT.Trace.Packaging.App.csproj", "{B3104843-5338-482B-A272-19362ADE7AB4}"
 EndProject
@@ -278,13 +281,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.TraceabilityLegacy
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GTTraceV2ConfigurationPanel", "GTTraceV2ConfigurationPanel", "{3CAE0FA5-5CF0-4413-B378-DEA573C5B055}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.App", "GT.Trace.ConfigurationPanel.App\GT.Trace.ConfigurationPanel.App.csproj", "{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.ConfigurationPanel.App", "GT.Trace.ConfigurationPanel.App\GT.Trace.ConfigurationPanel.App.csproj", "{3F4B04E8-D112-459E-B9BC-EBCAD2C8E536}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.Domain", "GT.Trace.ConfigurationPanel.Domain\GT.Trace.ConfigurationPanel.Domain.csproj", "{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.ConfigurationPanel.Domain", "GT.Trace.ConfigurationPanel.Domain\GT.Trace.ConfigurationPanel.Domain.csproj", "{6FA7D6C5-FD8E-44C3-A2B8-BF4A593320ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.Infra", "GT.Trace.ConfigurationPanel.Infra\GT.Trace.ConfigurationPanel.Infra.csproj", "{D42488C3-1B16-4025-BA45-C256F750048B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.ConfigurationPanel.Infra", "GT.Trace.ConfigurationPanel.Infra\GT.Trace.ConfigurationPanel.Infra.csproj", "{D42488C3-1B16-4025-BA45-C256F750048B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GT.Trace.ConfigurationPanel.WebApi", "GT.Trace.ConfigurationPanel.WebApi\GT.Trace.ConfigurationPanel.WebApi.csproj", "{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GT.Trace.ConfigurationPanel.WebApi", "GT.Trace.ConfigurationPanel.WebApi\GT.Trace.ConfigurationPanel.WebApi.csproj", "{B6A0EC63-4072-4A50-A00C-EFCA9757D3CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
