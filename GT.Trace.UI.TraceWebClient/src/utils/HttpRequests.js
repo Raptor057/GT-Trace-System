@@ -75,8 +75,7 @@ export const MaterialLoadingApi = (function (apiUrl) {
 })("http://mxsrvapps.gt.local/gtt/services/materialloading");
 
 export const ProcessHistoryApi = (function (apiUrl) {
-    //apiUrl = 'http://localhost:5270';
-    //apiUrl = 'https://localhost:1117';
+    apiUrl = 'http://localhost:5270';
     return {
         UpdateEtis: async (EtiNo) =>
             HttpRequest.post(`${apiUrl}/api/eti/${EtiNo}`),

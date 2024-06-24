@@ -11,49 +11,49 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
     //RA: 05/10/2023
     #region
 
-    //public record Label(long UnitID);
-    //public record MotorData(string Volt, string RPM, DateTime DateTime, string SerialNumber);
+    public record Label(long UnitID);
+    public record MotorData(string Volt, string RPM, DateTime DateTime, string SerialNumber);
 
-    //public static class Labels
-    //{
-    //    public const string InformationSeparatorThree = "\u001d";
-    //    public const string EndOfTransmission = "\u0004";
-    //    private static string WalkBehindLabelFormatRegExPattern => $"\\[\\)>06SWB(?<transmissionID>\\d+)P(?<clientPartNo>.+)Z.+1T(?<partNo>.+)2T(?<partRev>.+)3T(?<julianDay>\\d+)$";
-    //    private static string ClearInputFromSpecialCharacters(string input) => input.Replace(InformationSeparatorThree, "").Replace(EndOfTransmission, "");
+    public static class Labels
+    {
+        public const string InformationSeparatorThree = "\u001d";
+        public const string EndOfTransmission = "\u0004";
+        private static string WalkBehindLabelFormatRegExPattern => $"\\[\\)>06SWB(?<transmissionID>\\d+)P(?<clientPartNo>.+)Z.+1T(?<partNo>.+)2T(?<partRev>.+)3T(?<julianDay>\\d+)$";
+        private static string ClearInputFromSpecialCharacters(string input) => input.Replace(InformationSeparatorThree, "").Replace(EndOfTransmission, "");
 
-    //    public static Label? TryParseNewWBFormat(string value)
-    //    {
-    //        var match = Regex.Match(
-    //            ClearInputFromSpecialCharacters(value),
-    //            WalkBehindLabelFormatRegExPattern,
-    //            RegexOptions.IgnoreCase | RegexOptions.Singleline);
-    //        if (match.Success)
-    //        {
-    //            return new Label(
-    //            long.Parse(match.Groups["transmissionID"].Value));
-    //        }
-    //        else
-    //        {
-    //            return null;
-    //        }
-    //    }
+        public static Label? TryParseNewWBFormat(string value)
+        {
+            var match = Regex.Match(
+                ClearInputFromSpecialCharacters(value),
+                WalkBehindLabelFormatRegExPattern,
+                RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            if (match.Success)
+            {
+                return new Label(
+                long.Parse(match.Groups["transmissionID"].Value));
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-    //    public static MotorData? ParseMotorData(string input)
-    //    {
-    //        var regex = new Regex(@"^(?<Volt>[0-9\.]+[A-Z])\|(?<RPM>[0-9]+)\|(?<datetime>\d{6}-\d{6})\|(?<SerialNumber>[0-9A-Z]+)$");
-    //        var match = regex.Match(input);
-    //        if (!match.Success) return null;
-    //        var dateTimeString = match.Groups["datetime"].Value;
-    //        var dateTime = DateTime.ParseExact(dateTimeString, "yyMMdd-HHmmss", CultureInfo.InvariantCulture);
+        public static MotorData? ParseMotorData(string input)
+        {
+            var regex = new Regex(@"^(?<Volt>[0-9\.]+[A-Z])\|(?<RPM>[0-9]+)\|(?<datetime>\d{6}-\d{6})\|(?<SerialNumber>[0-9A-Z]+)$");
+            var match = regex.Match(input);
+            if (!match.Success) return null;
+            var dateTimeString = match.Groups["datetime"].Value;
+            var dateTime = DateTime.ParseExact(dateTimeString, "yyMMdd-HHmmss", CultureInfo.InvariantCulture);
 
-    //        return new MotorData(
-    //            match.Groups["Volt"].Value,
-    //            match.Groups["RPM"].Value,
-    //            dateTime,
-    //            match.Groups["SerialNumber"].Value
-    //        );
-    //    }
-    //}
+            return new MotorData(
+                match.Groups["Volt"].Value,
+                match.Groups["RPM"].Value,
+                dateTime,
+                match.Groups["SerialNumber"].Value
+            );
+        }
+    }
     #endregion
 #pragma warning disable CS8603 // Possible null reference return.
     [ApiController]
@@ -99,139 +99,139 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
         //RA: 05/10/2023
         //---------------
         #region
-        //[HttpPost]
-        //[Route("/api/eti/{EtiNo}")]
-        //public async Task<IActionResult> Execute3([FromRoute] string EtiNo)
-        //{
-            
-        //    await UpdateEtiNoUtcUsageTime(EtiNo).ConfigureAwait(false);
-        //    return Ok(new ApiResponse("OK"));
-        //}
+        [HttpPost]
+        [Route("/api/eti/{EtiNo}")]
+        public async Task<IActionResult> Execute3([FromRoute] string EtiNo)
+        {
 
-        //private async Task UpdateEtiNoUtcUsageTime(string EtiNo)
-        //{
-        //    using var con = await GetGttConnection().ConfigureAwait(false);
-        //    await con.ExecuteAsync(
-        //        "UPDATE PointOfUseEtisV2 SET UtcUsageTime = GETUTCDATE() WHERE EtiNo = @EtiNo AND UtcExpirationTime is NULL and UtcUsageTime is not NULL and IsDepleted != 1",
-        //        new { EtiNo});
-        //}
+            await UpdateEtiNoUtcUsageTime(EtiNo).ConfigureAwait(false);
+            return Ok(new ApiResponse("OK"));
+        }
 
-        ////-------------------------------------------------------------------------------------------------------------------------------------------
-        //[HttpPost]
-        //[Route("/api/UnitID/{ezLabel}/Line/{LineCode}")]
-        //public async Task<IActionResult> Execute([FromRoute] string ezLabel, [FromRoute] string LineCode)
-        //{
-        //    try
-        //    {
-        //        var label = Labels.TryParseNewWBFormat(ezLabel);
+        private async Task UpdateEtiNoUtcUsageTime(string EtiNo)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "UPDATE PointOfUseEtisV2 SET UtcUsageTime = GETUTCDATE() WHERE EtiNo = @EtiNo AND UtcExpirationTime is NULL and UtcUsageTime is not NULL and IsDepleted != 1",
+                new { EtiNo });
+        }
 
-        //        if (label == null)
-        //        {
-        //            return BadRequest(new ApiResponse("Datos inválidos."));
-        //        }
+        //-------------------------------------------------------------------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("/api/UnitID/{ezLabel}/Line/{LineCode}")]
+        public async Task<IActionResult> Execute([FromRoute] string ezLabel, [FromRoute] string LineCode)
+        {
+            try
+            {
+                var label = Labels.TryParseNewWBFormat(ezLabel);
 
-        //        var unitId = label.UnitID;
+                if (label == null)
+                {
+                    return BadRequest(new ApiResponse("Datos inválidos."));
+                }
 
-        //        if (!await TraceInEZ2000Motors(label.UnitID).ConfigureAwait(false))
-        //        {
-        //            throw new TraceException("La etiqueta no ha sido trazada en la estación de Join Motors.");
-        //        }
-        //        else if(await TraceInProcessHistory(label.UnitID).ConfigureAwait(false))
-        //        {
-        //            throw new TraceException("La etiqueta ya ha sido trazada en esta estación.");
-        //        }
-        //        else
-        //        {
-        //            await RecordProcess2(label.UnitID, "0", LineCode).ConfigureAwait(false);
-        //            return new OkObjectResult(new ApiResponse($"Unidad {label.UnitID} registrada correctamente."));
-        //        }
-        //    }
-        //    catch (TraceException ex)
-        //    {
-        //        return StatusCode(400, new ApiResponse(ex.Message));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new ApiResponse(ex.Message));
-        //    }
-        //}
-        //public class TraceException : Exception
-        //{
-        //    public TraceException(string message) : base(message)
-        //    { }
-        //}
+                var unitId = label.UnitID;
 
-        //private async Task RecordProcess2(long unitID, string processNo, string lineCode)
-        //{
-        //    using var con = await GetGttConnection().ConfigureAwait(false);
-        //    await con.ExecuteAsync(
-        //        "INSERT INTO dbo.ProcessHistory (UnitID, ProcessID, LineCode) VALUES(@unitID, @processNo, @lineCode);",
-        //        new { unitID, processNo, lineCode });
-        //}
+                if (!await TraceInEZ2000Motors(label.UnitID).ConfigureAwait(false))
+                {
+                    throw new TraceException("La etiqueta no ha sido trazada en la estación de Join Motors.");
+                }
+                else if (await TraceInProcessHistory(label.UnitID).ConfigureAwait(false))
+                {
+                    throw new TraceException("La etiqueta ya ha sido trazada en esta estación.");
+                }
+                else
+                {
+                    await RecordProcess2(label.UnitID, "0", LineCode).ConfigureAwait(false);
+                    return new OkObjectResult(new ApiResponse($"Unidad {label.UnitID} registrada correctamente."));
+                }
+            }
+            catch (TraceException ex)
+            {
+                return StatusCode(400, new ApiResponse(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(ex.Message));
+            }
+        }
+        public class TraceException : Exception
+        {
+            public TraceException(string message) : base(message)
+            { }
+        }
 
-        //private async Task<bool> TraceInEZ2000Motors(long unitID)
-        //{
-        //    using var con = await GetGttConnection().ConfigureAwait(false);
-        //    return con.ExecuteScalar<int>(
-        //        "SELECT COUNT(DISTINCT(UnitID)) AS [EZ2000Motors] FROM EZ2000Motors WHERE UnitID = @unitID",
-        //        new { unitID }) > 0;
-        //}
-        //private async Task<bool> TraceInProcessHistory(long unitID)
-        //{
-        //    using var con = await GetGttConnection().ConfigureAwait(false);
-        //    return con.ExecuteScalar<int>(
-        //        "SELECT COUNT(UnitID) AS UnitID  FROM [gtt].[dbo].[ProcessHistory] where UnitID = @unitID AND ProcessID = 0",
-        //        new { unitID }) > 0;
-        //}
+        private async Task RecordProcess2(long unitID, string processNo, string lineCode)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "INSERT INTO dbo.ProcessHistory (UnitID, ProcessID, LineCode) VALUES(@unitID, @processNo, @lineCode);",
+                new { unitID, processNo, lineCode });
+        }
 
-        ////-------------------------------------------------------------------------------------------------------------------------------------------
-        //[HttpPost]
-        //[Route("/api/ProductionID/{ProductionID}/Line/{LineCode}")]
-        //public async Task<IActionResult> Execute5([FromRoute] string ProductionID, [FromRoute] string LineCode)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(ProductionID))
-        //        {
-        //            throw new TraceException("Datos inválidos.");
-        //        }
+        private async Task<bool> TraceInEZ2000Motors(long unitID)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            return con.ExecuteScalar<int>(
+                "SELECT COUNT(DISTINCT(UnitID)) AS [EZ2000Motors] FROM EZ2000Motors WHERE UnitID = @unitID",
+                new { unitID }) > 0;
+        }
+        private async Task<bool> TraceInProcessHistory(long unitID)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            return con.ExecuteScalar<int>(
+                "SELECT COUNT(UnitID) AS UnitID  FROM [gtt].[dbo].[ProcessHistory] where UnitID = @unitID AND ProcessID = 0",
+                new { unitID }) > 0;
+        }
 
-        //        var label = Labels.ParseMotorData(ProductionID);
-        //        #pragma warning disable CS8602
-        //        if (await TraceInMotorsDataFrameless(label.SerialNumber).ConfigureAwait(false))
-        //        {
-        //            throw new TraceException($"La Unidad {label.SerialNumber} ya se encuentra registrada.");
-        //        }
+        //-------------------------------------------------------------------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("/api/ProductionID/{ProductionID}/Line/{LineCode}")]
+        public async Task<IActionResult> Execute5([FromRoute] string ProductionID, [FromRoute] string LineCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(ProductionID))
+                {
+                    throw new TraceException("Datos inválidos.");
+                }
 
-        //        await RecordProcess3(label.SerialNumber, label.Volt, label.RPM, label.DateTime, LineCode).ConfigureAwait(false);
-        //        return Ok(new ApiResponse($"Unidad {label.SerialNumber} registrada correctamente."));
-        //    }
-        //    catch (TraceException ex)
-        //    {
-        //        return StatusCode(400, new ApiResponse(ex.Message));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new ApiResponse(ex.Message));
-        //    }
-        //}
+                var label = Labels.ParseMotorData(ProductionID);
+#pragma warning disable CS8602
+                if (await TraceInMotorsDataFrameless(label.SerialNumber).ConfigureAwait(false))
+                {
+                    throw new TraceException($"La Unidad {label.SerialNumber} ya se encuentra registrada.");
+                }
 
-        //private async Task RecordProcess3(string SerialNumber,string Volt, string RPM, DateTime DateTimeMotor, string LineCode)
-        //{
-        //    using var con = await GetGttConnection().ConfigureAwait(false);
-        //    await con.ExecuteAsync(
-        //        "INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);",
-        //        new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode });
-        //}
+                await RecordProcess3(label.SerialNumber, label.Volt, label.RPM, label.DateTime, LineCode).ConfigureAwait(false);
+                return Ok(new ApiResponse($"Unidad {label.SerialNumber} registrada correctamente."));
+            }
+            catch (TraceException ex)
+            {
+                return StatusCode(400, new ApiResponse(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(ex.Message));
+            }
+        }
 
-        //private async Task<bool> TraceInMotorsDataFrameless(string ProductionID)
-        //{
-        //    using var con = await GetGttConnection().ConfigureAwait(false);
-        //    return con.ExecuteScalar<int>(
-        //        "SELECT COUNT(DISTINCT(SerialNumber)) FROM MotorsData WHERE SerialNumber = @ProductionID",
-        //        new { ProductionID }) > 0;
-        //}
-        ////------------------------------------------------
+        private async Task RecordProcess3(string SerialNumber, string Volt, string RPM, DateTime DateTimeMotor, string LineCode)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "INSERT INTO dbo.MotorsData([SerialNumber],[Volt],[RPM],[DateTimeMotor],[Line])VALUES(@SerialNumber,@Volt,@RPM,@DateTimeMotor,@LineCode);",
+                new { SerialNumber, Volt, RPM, DateTimeMotor, LineCode });
+        }
+
+        private async Task<bool> TraceInMotorsDataFrameless(string ProductionID)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            return con.ExecuteScalar<int>(
+                "SELECT COUNT(DISTINCT(SerialNumber)) FROM MotorsData WHERE SerialNumber = @ProductionID",
+                new { ProductionID }) > 0;
+        }
+        //------------------------------------------------
         #endregion
 
         public record ApiResponse(string Message);

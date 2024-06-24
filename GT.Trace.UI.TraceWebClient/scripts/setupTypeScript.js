@@ -1,121 +1,94 @@
-// @ts-check
+const handleRejectedResponse = async (error) => {
+  console.error(error);
+  let message = error.message || `${error.status}: ${error.statusText}`;
 
-/** This script modifies the project to support TS code in .svelte files like:
+  const processJson = (json) => {
+      console.debug("JSON error from API", json);
+      if (json.hasOwnProperty('errors')) {
+          let message = json.title;
+          for (let index in json.errors) {
+              message += `\n- ${json.errors[index]}`;
+          }
+          return message;
+      }
+      return json.message;
+  };
 
-  <script lang="ts">
-  	export let name: string;
-  </script>
- 
-  As well as validating the code for CI.
-  */
+  const processText = (text) => {
+      console.debug("Text error from API", text);
+      return text;
+  };
 
-/**  To work on this script:
-  rm -rf test-template template && git clone sveltejs/template test-template && node scripts/setupTypeScript.js test-template
-*/
-
-const fs = require("fs")
-const path = require("path")
-const { argv } = require("process")
-
-const projectRoot = argv[2] || path.join(__dirname, "..")
-
-// Add deps to pkg.json
-const packageJSON = JSON.parse(fs.readFileSync(path.join(projectRoot, "package.json"), "utf8"))
-packageJSON.devDependencies = Object.assign(packageJSON.devDependencies, {
-  "svelte-check": "^2.0.0",
-  "svelte-preprocess": "^4.0.0",
-  "@rollup/plugin-typescript": "^8.0.0",
-  "typescript": "^4.0.0",
-  "tslib": "^2.0.0",
-  "@tsconfig/svelte": "^2.0.0"
-})
-
-// Add script for checking
-packageJSON.scripts = Object.assign(packageJSON.scripts, {
-  "check": "svelte-check --tsconfig ./tsconfig.json"
-})
-
-// Write the package JSON
-fs.writeFileSync(path.join(projectRoot, "package.json"), JSON.stringify(packageJSON, null, "  "))
-
-// mv src/main.js to main.ts - note, we need to edit rollup.config.js for this too
-const beforeMainJSPath = path.join(projectRoot, "src", "main.js")
-const afterMainTSPath = path.join(projectRoot, "src", "main.ts")
-fs.renameSync(beforeMainJSPath, afterMainTSPath)
-
-// Switch the app.svelte file to use TS
-const appSveltePath = path.join(projectRoot, "src", "App.svelte")
-let appFile = fs.readFileSync(appSveltePath, "utf8")
-appFile = appFile.replace("<script>", '<script lang="ts">')
-appFile = appFile.replace("export let name;", 'export let name: string;')
-fs.writeFileSync(appSveltePath, appFile)
-
-// Edit rollup config
-const rollupConfigPath = path.join(projectRoot, "rollup.config.js")
-let rollupConfig = fs.readFileSync(rollupConfigPath, "utf8")
-
-// Edit imports
-rollupConfig = rollupConfig.replace(`'rollup-plugin-terser';`, `'rollup-plugin-terser';
-import sveltePreprocess from 'svelte-preprocess';
-import typescript from '@rollup/plugin-typescript';`)
-
-// Replace name of entry point
-rollupConfig = rollupConfig.replace(`'src/main.js'`, `'src/main.ts'`)
-
-// Add preprocessor
-rollupConfig = rollupConfig.replace(
-  'compilerOptions:',
-  'preprocess: sveltePreprocess({ sourceMap: !production }),\n\t\t\tcompilerOptions:'
-);
-
-// Add TypeScript
-rollupConfig = rollupConfig.replace(
-  'commonjs(),',
-  'commonjs(),\n\t\ttypescript({\n\t\t\tsourceMap: !production,\n\t\t\tinlineSources: !production\n\t\t}),'
-);
-fs.writeFileSync(rollupConfigPath, rollupConfig)
-
-// Add TSConfig
-const tsconfig = `{
-  "extends": "@tsconfig/svelte/tsconfig.json",
-
-  "include": ["src/**/*"],
-  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
-}`
-const tsconfigPath =  path.join(projectRoot, "tsconfig.json")
-fs.writeFileSync(tsconfigPath, tsconfig)
-
-// Add global.d.ts
-const dtsPath =  path.join(projectRoot, "src", "global.d.ts")
-fs.writeFileSync(dtsPath, `/// <reference types="svelte" />`)
-
-// Delete this script, but not during testing
-if (!argv[2]) {
-  // Remove the script
-  fs.unlinkSync(path.join(__filename))
-
-  // Check for Mac's DS_store file, and if it's the only one left remove it
-  const remainingFiles = fs.readdirSync(path.join(__dirname))
-  if (remainingFiles.length === 1 && remainingFiles[0] === '.DS_store') {
-    fs.unlinkSync(path.join(__dirname, '.DS_store'))
+  if (typeof error.json === "function") {
+      let isJSON = error.headers.get('content-type').includes('application/json');
+      message = await (isJSON ? error.json().then(processJson) : error.text().then(processText)).catch(async genericError => {
+          console.debug("Generic error from API", genericError);
+          return `${error.status}: ${error.statusText}`;
+      });
   }
+  return Promise.reject(message);
+};
 
-  // Check if the scripts folder is empty
-  if (fs.readdirSync(path.join(__dirname)).length === 0) {
-    // Remove the scripts folder
-    fs.rmdirSync(path.join(__dirname))
-  }
+const getOptions = (method, data = null) => {
+  const headers = { "Access-Control-Expose-Headers": "Content-Length", "Content-Type": "application/json" };
+  const options = ({ method: method, headers: headers, mode: 'cors' });
+  return data == null ? options : { ...options, body: JSON.stringify(data) }
 }
 
-// Adds the extension recommendation
-fs.mkdirSync(path.join(projectRoot, ".vscode"), { recursive: true })
-fs.writeFileSync(path.join(projectRoot, ".vscode", "extensions.json"), `{
-  "recommendations": ["svelte.svelte-vscode"]
-}
-`)
+const HttpRequest = (function () {
+  const httpRequest = async (method, url, data = null) => {
+      console.debug(method, url);
+      return fetch(url, getOptions(method, data))
+          .then(response => {
+              console.debug(response);
+              if (!response.ok) {
+                  return Promise.reject(response);
+              }
+              return response.json();
+          })
+          .then ((json) => json.data)
+          .catch (handleRejectedResponse);
+  };
+  return {
+      get: async (url) => httpRequest('GET', url),
+      put: async (url, data) => httpRequest('PUT', url, data),
+      post: async (url, data) => httpRequest('POST', url, data),
+      delete: async (url, data) => httpRequest('DELETE', url, data),
+  };
+})();
 
-console.log("Converted to TypeScript.")
+export const MaterialLoadingApi = (function (apiUrl) {
+  //apiUrl = 'http://localhost:5183';
+  return {
+      getLine: (lineCode) =>
+          HttpRequest.get(`${apiUrl}/api/lines/${lineCode}`),
+      /**
+       * Poka Yoke implemented to block the lines requested as a corrective action for 8D ACIN-2223-005.
+      2 endpoints were added in the Packaging api
+      1) set a line lock and unlock when the assembly UI scans for something wrong.
+      2) supervisor password validation.
+      */
+      getEtiPointsOfUse: async (etiNo,lineCode,partNo ) =>
+      HttpRequest.get(`${apiUrl}/api/etis/${etiNo}/pointsofuse?lineCode=${lineCode}&partNo=${partNo}`),      
 
-if (fs.existsSync(path.join(projectRoot, "node_modules"))) {
-  console.log("\nYou will need to re-run your dependency manager to get started.")
-}
+  };
+})("http://mxsrvapps.gt.local/gtt/services/materialloading");
+
+export const ProcessHistoryApi = (function (apiUrl) {
+  //apiUrl = 'http://localhost:5270';
+  //apiUrl = 'https://localhost:1117';
+  return {
+      UpdateEtis: async (EtiNo) =>
+          HttpRequest.post(`${apiUrl}/api/eti/${EtiNo}`),
+
+      SaveElectricalMotors: async (ProductionID,LineCode) =>
+//        HttpRequest.post(`${apiUrl}/api/ProductionID/${ProductionID}/Line/${LineCode}`),
+      HttpRequest.post(`${apiUrl}/api/ProductionID/${ProductionID}/Line/${LineCode}`),
+      ///api/ProductionID/{ProductionID}/Line/{LineCode}
+
+      RecordProcessNo: async (UnitID,LineCode) =>
+      //HttpRequest.post(`${apiUrl}/api/units/{unitID}/lines/${LineCode}/processes/${UnitID}`),
+      HttpRequest.post(`${apiUrl}/api/UnitID/${UnitID}/Line/${LineCode}`),
+      ///api/UnitID/{unitID}/Line/{LineCode}
+  };
+})("http://mxsrvapps/gtt/services/processhistory");
