@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import GammaItem from "./GammaItem.svelte";
+  import GammaItem50 from "./GammaItem50.svelte";
+  
 
   export let lineCode = null;
   export let items = [];
@@ -65,7 +67,7 @@
 </script>
 
 <div class="gamma" {style}>
-  {#if items.length > 0}
+  <!-- {#if items.length > 0}
     {#each items as item, i}
       <GammaItem
         width={itemWidth}
@@ -87,7 +89,43 @@
         </span>
       {/if}
     </h1>
-  {/if}
+  {/if} -->
+
+  <!-- Esto se agrego debido a que cuando son mas de 50 ya no se persive el numero de parte nu revision -->
+  {#if items.length > 50}
+  {#each items as item, i}
+    <GammaItem50
+      width={itemWidth}
+      height={itemHeight}
+      {...item}
+      bind:item={refItem}
+      on:itemClick={handleItemClick}
+    />
+  {/each}
+{:else if items.length > 0}
+  {#each items as item, i}
+    <GammaItem
+      width={itemWidth}
+      height={itemHeight}
+      {...item}
+      bind:item={refItem}
+      on:itemClick={handleItemClick}
+    />
+  {/each}
+{:else}
+  <h1 class="message">
+    {#if !lineCode}
+      <span>No se ha especificado el código de la línea</span>
+    {:else}
+      <span>
+        no se encontró información
+        <br />
+        sobre la línea <b>{lineCode}</b>
+      </span>
+    {/if}
+  </h1>
+{/if}
+
 </div>
 
 <style lang="scss">

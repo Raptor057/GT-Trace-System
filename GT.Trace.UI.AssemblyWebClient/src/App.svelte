@@ -431,9 +431,16 @@ const handleAuthorization = (passwordResponse) => {
   btnUnlock={ButtonUnlockLine}
   btnPrintSubAssembly={PrintSubAssembly}
 />
-<!-- SnapShotID Nuevo -->
 
+<!-- original Line -->
 <Gamma {lineCode} items={state.pointsOfUse} {materialReturnModeIsEnabled} />
+
+<!-- {#if lineCode === 'LE'}
+  <LEGamma {lineCode} items={state.pointsOfUse} {materialReturnModeIsEnabled} />
+{:else}
+  <Gamma {lineCode} items={state.pointsOfUse} {materialReturnModeIsEnabled} />
+{/if} -->
+
 
 <AppFooter 
 bind:materialReturnModeIsEnabled 
