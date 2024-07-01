@@ -14,7 +14,9 @@ namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ200
         public const string InformationSeparatorThree = "\u001d";
         public const string EndOfTransmission = "\u0004";
         private static string WalkBehindLabelFormatRegExPattern => @"\[\)>06SWB(?<transmissionID>\d+)P(?<clientPartNo>.+)Z.+1T(?<partNo>.+)2T(?<partRev>.+)3T(?<julianDay>\d+)$";
-        private static string MotorsLabelFormatRegExPattern => @"^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])(?:\s+)?(?<rpm>[0-9]+)\s+(?<date>\d{4}-\d{1,2}-\d{1,2})\s+(?<time>\d{1,2}:\d{2})\s+(?<id>[0-9]+)$";
+        //"MotorsEZ2000": "^(?<PN>\\d{5})(?<id>\\d{4})(?<AEM>.+)\\s*(?<date>\\d{4}[-/]\\d{1,2}[-/]\\d{1,2})\\s*(?<time>\\d{1,2}:\\d{2})\\s*(?<rpm>\\d{5})(?<voltage>[0-9.]+[A-Z])(?<website>.+)$|^(?<PN>\\d{9})(?<date>\\d{4}[-/]\\d{1,2}[-/]\\d{1,2})\\s*(?<time>\\d{1,2}:\\d{2})(?<rpm>\\d{6}[A-Z])(?<website>.+)$|^(?<website>.+)\\s+(?<voltage>[0-9.]+[A-Z])\\s+(?<rpm>\\d+)\\s+(?<date>\\d{4}-\\d{1,2}-\\d{1,2})\\s+(?<time>\\d{1,2}:\\d{2})\\s+(?<id>\\d+)$|^(?<PN>\\d{5})(?<id>\\d{4})(?<AEM>\\d{5}...)(?<website>.+)$|^(?<website>www\\.[^\\s]+)\\s*(?<voltage>\\d+\\.\\d+[A-Z])(?<rpn>\\d+)\\s*(?<date>\\d{4}-\\d{2}-\\d{2})\\s*(?<time>\\d{2}:\\d{2})(?<id>\\d+)$",
+        //private static string MotorsLabelFormatRegExPattern => @"^(?<website>.+)\s+(?<voltage>[0-9\.]+[A-Z])(?:\s+)?(?<rpm>[0-9]+)\s+(?<date>\d{4}-\d{1,2}-\d{1,2})\s+(?<time>\d{1,2}:\d{2})\s+(?<id>[0-9]+)$";
+        private static string MotorsLabelFormatRegExPattern => @"^(?<PN>\\d{5})(?<id>\\d{4})(?<AEM>.+)\\s*(?<date>\\d{4}[-/]\\d{1,2}[-/]\\d{1,2})\\s*(?<time>\\d{1,2}:\\d{2})\\s*(?<rpm>\\d{5})(?<voltage>[0-9.]+[A-Z])(?<website>.+)$|^(?<PN>\\d{9})(?<date>\\d{4}[-/]\\d{1,2}[-/]\\d{1,2})\\s*(?<time>\\d{1,2}:\\d{2})(?<rpm>\\d{6}[A-Z])(?<website>.+)$|^(?<website>.+)\\s+(?<voltage>[0-9.]+[A-Z])\\s+(?<rpm>\\d+)\\s+(?<date>\\d{4}-\\d{1,2}-\\d{1,2})\\s+(?<time>\\d{1,2}:\\d{2})\\s+(?<id>\\d+)$|^(?<PN>\\d{5})(?<id>\\d{4})(?<AEM>\\d{5}...)(?<website>.+)$|^(?<website>www\\.[^\\s]+)\\s*(?<voltage>\\d+\\.\\d+[A-Z])(?<rpn>\\d+)\\s*(?<date>\\d{4}-\\d{2}-\\d{2})\\s*(?<time>\\d{2}:\\d{2})(?<id>\\d+)$";
         private static string ClearInputFromSpecialCharacters(string input) => input.Replace(InformationSeparatorThree, "").Replace(EndOfTransmission, "");
 
         public static Label? TryParseNewWBFormat(string value)
@@ -76,8 +78,13 @@ namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ200
 
                 #pragma warning disable CS8604
                 #pragma warning disable CS8602
+
+                await RecordProcess2(label.UnitID ?? 0, "0", "LE").ConfigureAwait(false);
+
                 await JoinMotors(label.UnitID ?? 0, ez2000Motor1.Website, ez2000Motor1.Voltage, ez2000Motor1.RPM, Convert.ToString(ez2000Motor1.Date), ez2000Motor1.Time, ez2000Motor1.ProductionID,
                     ez2000Motor2.Voltage, ez2000Motor2.RPM, Convert.ToString(ez2000Motor2.Date), ez2000Motor2.Time, ez2000Motor2.ProductionID).ConfigureAwait(false);
+                
+
                 #pragma warning restore CS8604
 
                 return Ok(new ApiResponse($"Unidad {label.UnitID} casada con Motores {ez2000Motor1.ProductionID} y {ez2000Motor2.ProductionID} correctamente."));
@@ -106,5 +113,21 @@ namespace GT.Trace.JoinMotors.HttpServices.EndPoints.Units.Lines.JoinMotorsEZ200
                 "(@unitID,@web,@No_Load_Current2,@No_Load_Speed2,@date2,@time2,@Motor_number2)",
                 new { unitID, web, No_Load_Current, No_Load_Speed, date, time, Motor_number, No_Load_Current2, No_Load_Speed2, date2, time2, Motor_number2 });
         }
+
+        private async Task RecordProcess2(long unitID, string processNo, string lineCode)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "INSERT INTO dbo.ProcessHistory (UnitID, ProcessID, LineCode) VALUES(@unitID, @processNo, @lineCode);",
+                new { unitID, processNo, lineCode });
+        }
+        private async Task UpdateEtiNoUtcUsageTime(string EtiNo)
+        {
+            using var con = await GetGttConnection().ConfigureAwait(false);
+            await con.ExecuteAsync(
+                "UPDATE PointOfUseEtisV2 SET UtcUsageTime = GETUTCDATE() WHERE EtiNo = @EtiNo AND UtcExpirationTime is NULL and UtcUsageTime is not NULL and IsDepleted != 1",
+                new { EtiNo });
+        }
+
     }
 }

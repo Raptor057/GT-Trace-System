@@ -66,7 +66,7 @@ export const MaterialLoadingApi = (function (apiUrl) {
 })("http://mxsrvapps.gt.local/gtt/services/materialloading");
 
 export const PackagingApi = (function (apiUrl) {
-    //apiUrl = 'http://localhost:5183'; //Este se usa cuando se ejecuta la api con debug de manera local
+    apiUrl = 'http://localhost:5270'; //Este se usa cuando se ejecuta la api con debug de manera local
     return {
         JoinFramelessMotors: (scannerInputUnitID,scannerInputComponentID,lineCode,partNo) =>
         HttpRequest.post(`${apiUrl}/api/JoinFramelessMotors/`,{ ScannerInputUnitID: scannerInputUnitID, ScannerInputComponentID: scannerInputComponentID, LineCode: lineCode, PartNo: partNo }),
