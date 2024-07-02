@@ -252,8 +252,16 @@
                 if ((containerSize ?? 0) == 0) containerSize = uarticle.ContainerSize;
             }
 
-    #endregion
-    var containerPlaceholders = Enumerable.Range(0, scannedUnits.Count() / (containerSize ?? 0) + 1);
+            #endregion
+            //#POKA-YOKE
+            //MM/DD/YYYY
+            //07/02/2024
+            //RA.
+            if (Equals(containerSize,0)|| Equals(containerSize, null))
+            {
+                throw new InvalidOperationException($"Hay un problema en CEGID en el campo Pers para el modelo {prod_unit.modelo} Rev. {prod_unit.active_revision}, el campo [CANT SPACK 002] esta en 0 o es nulo, Comunicate con tu supervisor o con el Ing. de Producto / Mejora Continua");
+            }
+            var containerPlaceholders = Enumerable.Range(0, scannedUnits.Count() / (containerSize ?? 0) + 1);
 
             var purchaseOrder = new PurchaseOrder(poNumber ?? refext.PO.Trim());
             var workOrder = new WorkOrder(
