@@ -10,13 +10,14 @@ namespace GT.Trace.Infra.Repositories
         {
             var bom = await Bom.FetchBomAsync(partNo, lineCode).ConfigureAwait(false);
 
-            //return bom.Select(item => new BomComponent(item.PointOfUse, item.CompNo, item.CompRev, item.CompDesc, int.Parse(item.Capacity)));
-            return bom.Select(item => new BomComponent(
-            item.PointOfUse,
-            item.CompNo,
-            item.CompRev,
-            item.CompDesc,
-            string.IsNullOrEmpty(item.Capacity) ? 1 : int.Parse(item.Capacity)));
+            return bom.Select(item => new BomComponent(item.PointOfUse, item.CompNo, item.CompRev, item.CompDesc, int.Parse(item.Capacity)));
+
+            //return bom.Select(item => new BomComponent(
+            //item.PointOfUse,
+            //item.CompNo,
+            //item.CompRev,
+            //item.CompDesc,
+            //string.IsNullOrEmpty(item.Capacity) ? 1 : int.Parse(item.Capacity)));
         }
     }
 }

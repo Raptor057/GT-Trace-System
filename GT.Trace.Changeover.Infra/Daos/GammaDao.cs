@@ -27,6 +27,33 @@ namespace GT.Trace.Changeover.Infra.Daos
             await Connection.QueryAsync<Entities.bom>(@"SELECT CompNo, CompRev2, PointOfUse FROM cegid.ufn_bom(@ogPartNo, @ogRevision)
             EXCEPT
             SELECT CompNo, CompRev2, PointOfUse FROM cegid.ufn_bom(@icPartNo, @icRevision)", new { ogPartNo, icPartNo, ogRevision, icRevision }).ConfigureAwait(false);
+
+        public async Task<int> GetEmptyCapacities(string partNo, string lineCode)=>
+            await Connection.QueryFirstAsync<int>("SELECT COUNT(CompNo) AS [Empty Capacity] FROM cegid.ufn_bom(@partNo, @lineCode) WHERE Capacity < 1", new { partNo, lineCode }).ConfigureAwait(false);
+
+        //public async Task<int> GetRepeatedComponents(string partNo, string lineCode) =>
+        //    await Connection.QueryFirstAsync<int>("SELECT COUNT(*)" +
+        //        "FROM (SELECT NOKTCODPF, NOKTCOMPF, NOCTCODOPE, NOCTCODECP,COUNT(NOCTCODECP) AS [Cantidad]" +
+        //        "FROM [MXSRVTRACA].[TRAZAB].[cegid].[bom]" +
+        //        "WHERE NOKTCODPF = @partNo AND NOKTCOMPF = @lineCode" +
+        //        "GROUP BY NOKTCODPF, NOKTCOMPF, NOCTCODOPE, NOCTCODECP) AS Subconsulta" +
+        //        "WHERE [Cantidad] > 1", new { partNo , lineCode }).ConfigureAwait(false);
+
+        public async Task<IEnumerable<Entities.RepeatedComponents>> GetRepeatedComponents(string partNo, string lineCode) =>
+            await Connection.QueryAsync<Entities.RepeatedComponents>(@"
+            SELECT
+            NOKTCODPF AS [Parte], 
+            NOKTCOMPF AS [Linea], 
+            NOCTCODOPE AS [Tunel], 
+            NOCTCODECP AS [Componente], 
+            COUNT(NOCTCODECP) AS [Cantidad]
+            FROM [MXSRVTRACA].[TRAZAB].[cegid].[bom] 
+            WHERE NOKTCODPF = @partNo AND NOKTCOMPF = @lineCode
+            GROUP BY NOKTCODPF, NOKTCOMPF, NOCTCODOPE, NOCTCODECP
+            HAVING COUNT(NOCTCODECP) > 1
+            ORDER BY [Cantidad] DESC;"
+            , new { partNo, lineCode }).ConfigureAwait(false);
+
     }
 
 

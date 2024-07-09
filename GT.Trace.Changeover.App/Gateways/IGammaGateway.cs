@@ -37,5 +37,8 @@ namespace GT.Trace.Changeover.App.Gateways
         /// <param name="icRevision">Revisión del número de parte del componente de entrada.</param>
         /// <returns>Una lista de objetos GammaItemDto correspondientes a los componentes Gamma encontrados.</returns>
         Task<IEnumerable<GammaItemDto>> GetOutgoingComponentsAsync(string ogPartNo, string ogRevision, string icPartNo, string icRevision);
+
+        Task<bool> GetRepeatedComponentsAsync(string partNo, string lineCode);
+        Task<bool> GetEmptyCapacitiesAsync(string partNo, string lineCode);
     }
 }

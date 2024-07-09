@@ -59,7 +59,7 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
             {
                 return new ChangeoverNotRequiredResponse(line.Code);
             }
-
+            //#POKA-YOKE
             //Agregado para corregir el BUG que no se actualiza la tabla LineProductionSchedule al aplicar cambio de modelo en cualquier linea
             var CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
             if (!CountFindLineModelCapabilitiesAsync)
@@ -68,6 +68,24 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
                 return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! no se encontro compatibilidad en la tabla [LineModelCapabilities] en GTT para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} !!!REINICIA ESTA PANTALLA PARA INTENTAR SOLUCIONAR ESTE PROBLEMA!!!, si no se soluciona comunicate con el supervisor de linea / ingeniero de mejora continua / ingeniero programador");
             }
 
+            //#POKA-YOKE
+            //MM/DD/YYY
+            //07/01/2024
+            var GetEmptyCapacitiesAsync = await _gamma.GetEmptyCapacitiesAsync(workOrder.PartNo, request.LineCode).ConfigureAwait(false);
+            if (GetEmptyCapacitiesAsync)
+            {
+                return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! Hay capacidades de tuneles vacios para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} !!!Hablar a Ing. de Producto / Ing. Mejora Continua!!!");
+            }
+            //#POKA-YOKE
+            //MM/DD/YYY
+            //07/01/2024
+            var GetRepeatedComponentsAsync = await _gamma.GetRepeatedComponentsAsync(workOrder.PartNo, request.LineCode).ConfigureAwait(false);
+            if (GetRepeatedComponentsAsync)
+            {
+                return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! Hay 1 o mas componentes repedidos en el mismo tunel para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} !!!Hablar a Ing. de Producto / Ing. Mejora Continua!!!");
+            }
+
+            //#POKA-YOKE
             if (line.Code != "LN")
             {
                 //Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
@@ -81,6 +99,7 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
                 }
                 _logger.LogInformation("{GammaData}", gammaData);
             }
+
             ////Se agrego para evitar el cambio de linea si falta la gamma en la base de datos
             ////RA: 07/05/2023.
             //var gammaData = await _gamma.GammaDataAsync(workOrder.PartNo, line.Code).ConfigureAwait(false);
@@ -100,9 +119,7 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
             //using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             foreach (var item in outgoingComponents)
             {
-                outgoingEtis.AddRange(
-                    await _pointsOfUse.GetLoadedComponentEtis(item.CompNo, item.PointOfUseCode).ConfigureAwait(false)
-                );
+                outgoingEtis.AddRange(await _pointsOfUse.GetLoadedComponentEtis(item.CompNo, item.PointOfUseCode).ConfigureAwait(false));
                 //! Make sure the API call below updates the records.
                 //await con.ExecuteAsync("UPDATE dbo.PointOfUseEtis SET UtcExpirationTime=GETUTCDATE(), Comments = 'CHANGEOVER' WHERE UtcExpirationTime IS NULL AND ComponentNo = @CompNo AND PointOfUseCode = @PointOfUse;", (object)item).ConfigureAwait(false);
             }
