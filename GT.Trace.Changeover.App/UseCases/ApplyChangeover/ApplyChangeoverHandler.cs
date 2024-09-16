@@ -62,10 +62,21 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
             //#POKA-YOKE
             //Agregado para corregir el BUG que no se actualiza la tabla LineProductionSchedule al aplicar cambio de modelo en cualquier linea
             var CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
+            
             if (!CountFindLineModelCapabilitiesAsync)
             {
                 await _productionSchedule.InsertModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait (false);
-                return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! no se encontro compatibilidad en la tabla [LineModelCapabilities] en GTT para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} !!!REINICIA ESTA PANTALLA PARA INTENTAR SOLUCIONAR ESTE PROBLEMA!!!, si no se soluciona comunicate con el supervisor de linea / ingeniero de mejora continua / ingeniero programador");
+                CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
+
+                if (!CountFindLineModelCapabilitiesAsync)
+                {
+                    await _productionSchedule.InsertModelCapabilitiesNewAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
+                    CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
+                }
+                else if (!CountFindLineModelCapabilitiesAsync)
+                {
+                    return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! no se encontro compatibilidad en la tabla [LineModelCapabilities] en GTT para el modelo: {workOrder.PartNo} para la linea: {request.LineCode} !!!REINICIA ESTA PANTALLA PARA INTENTAR SOLUCIONAR ESTE PROBLEMA!!!, si no se soluciona comunicate con el supervisor de linea / ingeniero de mejora continua / ingeniero programador");
+                }
             }
 
             //#POKA-YOKE
@@ -95,6 +106,11 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
                 if (!gammaData)
                 {
                     await _gamma.UpdateGamaTrazabAsync(workOrder.PartNo, line.Code).ConfigureAwait(false);
+                    gammaData = await _gamma.GammaDataAsync(workOrder.PartNo, line.Code).ConfigureAwait(false);
+                    
+                }
+                else if (!gammaData)
+                {
                     return new GammaNotFoundResponse($"!!!CAMBIO DE MODELO FALLIDO!!! no se encontro Gama de {workOrder.PartNo} para la linea {line.Code} actualiza esta ventana e intenta nueva mente, si no funciona comunicate con el supervisor de linea o con el ingeniero de mejora continua");
                 }
                 _logger.LogInformation("{GammaData}", gammaData);

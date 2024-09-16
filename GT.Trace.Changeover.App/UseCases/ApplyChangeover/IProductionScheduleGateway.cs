@@ -12,5 +12,6 @@
         Task<bool> FindLineModelCapabilitiesAsync(string lineCode, string partNo);
 
         Task InsertModelCapabilitiesAsync(string lineCode, string partNo);
+        Task InsertModelCapabilitiesNewAsync(string lineCode, string partNo);
     }
 }
