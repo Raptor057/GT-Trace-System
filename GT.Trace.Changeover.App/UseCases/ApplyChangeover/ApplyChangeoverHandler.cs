@@ -61,7 +61,7 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
             }
             //#POKA-YOKE
             //Agregado para corregir el BUG que no se actualiza la tabla LineProductionSchedule al aplicar cambio de modelo en cualquier linea
-            var CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);
+            var CountFindLineModelCapabilitiesAsync = await _productionSchedule.FindLineModelCapabilitiesAsync(request.LineCode, workOrder.PartNo).ConfigureAwait(false);         
             
             if (!CountFindLineModelCapabilitiesAsync)
             {

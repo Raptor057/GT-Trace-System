@@ -128,9 +128,12 @@
                 errors.Add("Se Requiere Liberacion de Auditor de Calidad Para Seguir Empacando!!");
             }
 
-            if (Line.Bom.Components.Any(com => string.IsNullOrWhiteSpace(com.EtiNo)))
+            if (Line.Code != "LN")
             {
-                errors.Add($"La trazabilidad de componentes en la línea \"{Line.Code}\" se encuentra incompleta.");
+                if (Line.Bom.Components.Any(com => string.IsNullOrWhiteSpace(com.EtiNo)))
+                {
+                    errors.Add($"La trazabilidad de componentes en la línea \"{Line.Code}\" se encuentra incompleta.");
+                }
             }
 
             return errors.IsEmpty;
