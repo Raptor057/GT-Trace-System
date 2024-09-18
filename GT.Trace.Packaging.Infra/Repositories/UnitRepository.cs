@@ -88,9 +88,7 @@
            return await _apps.GetLineAndSerialByID(id).ConfigureAwait(false);
         }
 
-        public Task<string?> GetWwwByCegid(string partNo, string revision)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<string?> GetWwwByCegidAsync(string partNo, string revision)
+            => await _cegid.GetWwwByCegid(partNo, revision).ConfigureAwait(false);
     }
 }

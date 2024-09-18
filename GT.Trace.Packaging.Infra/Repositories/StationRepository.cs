@@ -96,35 +96,37 @@
             }
 
             #region Torquimetros para LE
-            if (prod_unit.letter == "LE")
-            {
-                //string ubicacionArchivo = @"C:\ISS\CrystalReportViewer1.csv";
-                string ubicacionArchivo = @"\\mxsrvdata\DATA\IT\Proyects\GTInvMtto\Proteus Linea E TORQUIMETROS GRUPO 4\CrystalReportViewer1.csv";
-                System.IO.StreamReader archivo = new(ubicacionArchivo);
-                string separador = ",";
-                string? linea;
-                var datenow = DateTime.Now;
-                //bool encontrado = false;
-                while ((linea = archivo.ReadLine()) != null)
-                {
-                    string[] fila = linea.Split(separador);
-                    string ID = fila[3].Trim('\"');
-                    string Descipcion = fila[5];
-                    DateTime FechaPM = Convert.ToDateTime(fila[6]);
-                    //var Activo = fila[8];
 
-                    if (Descipcion == "TORQUIMETROS GRUPO 4" && datenow >= FechaPM)
-                    {
-                        //encontrado = true;
-                        //Console.WriteLine("El PM de \"TORQUIMETROS GRUPO 4\" se encuentra vencido");
-                        throw new InvalidOperationException($"Mantenimiento a TORQUIMETROS GRUPO 4 no registrado. Favor de comunicarse con Mantenimiento / Sistemas.");
-                    }
-                    else
-                    {
-                        //encontrado = false;
-                    }
-                }
-            }
+            //Se retiro el pokayoke de los otrquimetros, ya que se tiene que reevaluar su implementacion 
+            //if (prod_unit.letter == "LE")
+            //{
+            //    //string ubicacionArchivo = @"C:\ISS\CrystalReportViewer1.csv";
+            //    string ubicacionArchivo = @"\\mxsrvdata\DATA\IT\Proteus Linea E TORQUIMETROS GRUPO 4\CrystalReportViewer1.csv";
+            //    System.IO.StreamReader archivo = new(ubicacionArchivo);
+            //    string separador = ",";
+            //    string? linea;
+            //    var datenow = DateTime.Now;
+            //    //bool encontrado = false;
+            //    while ((linea = archivo.ReadLine()) != null)
+            //    {
+            //        string[] fila = linea.Split(separador);
+            //        string ID = fila[3].Trim('\"');
+            //        string Descipcion = fila[5];
+            //        DateTime FechaPM = Convert.ToDateTime(fila[6]);
+            //        //var Activo = fila[8];
+
+            //        if (Descipcion == "TORQUIMETROS GRUPO 4" && datenow >= FechaPM)
+            //        {
+            //            //encontrado = true;
+            //            //Console.WriteLine("El PM de \"TORQUIMETROS GRUPO 4\" se encuentra vencido");
+            //            throw new InvalidOperationException($"Mantenimiento a TORQUIMETROS GRUPO 4 no registrado. Favor de comunicarse con Mantenimiento / Sistemas.");
+            //        }
+            //        else
+            //        {
+            //            //encontrado = false;
+            //        }
+            //    }
+            //}
             #endregion
 
 
@@ -422,7 +424,7 @@
         public async Task <string?> GetOrigenByCegid(string partNum, string partRev) =>
             await _traza.GetOrigenByCegid(partNum, partRev).ConfigureAwait(false);
 
-        public async Task<string?> GetWwwByCegid(string partNo, string revision) =>
+        public async Task<string?> GetWwwByCegidAsync(string partNo, string revision) =>
                await _cegid.GetWwwByCegid(partNo, revision).ConfigureAwait(false);
 
 

@@ -192,7 +192,7 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 long? masterLabelID = await _stations.GetLatestMasterLabelFolioByLineAsync(station.Line.Name).ConfigureAwait(false);
                 //03/30/2023: RA: Aqui se va a agregar el Origen segun el tipo de producto.
                 string? origen = (await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false)) ?? " ";
-                string? www = (await _stations.GetWwwByCegid  (station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false) ?? "");
+                string? www = (await _stations.GetWwwByCegidAsync(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false) ?? "");
                 var date = DateTime.Now.Date;
                 var pallet = new PalletDto
                 {

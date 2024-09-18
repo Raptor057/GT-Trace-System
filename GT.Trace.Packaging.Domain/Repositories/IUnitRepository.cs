@@ -23,6 +23,6 @@
         /// <returns>
         /// string con URL del manual para partes de servicio.
         /// </returns>
-        Task <string?> GetWwwByCegid(string partNo, string revision);
+        Task <string?> GetWwwByCegidAsync(string partNo, string revision);
     }
 }

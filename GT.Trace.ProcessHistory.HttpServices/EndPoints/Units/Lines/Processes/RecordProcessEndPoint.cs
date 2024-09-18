@@ -95,10 +95,10 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
             return Ok(new ApiResponse("OK"));
         }
 
+        #region
         //Hoy estoy en modo huevon y no quiero hacer una API solo para hacer un test ya que realmente tuve un mal dia com mi Laptop que no fue nada agradable.
         //RA: 05/10/2023
         //---------------
-        #region
         [HttpPost]
         [Route("/api/eti/{EtiNo}")]
         public async Task<IActionResult> Execute3([FromRoute] string EtiNo)
@@ -117,6 +117,8 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------------------
+        #endregion
+
         [HttpPost]
         [Route("/api/UnitID/{ezLabel}/Line/{LineCode}")]
         public async Task<IActionResult> Execute([FromRoute] string ezLabel, [FromRoute] string LineCode)
@@ -183,7 +185,7 @@ namespace GT.Trace.ProcessHistory.HttpServices.EndPoints.Units.Lines.Processes
                 "SELECT COUNT(UnitID) AS UnitID  FROM [gtt].[dbo].[ProcessHistory] where UnitID = @unitID AND ProcessID = 0",
                 new { unitID }) > 0;
         }
-
+        #region
         //-------------------------------------------------------------------------------------------------------------------------------------------
         [HttpPost]
         [Route("/api/ProductionID/{ProductionID}/Line/{LineCode}")]

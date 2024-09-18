@@ -10,7 +10,7 @@
 
         Task<long?> GetLatestMasterLabelFolioByLineAsync(string lineName);
         Task <string?> GetOrigenByCegid(string partNo, string partRev);
-        Task <string?> GetWwwByCegid(string partNo, string revision);
+        Task <string?> GetWwwByCegidAsync(string partNo, string revision);
 
         #region EZ
         /*Nuevo para EZ 
@@ -24,6 +24,7 @@
 
         Task<bool> GetProcessHistoryAsync(long unitID);
         #endregion
+
 
     }
 }
