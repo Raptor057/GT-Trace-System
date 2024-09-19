@@ -34,21 +34,21 @@ Descripción del estado actual del proyecto, incluyendo si está en desarrollo, 
 
 - [Clean Architecture](https://medium.com/@msmdotnet/introducci%C3%B3n-a-clean-architecture-con-net-parte-1-9db30045f2f2)
 
-[![Diagrama de Clean Architecture propuesto por Robert C. Martin](/Sources/GT-Trace-System/Clean_Architecture.jpeg)](https://medium.com/@msmdotnet/introducci%C3%B3n-a-clean-architecture-con-net-parte-1-9db30045f2f2)
+[![Diagrama de Clean Architecture propuesto por Robert C. Martin](./GT.Trace.System.Documentation/GT-Trace-System/Clean_Architecture.jpeg)](https://medium.com/@msmdotnet/introducci%C3%B3n-a-clean-architecture-con-net-parte-1-9db30045f2f2)
 
 ## Libros de apoyo
 
-- [Clean Architecture A Craftsman's Guide to Software Structure and Design](/Sources/GT-Trace-System/Clean-Architecture.pdf)
+- [Clean Architecture A Craftsman's Guide to Software Structure and Design](./GT.Trace.System.Documentation/GT-Trace-System/Clean-Architecture.pdf)
 
-[![Portada](/Sources/GT-Trace-System/Clean-Architecture.jpg)](/Sources/GT-Trace-System/Clean-Architecture.jpg)
+[![Portada](./GT.Trace.System.Documentation/GT-Trace-System/Clean-Architecture.jpg)](./GT.Trace.System.Documentation/GT-Trace-System/Clean-Architecture.jpg)
 
-- [Clean Code A Handbook of Agile Software Craftsmanship](/Sources/GT-Trace-System/Clean-Code.pdf)
+- [Clean Code A Handbook of Agile Software Craftsmanship](./GT.Trace.System.Documentation/GT-Trace-System/Clean-Code.pdf)
 
-[![Portada](/Sources/GT-Trace-System/Clean-code.jpg)](/Sources/GT-Trace-System/Clean-code.jpg)
+[![Portada](./GT.Trace.System.Documentation/GT-Trace-System/Clean-code.jpg)](./GT.Trace.System.Documentation/GT-Trace-System/Clean-code.jpg)
 
-- [C# 11 and .NET 7 Modern Cross Platform Development Fundamentals Seventh Edition](/Sources/GT-Trace-System/C-11-and-.NET-7.pdf)
+- [C# 11 and .NET 7 Modern Cross Platform Development Fundamentals Seventh Edition](./GT.Trace.System.Documentation/GT-Trace-System/C-11-and-.NET-7.pdf)
 
-[![Portada](/Sources/GT-Trace-System/C#-11-and-.NET-7.jpg)](/Sources/GT-Trace-System/C#-11-and-.NET-7.jpg)
+[![Portada](./GT.Trace.System.Documentation/GT-Trace-System/C#-11-and-.NET-7.jpg)](./GT.Trace.System.Documentation/GT-Trace-System/C#-11-and-.NET-7.jpg)
 
 
 ## Funcionalidades
@@ -71,23 +71,23 @@ Descripción del estado actual del proyecto, incluyendo si está en desarrollo, 
 
 ` \\mxsrvapps\apps\web `
 
-[![IIS](/Sources/GT-Trace-System/iis-web-server.png)]()
+[![IIS](./GT.Trace.System.Documentation/GT-Trace-System/iis-web-server.png)]()
 
 Cuando se publica una Web Api se hace en la carpeta 
 ` \\mxsrvapps\apps\web\gtt\services `
 
-[![IIS](/Sources/GT-Trace-System/iis-web-server-services.png)]()
+[![IIS](./GT.Trace.System.Documentation/GT-Trace-System/iis-web-server-services.png)]()
 
 una vez publicado se debe crear una Application Pool solo para esa API
 
 Cuando se publica un Web Client se hace en la carpeta 
 ` \\mxsrvapps\apps\web\gtt\mfg `
 
-[![IIS](/Sources/GT-Trace-System/iis-web-server-mfg.png)]()
+[![IIS](./GT.Trace.System.Documentation/GT-Trace-System/iis-web-server-mfg.png)]()
 
 este web client puede ir en DefaultAppPool
 
-[![IIS](/Sources/GT-Trace-System/iis-web-server-appliction-pools.png)]()
+[![IIS](./GT.Trace.System.Documentation/GT-Trace-System/iis-web-server-appliction-pools.png)]()
 
 ## Uso
 
