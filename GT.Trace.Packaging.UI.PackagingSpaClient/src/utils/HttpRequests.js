@@ -55,7 +55,7 @@ export const PackagingApi = (function (apiUrl) {
     return {
         fetchHourlyProduction: async (lineCode) =>
             HttpRequest.get(`${apiUrl}/api/lines/${lineCode}/hourlyproduction`),
-        
+
         getStationState: (hostname, containerSize, palletSize, lineCode) =>
             HttpRequest.get(`${apiUrl}/api/lines/${hostname}?containerSize=${(containerSize > 0 ? containerSize : '')}&palletSize=${(palletSize > 0 ? palletSize : '')}&lineCode=${(lineCode ? lineCode : '')}`),
 

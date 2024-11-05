@@ -42,7 +42,7 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             
 
             //const string pattern2 = @"^\s*(\d{2}\.\d{2}[A-Za-z])\s+(\d+)\s+(\w+)\s+(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+)\s*$"; // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
-            const string pattern2 = @"^\s*(\d+)\s+(\w)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+\.\d+[A-Za-z])\s+(\d+)\s+(\d+)\s*$"; // RA 02/22/2024: Esto se agrego para leer el QR de motores de las lineas MW Y MX Rev.2
+            const string pattern2 = @"^\s*([A-Za-z0-9]+)\s+(\w)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+(\d+\.\d+[A-Za-z])\s+(\d+)\s+(\d+)\s*$"; // RA 02/22/2024: Esto se agrego para leer el QR de motores de las lineas MW Y MX Rev.2
             //const string pattern2 = @"^\s*(?<modelo>\d+)\s+(?<rev>\w)\s+(?<fecha>\d{4}-\d{2}-\d{2})\s+(?<hora>\d{2}:\d{2}:\d{2})\s+(?<volt>\d+\.\d+[A-Za-z])\s+(?<rpm>\d+)\s+(?<serial>\d+)\s*$"; // RA 02/22/2024: Esto se agrego para leer el QR de motores de las lineas MW Y MX Rev.2
             var match = Regex.Match(request.ScannerInput ?? "", pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
             var match2 = Regex.Match(request.ScannerInput ?? "", pattern2, RegexOptions.Singleline | RegexOptions.IgnoreCase); // RA 11:14/2023: Esto se agrego para leer el QR de motores de las lineas MW Y MX
@@ -85,8 +85,7 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
                 await _units.AddMotorsDataAsync(serialCode, modelo, volt, rpm, creationTime, rev).ConfigureAwait(false);
                 if (!id.HasValue)
                 {
-                    unitID = await _units.AddUnitAsync(station.Line.Code, 0, serialCode, creationTime).ConfigureAwait(false);
-                    
+                    unitID = await _units.AddUnitAsync(station.Line.Code, 0, serialCode, creationTime).ConfigureAwait(false);  
                 }
                 else unitID = id.Value;
 
@@ -191,8 +190,9 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
             {
                 long? masterLabelID = await _stations.GetLatestMasterLabelFolioByLineAsync(station.Line.Name).ConfigureAwait(false);
                 //03/30/2023: RA: Aqui se va a agregar el Origen segun el tipo de producto.
-                string? origen = (await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false)) ?? " ";
-                string? www = (await _stations.GetWwwByCegidAsync(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false) ?? "");
+                string? origen = (await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false)) ?? (await _stations.GetOrigenByCegid(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.Number).ConfigureAwait(false)) ?? " ";
+                //string? www = (await _stations.GetWwwByCegidAsync(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.OriginalValue).ConfigureAwait(false) ?? "");
+                string? www = (await _stations.GetWwwByCegidAsync(station.Line.WorkOrder.Part!.Number, station.Line.WorkOrder.Part.Revision.Number).ConfigureAwait(false) ?? "");
                 var date = DateTime.Now.Date;
                 var pallet = new PalletDto
                 {

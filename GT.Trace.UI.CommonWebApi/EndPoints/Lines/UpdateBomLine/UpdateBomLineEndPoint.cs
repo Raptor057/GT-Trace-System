@@ -20,11 +20,30 @@ namespace GT.Trace.UI.CommonWebApi.EndPoints.Lines.UpdateBomLine
             _model=model;
         }
 
+        //[HttpPut]
+        //[Route("api/lines/updategama/partno/{partNo}/lineCode/{lineCode}")]
+        //public async Task<IActionResult> Execute([FromRoute] string partNo, [FromRoute] string lineCode)
+        //{
+        //    var request = new UpdateBomLineRequest(partNo, lineCode);
+        //    try
+        //    {
+        //        _ = await _mediator.Send(request).ConfigureAwait(false);
+        //        return _model.IsSuccess ? Ok(_model) : StatusCode(500, _model);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var innerEx = ex;
+        //        while (innerEx.InnerException != null) innerEx = innerEx.InnerException;
+        //        return Ok(new { IsSuccess = false, Message = innerEx.Message });
+        //    }
+        //}
+        //ogpartNo,icpartNo,oglineCode,iclineCode
+
         [HttpPut]
-        [Route("api/lines/updategama/partno/{partNo}/lineCode/{lineCode}")]
-        public async Task<IActionResult> Execute([FromRoute] string partNo, [FromRoute] string lineCode)
+        [Route("api/lines/updategama/partno/{ogpartNo}/{icpartNo}/lineCode/{oglineCode}/{iclineCode}")]
+        public async Task<IActionResult> Execute([FromRoute] string ogpartNo, [FromRoute] string icpartNo, [FromRoute] string oglineCode, [FromRoute] string iclineCode)
         {
-            var request = new UpdateBomLineRequest(partNo, lineCode);
+            var request = new UpdateBomLineRequest(ogpartNo, icpartNo, oglineCode, iclineCode);
             try
             {
                 _ = await _mediator.Send(request).ConfigureAwait(false);
