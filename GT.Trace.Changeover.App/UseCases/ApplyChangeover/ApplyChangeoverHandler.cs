@@ -126,6 +126,7 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
             //}
             //_logger.LogInformation("{GammaData}", gammaData);
 
+            //Esta linea sirve obtener la diferencia de componentes entre un modelo y otro
             var outgoingComponents = await _gamma.GetOutgoingComponentsAsync(line.PartNo, line.Code, workOrder.PartNo, line.Code).ConfigureAwait(false);
 
             _logger.LogInformation("{OutgoingComponents}", outgoingComponents);
@@ -143,6 +144,7 @@ namespace GT.Trace.Changeover.App.UseCases.ApplyChangeover
 
             _logger.LogInformation("{OutgoingEtis}", outgoingEtis);
 
+            //Aqui se retornan las etiquetas por numero de eti entre componentes
             var errors = await _returnLabels.ExecuteAsync(request.LineCode, outgoingEtis.Select(item => item.Number).ToArray());
 
             _logger.LogInformation("{PrintErrors}", errors);

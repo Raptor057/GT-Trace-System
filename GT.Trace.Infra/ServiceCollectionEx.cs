@@ -1,4 +1,5 @@
 ﻿using GT.Trace.App.Services;
+using GT.Trace.App.UseCases.Lines.DeleteBomLine;
 using GT.Trace.App.UseCases.Lines.GetBom;
 using GT.Trace.App.UseCases.Lines.GetCurrentHourProduction;
 using GT.Trace.App.UseCases.Lines.GetHourlyProduction;
@@ -72,7 +73,8 @@ namespace GT.Trace.Infra
                 .AddTransient<IGetWorkOrderGateway, SqlGetLineWorkOrderGateway>()
                 .AddTransient<IGetBomGateway, SqlGetLineBomGateway>()
                 .AddTransient<IUpdateBomLineGateway,SqlUpdateGamaGateway>()// Agregadas el 08/30/2023 para el endpoint de actualizacion de gama
-                .AddTransient<ILoadStateGateway, SqlLoadStateGateway>();
+                .AddTransient<ILoadStateGateway, SqlLoadStateGateway>()
+                .AddTransient<IDeleteBomLineGateway, SqlDeleteBomLineGateway>();
         }
     }
 }

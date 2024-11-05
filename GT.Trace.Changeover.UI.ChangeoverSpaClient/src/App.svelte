@@ -39,7 +39,7 @@
           line.workOrderCode === data.code && line.partNo === data.partNo
             ? changeoverStatues.MATCH
             : changeoverStatues.REQUIRED;
-            CommonApi.UpdateGama(workOrder.partNo, line.code);
+            //CommonApi.UpdateGama(line.partNo,workOrder.partNo,line.code,line.code); //Esto se comento debido a que se actualizaba la gama en automatico al actualizar la pantalla
       })
       .catch(window.alert);
   };

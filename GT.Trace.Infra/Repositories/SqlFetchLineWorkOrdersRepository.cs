@@ -16,7 +16,7 @@ namespace GT.Trace.Infra.Repositories
         public async Task<IEnumerable<WorkOrderDto>> FetchWorkOrdersByLineAsync(int lineID)
         {
             //return (await _apps.QueryAsync<pro_production>("SELECT * FROM dbo.pro_production WHERE id_line = @lineID and is_finished = 0;", new { lineID })
-            return (await _apps.QueryAsync<pro_production>("SELECT * FROM dbo.pro_production WHERE id_line = '6' and is_finished = 0 AND is_running = 1 AND is_stoped = 0;", new { lineID })
+            return (await _apps.QueryAsync<pro_production>("SELECT * FROM dbo.pro_production WHERE id_line = @lineID and is_finished = 0 AND is_running = 1 AND is_stoped = 0;", new { lineID })
                 .ConfigureAwait(false))
                 .Select(item => new WorkOrderDto(item.id, item.codew, item.part_number.Trim(), item.rev.Trim(), item.order, item.line, item.client_name.Trim()));
         }

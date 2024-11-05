@@ -61,6 +61,7 @@ GROUP BY PointOfUseCode, ComponentNo;",
                 new { partNo, lineCode }
             ).ConfigureAwait(false);
 
+
         /*Se agrego esto para crear un endpoint que actualize el la gama de los componentes Agregado el 8/17/2023 */
         #region 
         //public async Task<dynamic> GetLineandPartnofromPointOfUseAsync(string PointOfUse) =>

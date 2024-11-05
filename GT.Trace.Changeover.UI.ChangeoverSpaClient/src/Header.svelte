@@ -21,11 +21,35 @@
 
 
   const handleUpdateGamaClick = () => {
-  const confirmationMessage = `Se actualizara la gama de la línea ${line.code} del modelo ${workOrder.partNo}`;
-  CommonApi.UpdateGama(workOrder.partNo, line.code)
+  const confirmationMessage = `Se actualizaran las gamas de la línea ${line.code} Modelos [${line.partNo} y ${workOrder.partNo}]`;
+  CommonApi.UpdateGama(line.partNo,workOrder.partNo,line.code,line.code)
   .then(() => window.location.reload(true));
-  alert(confirmationMessage);
+  alert(confirmationMessage);};
+
+
+  const handleDeletedGamaClick = () => {
+    if (confirm("Seguro que vas a realizar un reempaque?")) {
+        const confirmationMessage = `Se borraron las gamas de la línea ${line.code}. Modelos [${line.partNo} y ${workOrder.partNo}]`;
+        CommonApi.DeleteGama(line.partNo, workOrder.partNo, line.code, line.code)
+            .then(() => {
+                alert(confirmationMessage);
+                window.location.reload(true);
+            });
+    }
 };
+
+// const handleDeletedGamaClick = () => {
+// if (confirm("Press a button!") == true)
+// {
+// const confirmationMessage = `Se borraran las gamas de la línea ${line.code} Modelos [${line.partNo} y ${workOrder.partNo}]`;
+// CommonApi.DeleteGama(line.partNo,workOrder.partNo,line.code,line.code)
+// .then(() => window.location.reload(true));
+// alert(confirmationMessage);};
+// }
+// else {
+
+// }
+
 
 </script>
 
@@ -55,14 +79,22 @@
     &bull;
     {workOrder.partNo}
     {workOrder.revision}
-  </strong>  
+  </strong>
+
   <button
-  id="update-gama-button"
+  id="gama-button"
   on:click={handleUpdateGamaClick}
-  {disabled}
->
-  Actualizar Gamma
+  {disabled}>
+  Actualizar Gammas
 </button>
+
+<button
+id="gama-button"
+on:click={handleDeletedGamaClick}
+{disabled}>
+Borrar Gammas Para Reempaque
+</button>
+
 </header>
 
 <style>
@@ -119,7 +151,7 @@
     transition: background-color 100ms linear;
   }
 
-  button#update-gama-button {
+  button#gama-button {
     background-color: transparent;
     color: #48c78e;
     display: inline;
@@ -136,7 +168,7 @@
     transition: background-color 100ms linear;
   }
 
-  button#update-gama-button:hover {
+  button#gama-button:hover {
     background-color: #48c78e;
     border-color: transparent;
     color: #fff;

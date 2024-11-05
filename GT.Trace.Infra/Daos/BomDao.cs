@@ -25,5 +25,9 @@ namespace GT.Trace.Infra.Daos
                 "EXECUTE [MXSRVTRACA].[TRAZAB].[dbo].[usp_update_bom_info] @partNo,@lineCode;",
                 new { partNo, lineCode }
             ).ConfigureAwait(false);
+        
+        public async Task DeleteGama(string partNo, string lineCode)=>
+            await Connection.ExecuteAsync("Delete [TRAZAB].[cegid].[bom] WHERE NOKTCODPF = @partNo AND NOKTCOMPF = @lineCode", 
+                new {partNo,lineCode}).ConfigureAwait(false);
     }
 }
