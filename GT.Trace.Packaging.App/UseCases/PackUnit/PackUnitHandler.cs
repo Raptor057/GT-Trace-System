@@ -1,4 +1,5 @@
-﻿using GT.Trace.Common.CleanArch;
+﻿using GT.Trace.Common;
+using GT.Trace.Common.CleanArch;
 using GT.Trace.Packaging.App.Dtos;
 using GT.Trace.Packaging.App.Services;
 using GT.Trace.Packaging.App.UseCases.PackUnit.Responses;
@@ -131,6 +132,9 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
 
                 unitID = label.UnitID;
 
+                //POKA-YOKE
+                //New Add from functional test validation
+                await _units.ValidateFunctionalTestAsync(unitID, station.Line.Code, station.Line.WorkOrder.Part.Number);
                 #region
                 /*Agregado nuevo para LE para modelos EZ
                  12/04/2023
@@ -141,13 +145,6 @@ namespace GT.Trace.Packaging.App.UseCases.PackUnit
 
                 if (IsEZPartNo)
                 {
-                    //bool hisroty = await _stations.GetProcessHistoryAsync(unitID).ConfigureAwait(false);
-                    //bool testResult = await _stations.GetFuncionalTestResultAsync(unitID).ConfigureAwait(false);
-                    //if (!(testResult || hisroty))
-                    //{
-                    //    return new UnitNotFoundResponse(unitID);
-                    //}
-
                     if (!(await _stations.GetProcessHistoryAsync(unitID).ConfigureAwait(false) || await _stations.GetFuncionalTestResultAsync(unitID).ConfigureAwait(false)))
                     {
                         return new UnitNotFoundResponse(unitID);

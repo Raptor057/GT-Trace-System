@@ -24,5 +24,7 @@
         /// string con URL del manual para partes de servicio.
         /// </returns>
         Task <string?> GetWwwByCegidAsync(string partNo, string revision);
+
+        Task <bool> ValidateFunctionalTestAsync(long UnitID, string lineCode, string PartNo);
     }
 }

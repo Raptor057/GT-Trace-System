@@ -1,5 +1,4 @@
 ﻿using GT.Trace.Packaging.Infra.DataSources.Entities;
-using MediatR.NotificationPublishers;
 
 namespace GT.Trace.Packaging.Infra.DataSources
 {
@@ -224,6 +223,23 @@ namespace GT.Trace.Packaging.Infra.DataSources
             await _con.ExecuteAsync(@"  DELETE FROM [gtt].[dbo].[ProcessHistory] WHERE LineCode = @lineCode AND UnitID = @unitID;
                                         DELETE FROM [mxsrvtraca].[TRAZAB].[dbo].[Temp_pack_WB] WHERE linea = @lineName AND telesis = @unitID;
                                         UPDATE mxsrvtraca.APPS.dbo.pro_production SET current_qty = current_qty - 1 WHERE codew=@workOrderCode AND id_line = (SELECT id FROM mxsrvtraca.[APPS].[dbo].[pro_prod_units] WHERE comments = @lineName);",
-                new { lineName, unitID, workOrderCode, lineCode }).ConfigureAwait(false);
+        new { lineName, unitID, workOrderCode, lineCode }).ConfigureAwait(false);
+        /// <summary>
+        /// Esta consulta hace lo siguiente:
+        /// Filtra los registros donde LineCode es 'LH' y PartNo es 'AAA' o '*'.
+        /// Usa ORDER BY con una cláusula CASE para priorizar los registros donde PartNo es 'AAA'. Si no hay registros con PartNo 'AAA', entonces selecciona los registros con PartNo '*', el * signficia que tomara todos los modelos que corran en esta linea como necesarios para validar la prueba funcional. 
+        /// Si necesitas manejar valores NULL específicamente, puedes ajustar la consulta para incluir COALESCE o IS NULL según sea necesario.
+        /// </summary>
+        /// <param name="lineCode"></param>
+        /// <returns></returns>
+        public async Task<LineModelFunctionalTest?> ValidationDataForFunctionalTestingByModelAndLine(string lineCode, string PartNo)=>
+            await _con.QuerySingleAsync<LineModelFunctionalTest?>("SELECT TOP (1) [LineCode], [PartNo]" +
+                " FROM [gtt].[dbo].[LineModelFunctionalTest]" +
+                " WHERE LineCode = @lineCode " +
+                " AND (PartNo = @PartNo OR PartNo = '*')" +
+                " ORDER BY CASE" +
+                " WHEN PartNo = @PartNo THEN 1" +
+                " ELSE 2" +
+                " END;", new { lineCode , PartNo }).ConfigureAwait(false);
     }
 }

@@ -123,5 +123,21 @@ namespace GT.Trace.Packaging.Infra.DataSources
         public async Task <int> GetFuncionalTestResult(long unitID)=>
             await _con.QuerySingleAsync<int>("SELECT COUNT([WB]) AS [test_results] FROM [APPS].[dbo].[pro_tms_functional_test_results] WHERE WB = @unitID AND RESULTAT = 1 ", new {unitID}).ConfigureAwait(false);
         #endregion
+
+        #region 
+        /// <summary>
+        /// Gets only the following values ​​from the [APPS].[dbo].[pro_tms] table in the Applications database
+        /// id, line, serial ,functional_test_count ,functional_test_datetime ,functional_test_final_result
+        /// </summary>
+        /// <param name="line"> LineCode</param>
+        /// <param name="serial">PartNo</param>
+        /// <param name="UnitID">TM</param>
+        /// <returns></returns>
+        public async Task<FunctionalTestStatus?> GetFunctionalTestResultOfLastPrintedLabelByLineAndModelAndUnitID(long UnitID, string line, string serial) =>
+            await _con.QueryFirstAsync<FunctionalTestStatus?>("SELECT TOP (1) [id],[line],[serial],[functional_test_count],[functional_test_datetime],[functional_test_final_result] FROM [APPS].[dbo].[pro_tms]" +
+                " WHERE [id] = @UnitID AND [line] = @line AND [serial] = @serial AND functional_test_count IS NOT NULL AND functional_test_count > 0   AND functional_test_datetime IS NOT NULL" +
+                " ORDER BY id DESC", new {UnitID, line, serial }).ConfigureAwait(false);
+
+        #endregion
     }
 }

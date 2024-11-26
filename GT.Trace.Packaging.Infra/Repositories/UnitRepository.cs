@@ -1,10 +1,10 @@
 ﻿namespace GT.Trace.Packaging.Infra.Repositories
 {
     using DataSources;
-    using GT.Trace.Common.Infra.DataSources.SqlDB;
     using GT.Trace.Packaging.Domain.Entities;
     using GT.Trace.Packaging.Domain.Repositories;
     using GT.Trace.Packaging.Infra.DataSources.Entities;
+    using Microsoft.Extensions.Logging;
     using System.Globalization;
 
     internal class UnitRepository : IUnitRepository
@@ -13,13 +13,15 @@
         private readonly AppsSqlDB _apps;
         private readonly GttSqlDB _gtt;
         private readonly CegidSqlDB _cegid;
+        private readonly ILogger<UnitRepository> _logger;
 
-        public UnitRepository(TrazaSqlDB traza, AppsSqlDB apps, GttSqlDB gtt, CegidSqlDB cegid)
+        public UnitRepository(TrazaSqlDB traza, AppsSqlDB apps, GttSqlDB gtt, CegidSqlDB cegid, ILogger<UnitRepository> logger)
         {
             _traza = traza;
             _apps = apps;
             _gtt = gtt;
             _cegid=cegid;
+            _logger=logger;
         }
 
         public async Task<Unit?> GetUnitByIDAsync(long id)
@@ -90,5 +92,66 @@
 
         public async Task<string?> GetWwwByCegidAsync(string partNo, string revision)
             => await _cegid.GetWwwByCegid(partNo, revision).ConfigureAwait(false);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UnitID"></param>
+        /// <param name="lineCode"></param>
+        /// <param name="PartNo"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<bool> ValidateFunctionalTestAsync(long UnitID, string lineCode, string PartNo)
+        {
+            var ValidationDataForFunctionalTesting = await _gtt.ValidationDataForFunctionalTestingByModelAndLine(lineCode,PartNo).ConfigureAwait(false);
+
+            if(ValidationDataForFunctionalTesting == null)
+            {
+                _logger.LogInformation($"No se encontraron datos de validacion de pureba funcional en la tabla [LineModelFunctionalTest] en la base de datos GTT, para el modelo {PartNo} en la linea {lineCode}, esto significa que para esta linea y modelo no es necesario validar la prueba funcional");
+
+                return true;
+            }
+            
+            var ResultOfFunctionalTestByUnitID = await _apps.GetFunctionalTestResultOfLastPrintedLabelByLineAndModelAndUnitID(UnitID, lineCode, PartNo).ConfigureAwait(false);
+
+            if (ResultOfFunctionalTestByUnitID == null)
+            {
+                _logger.LogError($"No se encontraron datos de pureba funcional en la tabla [pro_tms] de la TM {UnitID} en la base de datos APPS");
+
+                throw new InvalidOperationException($"No se encontraron datos de pureba funcional en la tabla [pro_tms] de la TM {UnitID} en la base de datos APPS");
+                //return false;
+            }
+
+            if(ResultOfFunctionalTestByUnitID.functional_test_final_result == null)
+            {
+                _logger.LogError($"No hay datos sobre el resultado de la prueba funcional de la TM {UnitID}");
+
+                throw new InvalidOperationException($"No hay datos sobre el resultado de la prueba funcional de la TM {UnitID}");
+            }
+
+            if(!ResultOfFunctionalTestByUnitID.functional_test_final_result.Value && ResultOfFunctionalTestByUnitID.functional_test_count.Value > 0 && ResultOfFunctionalTestByUnitID.functional_test_count.Value <= 5)
+            {
+                _logger.LogError($"La prueba funcional no fue exitosa, vuelve a escanear la TM e intenta realizar la prueba funcional nuevamente, intento {5- ResultOfFunctionalTestByUnitID.functional_test_count}/5");
+
+                throw new InvalidOperationException($"La prueba funcional no fue exitosa, vuelve a escanear la TM e intenta realizar la prueba funcional nuevamente, intento {5 - ResultOfFunctionalTestByUnitID.functional_test_count}/5");
+            }
+
+            if (ResultOfFunctionalTestByUnitID.functional_test_final_result.Value || !ResultOfFunctionalTestByUnitID.functional_test_final_result.Value && ResultOfFunctionalTestByUnitID.functional_test_count.Value > 5)
+            {
+                _logger.LogError($"La prueba funcional no fue exitosa para la TM {UnitID}, y cuenta con un total de {ResultOfFunctionalTestByUnitID.functional_test_count.Value} intentos fallidos superando el limite establecido de maximo 5 pruebas, pasa a la siguiente TM, o comunicate con calidad.");
+
+                throw new InvalidOperationException($"\"La prueba funcional no fue exitosa para la TM {{UnitID}}, y cuenta con un total de {{ResultOfFunctionalTestByUnitID.functional_test_count.Value}} intentos fallidos superando el limite establecido de maximo 5 pruebas, pasa a la siguiente TM, o comunicate con calidad.");
+            }
+
+            if (ResultOfFunctionalTestByUnitID.functional_test_final_result.Value) 
+            {
+                _logger.LogInformation($"TM {UnitID} con prueba funcional exitosa");
+                return true;
+            }
+
+            _logger.LogError($"Por algun motivo algo salio mal con la TM {UnitID}, revisa la informacion de la TM en la tabla [APPS].[dbo].[pro_tms] o la validacion de prueba funcional por linea y modelo en la tabla [gtt].[dbo].[LineModelFunctionalTest]");
+
+            throw new InvalidOperationException($"Por algun motivo algo salio mal con la TM {UnitID}, revisa la informacion de la TM en la tabla [APPS].[dbo].[pro_tms] o la validacion de prueba funcional por linea y modelo en la tabla [gtt].[dbo].[LineModelFunctionalTest]");
+        }
     }
 }
