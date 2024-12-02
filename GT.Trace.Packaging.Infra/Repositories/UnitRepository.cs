@@ -116,7 +116,7 @@
 
             if (ResultOfFunctionalTestByUnitID == null)
             {
-                _logger.LogError($"No se encontraron datos de pureba funcional en la tabla [pro_tms] de la TM {UnitID} en la base de datos APPS");
+                _logger.LogError($"No se encontraron datos de prueba funcional en la tabla [pro_tms] de la TM {UnitID} en la base de datos APPS");
 
                 throw new InvalidOperationException($"No se encontraron datos de pureba funcional en la tabla [pro_tms] de la TM {UnitID} en la base de datos APPS");
                 //return false;
@@ -129,21 +129,21 @@
                 throw new InvalidOperationException($"No hay datos sobre el resultado de la prueba funcional de la TM {UnitID}");
             }
 
-            if(!ResultOfFunctionalTestByUnitID.functional_test_final_result.Value && ResultOfFunctionalTestByUnitID.functional_test_count.Value > 0 && ResultOfFunctionalTestByUnitID.functional_test_count.Value <= 5)
+            if(ResultOfFunctionalTestByUnitID.functional_test_final_result == false && ResultOfFunctionalTestByUnitID.functional_test_count.Value > 0 && ResultOfFunctionalTestByUnitID.functional_test_count.Value <= 5)
             {
-                _logger.LogError($"La prueba funcional no fue exitosa, vuelve a escanear la TM e intenta realizar la prueba funcional nuevamente, intento {5- ResultOfFunctionalTestByUnitID.functional_test_count}/5");
+                _logger.LogError($"La prueba funcional no fue exitosa, vuelve a escanear la TM {UnitID} e intenta realizar la prueba funcional nuevamente, intento {5- ResultOfFunctionalTestByUnitID.functional_test_count.Value}/5");
 
-                throw new InvalidOperationException($"La prueba funcional no fue exitosa, vuelve a escanear la TM e intenta realizar la prueba funcional nuevamente, intento {5 - ResultOfFunctionalTestByUnitID.functional_test_count}/5");
+                throw new InvalidOperationException($"La prueba funcional no fue exitosa, vuelve a escanear la TM {UnitID} e intenta realizar la prueba funcional nuevamente, intento {5 - ResultOfFunctionalTestByUnitID.functional_test_count.Value}/5");
             }
 
-            if (ResultOfFunctionalTestByUnitID.functional_test_final_result.Value || !ResultOfFunctionalTestByUnitID.functional_test_final_result.Value && ResultOfFunctionalTestByUnitID.functional_test_count.Value > 5)
-            {
-                _logger.LogError($"La prueba funcional no fue exitosa para la TM {UnitID}, y cuenta con un total de {ResultOfFunctionalTestByUnitID.functional_test_count.Value} intentos fallidos superando el limite establecido de maximo 5 pruebas, pasa a la siguiente TM, o comunicate con calidad.");
+            //if (ResultOfFunctionalTestByUnitID.functional_test_final_result.Value == true|| !ResultOfFunctionalTestByUnitID.functional_test_final_result.Value == false && ResultOfFunctionalTestByUnitID.functional_test_count.Value > 5)
+            //{
+            //    _logger.LogError($"La prueba funcional no fue exitosa para la TM {UnitID}, y cuenta con un total de {ResultOfFunctionalTestByUnitID.functional_test_count.Value} intentos fallidos superando el limite establecido de maximo 5 pruebas, pasa a la siguiente TM, o comunicate con calidad.");
 
-                throw new InvalidOperationException($"\"La prueba funcional no fue exitosa para la TM {{UnitID}}, y cuenta con un total de {{ResultOfFunctionalTestByUnitID.functional_test_count.Value}} intentos fallidos superando el limite establecido de maximo 5 pruebas, pasa a la siguiente TM, o comunicate con calidad.");
-            }
+            //    throw new InvalidOperationException($"\"La prueba funcional no fue exitosa para la TM {UnitID},o ya cuenta con un total de {ResultOfFunctionalTestByUnitID.functional_test_count.Value} intentos de prueba, superando el limite establecido de maximo 5 pruebas, pasa a la siguiente TM, o comunicate con calidad.");
+            //}
 
-            if (ResultOfFunctionalTestByUnitID.functional_test_final_result.Value) 
+            if (ResultOfFunctionalTestByUnitID.functional_test_final_result.Value == true) 
             {
                 _logger.LogInformation($"TM {UnitID} con prueba funcional exitosa");
                 return true;
