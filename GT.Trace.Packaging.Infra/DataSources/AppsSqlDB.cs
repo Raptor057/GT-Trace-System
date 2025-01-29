@@ -134,10 +134,21 @@ namespace GT.Trace.Packaging.Infra.DataSources
         /// <param name="UnitID">TM</param>
         /// <returns></returns>
         public async Task<FunctionalTestStatus?> GetFunctionalTestResultOfLastPrintedLabelByLineAndModelAndUnitID(long UnitID, string line, string serial) =>
-                        //await _con.QueryFirstAsync<FunctionalTestStatus?>("SELECT TOP (1) [id],[line],[serial],[functional_test_count],[functional_test_datetime],[functional_test_final_result] FROM [APPS].[dbo].[pro_tms]" +
-                        //    " WHERE [id] = @UnitID AND [line] = @line AND [serial] = @serial AND functional_test_count IS NOT NULL AND functional_test_count > 0   AND functional_test_datetime IS NOT NULL" +
-                        //    " ORDER BY id DESC", new {UnitID, line, serial }).ConfigureAwait(false);
-                    await _con.QueryFirstAsync<FunctionalTestStatus?>(@"SELECT TOP (1) [id],[line],[serial],[functional_test_count],[functional_test_datetime],[functional_test_final_result] FROM [APPS].[dbo].[pro_tms] WHERE [id] = @UnitID /*AND [line] = @line AND [serial] = @serial */AND functional_test_count IS NOT NULL AND functional_test_count > 0   AND functional_test_datetime IS NOT NULL ORDER BY id DESC", new { UnitID, line, serial }).ConfigureAwait(false);
+             //await _con.QueryFirstAsync<FunctionalTestStatus?>("SELECT TOP (1) [id],[line],[serial],[functional_test_count],[functional_test_datetime],[functional_test_final_result] FROM [APPS].[dbo].[pro_tms]" +
+             //    " WHERE [id] = @UnitID AND [line] = @line AND [serial] = @serial AND functional_test_count IS NOT NULL AND functional_test_count > 0   AND functional_test_datetime IS NOT NULL" +
+             //    " ORDER BY id DESC", new {UnitID, line, serial }).ConfigureAwait(false);
+
+             //await _con.QueryFirstAsync<FunctionalTestStatus?>(@"SELECT TOP (1) [id],[line],[serial],[functional_test_count],[functional_test_datetime],[functional_test_final_result] FROM [APPS].[dbo].[pro_tms] WHERE [id] = @UnitID /*AND [line] = @line AND [serial] = @serial */AND functional_test_count IS NOT NULL AND functional_test_count > 0   AND functional_test_datetime IS NOT NULL ORDER BY id DESC", new { UnitID, line, serial }).ConfigureAwait(false);
+
+             await _con.QueryFirstAsync<FunctionalTestStatus?>(@"SELECT TOP (1) [id],[line],[serial],[functional_test_count],[functional_test_datetime],[functional_test_final_result] 
+              FROM [APPS].[dbo].[pro_tms] WITH (NOLOCK) 
+              WHERE [id] = @UnitID 
+              AND functional_test_count IS NOT NULL 
+              AND functional_test_count > 0   
+              AND functional_test_datetime 
+              IS NOT NULL 
+              ORDER BY id DESC", 
+                new { UnitID, line, serial }).ConfigureAwait(false);
 
         #endregion
     }
