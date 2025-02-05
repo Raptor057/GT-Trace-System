@@ -43,7 +43,7 @@ namespace GT.Trace.EtiMovements.Infra.Repositories
             bool etiIsShared = false;
             if (movement != null)
             {
-                etiIsShared = await _pointsOfUse.CountLinesSharingPointOfUseAsync(movement.PointOfUseCode, etiInfo.ComponentNo).ConfigureAwait(false) > 1;
+                etiIsShared = await _pointsOfUse.CountLinesSharingPointOfUseAsyncV3(movement.PointOfUseCode, etiInfo.ComponentNo).ConfigureAwait(false) > 1;
             }
 
             return Result.OK(Eti.Create(

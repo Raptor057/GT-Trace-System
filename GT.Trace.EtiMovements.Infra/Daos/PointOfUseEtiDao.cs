@@ -10,23 +10,47 @@ namespace GT.Trace.EtiMovements.Infra.Daos
         { }
 
         /// <summary>
-        /// Original
+        /// Original 
+        /// Not Used anymore pleace use V2
         /// </summary>
         /// <param name="pointOfUseCode"></param>
         /// <param name="componentNo"></param>
-        /// <returns></returns>
-//        public async Task<int> CountLinesSharingPointOfUseAsync(string pointOfUseCode, string componentNo) =>
-//            await Connection.ExecuteScalarAsync<int>(@"SELECT COUNT(*) FROM dbo.LineProductionSchedule s
-//JOIN dbo.LineGamma g
-//    ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo
-//WHERE s.UtcExpirationTime >= '2099-12-31 23:59:59.997';", new { pointOfUseCode, componentNo }).ConfigureAwait(false);
-
-        
+        /// <returns>int number</returns>
+        [Obsolete]
         public async Task<int> CountLinesSharingPointOfUseAsync(string pointOfUseCode, string componentNo) =>
-    await Connection.ExecuteScalarAsync<int>(@"SELECT COUNT(*) FROM dbo.LineProductionSchedule s
-JOIN dbo.LineGamma g
-    ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo
-WHERE s.UtcExpirationTime > GETUTCDATE();", new { pointOfUseCode, componentNo }).ConfigureAwait(false);
+            await Connection.ExecuteScalarAsync<int>(@"SELECT COUNT(*) FROM dbo.LineProductionSchedule s
+        JOIN dbo.LineGamma g
+            ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo
+        WHERE s.UtcExpirationTime >= '2099-12-31 23:59:59.997';", new { pointOfUseCode, componentNo }).ConfigureAwait(false);
+
+        /// <summary>
+        /// Not Used anymore pleace use V3
+        /// </summary>
+        /// <param name="pointOfUseCode"></param>
+        /// <param name="componentNo"></param>
+        /// <returns>int number</returns>
+        [Obsolete]
+        public async Task<int> CountLinesSharingPointOfUseAsyncV2(string pointOfUseCode, string componentNo) =>
+    await Connection.ExecuteScalarAsync<int>(@"
+            SELECT COUNT(*) FROM dbo.LineProductionSchedule s
+            JOIN dbo.LineGamma g
+            ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo
+            WHERE s.UtcExpirationTime > GETUTCDATE();"
+            , new { pointOfUseCode, componentNo }).ConfigureAwait(false);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pointOfUseCode"></param>
+        /// <param name="componentNo"></param>
+        /// <returns>int number</returns>
+        public async Task<int> CountLinesSharingPointOfUseAsyncV3(string pointOfUseCode, string componentNo) =>
+    await Connection.ExecuteScalarAsync<int>(@"
+            SELECT COUNT(DISTINCT s.LineCode) FROM dbo.LineProductionSchedule s
+            JOIN dbo.LineGamma g
+            ON g.PartNo = s.PartNo AND g.LineCode = s.LineCode AND g.PointOfUseCode = @pointOfUseCode AND g.CompNo = @componentNo
+            WHERE s.UtcExpirationTime > GETUTCDATE();"
+            , new { pointOfUseCode, componentNo }).ConfigureAwait(false);
 
         public async Task<int> AddAsync(PointOfUseEtis movement)
         {
@@ -52,12 +76,15 @@ WHERE s.UtcExpirationTime > GETUTCDATE();", new { pointOfUseCode, componentNo })
             return await Connection.QueryFirstAsync<PointOfUseEtis>("SELECT TOP 1 * FROM dbo.PointOfUseEtis WHERE EtiNo = @etiNo ORDER BY ID DESC;", new { etiNo }).ConfigureAwait(false);
         }
 
+
         //agregado para guardar las etis removidas en la tabla SaveRemoveEtis
+        [Obsolete]
         public async Task<int> SaveRemoveEtiAsync(PointOfUseEtis movement)
         {
             return await Connection.ExecuteAsync("EXEC InsertSaveRemoveEti @etiNo;", movement).ConfigureAwait(false);
         }
 
+        [Obsolete]
         public async Task<int> WagonLoadaAsync (string PointOfUseCode, string ComponentNo)
         {
             //En esta tabla se guardan los componentes consumidos con estatus IsDepleted = 1

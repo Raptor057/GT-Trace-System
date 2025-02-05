@@ -22,7 +22,18 @@ namespace GT.Trace.Changeover.Infra.Services
         {
             var errors = new List<string>();
 
-            var uri = new Uri(string.Format(_configuration["HttpReturnLabelPrintingServiceUri"] ?? "", lineCode));
+            //var uri = new Uri(string.Format(_configuration["HttpReturnLabelPrintingServiceUri"] ?? "", lineCode));
+            var baseUrl = string.Format(_configuration["HttpReturnLabelPrintingServiceUri"] ?? "", lineCode);
+            var uriBuilder = new UriBuilder(baseUrl);
+
+            // Agregar parámetros de consulta
+            var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["isChangeOver"] = "1";
+
+            // Asignar la nueva query
+            uriBuilder.Query = query.ToString();
+            var uri = uriBuilder.Uri;
+
             _httpClient.Value.BaseAddress = uri;
             foreach (var eti in etis)
             {
